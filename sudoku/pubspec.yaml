@@ -41,6 +41,7 @@ dependencies:
 
   # Windows Title Bar
   bitsdojo_window: ^0.1.1+1
+  font_awesome_flutter: ^9.1.0
 
 dev_dependencies:
   flutter_test:
@@ -90,10 +91,12 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
-
   assets:
-    - assets/icon/icon_foreground.png
-    - assets/icon/icon_round.png
+    - assets/images/
+    - assets/
+    - assets/icon/
+  
+
 
 flutter_native_splash:
   # This package generates native code to customize Flutter's default white native splash screen

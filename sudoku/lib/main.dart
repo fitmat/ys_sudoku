@@ -2,9 +2,12 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:sudoku/pages/HomeScreen.dart';
+import 'package:sudoku/pages/SettingsScreen.dart';
 import 'package:sudoku_solver_generator/sudoku_solver_generator.dart';
 import 'Styles.dart';
 import 'Alerts.dart';
@@ -29,7 +32,8 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Styles.primaryColor,
       ),
-      home: SplashScreenPage(),
+      home: HomePage(),
+      // HomeScreen(),
     );
   }
 }
@@ -564,57 +568,116 @@ class HomePageState extends State<HomePage> {
           return true;
         },
         child: new Scaffold(
-            backgroundColor: Styles.primaryBackgroundColor,
-            appBar: PreferredSize(
-                preferredSize: const Size.fromHeight(56.0),
-                child: isDesktop
-                    ? MoveWindow(
-                        child: AppBar(
-                          centerTitle: true,
-                          title: Text('Sudoku'),
-                          backgroundColor: Styles.primaryColor,
-                          actions: [
-                            IconButton(
-                              icon: const Icon(Icons.minimize_outlined),
-                              padding: EdgeInsets.fromLTRB(8, 0, 8, 15),
-                              onPressed: () {
-                                appWindow.minimize();
-                              },
-                            ),
-                            IconButton(
-                              icon: const Icon(Icons.close_rounded),
-                              padding: EdgeInsets.fromLTRB(8, 8, 20, 8),
-                              onPressed: () {
-                                showAnimatedDialog<void>(
-                                    animationType:
-                                        DialogTransitionType.fadeScale,
-                                    barrierDismissible: true,
-                                    duration: Duration(milliseconds: 350),
-                                    context: context,
-                                    builder: (_) => AlertExit());
-                              },
-                            ),
-                          ],
-                        ),
-                      )
-                    : AppBar(
+          backgroundColor: Styles.primaryBackgroundColor,
+          appBar: PreferredSize(
+              preferredSize: const Size.fromHeight(56.0),
+              child: isDesktop
+                  ? MoveWindow(
+                      child: AppBar(
                         centerTitle: true,
                         title: Text('Sudoku'),
                         backgroundColor: Styles.primaryColor,
-                      )),
-            body: Builder(builder: (builder) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: createRows(),
+                        actions: [
+                          IconButton(
+                            icon: const Icon(Icons.minimize_outlined),
+                            padding: EdgeInsets.fromLTRB(8, 0, 8, 15),
+                            onPressed: () {
+                              appWindow.minimize();
+                            },
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close_rounded),
+                            padding: EdgeInsets.fromLTRB(8, 8, 20, 8),
+                            onPressed: () {
+                              showAnimatedDialog<void>(
+                                  animationType: DialogTransitionType.fadeScale,
+                                  barrierDismissible: true,
+                                  duration: Duration(milliseconds: 350),
+                                  context: context,
+                                  builder: (_) => AlertExit());
+                            },
+                          ),
+                        ],
+                      ),
+                    )
+                  : AppBar(
+                      centerTitle: true,
+                      title: Text('Sudoku'),
+                      backgroundColor: Styles.primaryColor,
+                    )),
+          body: Builder(builder: (builder) {
+            return Column(
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      children: [Text('Mode : $currentDifficultyLevel')],
+                    ),
+                    Row(
+                      children: [Text('Mistake')],
+                    ),
+                  ],
                 ),
-              );
-            }),
-            floatingActionButton: FloatingActionButton(
-              foregroundColor: Styles.primaryBackgroundColor,
-              backgroundColor: Styles.primaryColor,
-              onPressed: () => showOptionModalSheet(context),
-              child: Icon(Icons.menu_rounded),
-            )));
+                Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: createRows(),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Column(
+                      children: [
+                        Icon(FontAwesomeIcons.undo),
+                        ElevatedButton(
+                          child: Text('Undo'),
+                          style: ElevatedButton.styleFrom(
+                              primary: Color(0xffF96B3E)),
+                          onPressed: () {},
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.1,
+                    ),
+                    Column(
+                      children: [
+                        Icon(Icons.lightbulb_outlined),
+                        ElevatedButton(
+                          child: Text('Hints'),
+                          style: ElevatedButton.styleFrom(
+                              primary: Color(0xffF96B3E)),
+                          onPressed: () {},
+                        )
+                      ],
+                    ),
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width * 0.1,
+                    ),
+                    Column(
+                      children: [
+                        Icon(FontAwesomeIcons.eraser),
+                        ElevatedButton(
+                          child: Text('Erase'),
+                          style: ElevatedButton.styleFrom(
+                              primary: Color(0xffF96B3E)),
+                          onPressed: () {},
+                        )
+                      ],
+                    )
+                  ],
+                ),
+                Text('Bingo')
+              ],
+            );
+          }),
+        ));
+    // floatingActionButton: FloatingActionButton(
+    //   foregroundColor: Styles.primaryBackgroundColor,
+    //   backgroundColor: Styles.primaryColor,
+    //   onPressed: () => showOptionModalSheet(context),
+    //   child: Icon(Icons.menu_rounded),
+    // )));
   }
 }
