@@ -100,19 +100,24 @@ class _HomeScreenState extends State<HomeScreen> {
         // onTap: _onTap,
         items: [
           BottomNavigationBarItem(
-            icon: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Container(
-                    height: 30,
-                    width: 30,
-                    child: Icon(
-                      FontAwesomeIcons.cog,
-                    )),
-              ],
+            icon: GestureDetector(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                      height: 30,
+                      width: 30,
+                      child: Icon(
+                        FontAwesomeIcons.cog,
+                      )),
+                ],
+              ),
+              onTap: () {
+                Navigator.of(context).pushNamed('/settings_screen');
+              },
             ),
-            label: 'Family',
+            label: 'Settings',
           ),
           BottomNavigationBarItem(
             icon: Column(
@@ -126,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            label: ('Games'),
+            label: ('Play'),
           ),
           BottomNavigationBarItem(
             icon: Column(
@@ -145,7 +150,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ],
             ),
-            label: ('Options'),
+            label: ('Rules'),
           ),
         ],
       ),

@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
@@ -32,8 +33,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Styles.primaryColor,
       ),
-      home: HomePage(),
-      // HomeScreen(),
+      home:
+          // HomePage(),
+          HomeScreen(),
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case SettingsScreen.routeName:
+            return PageTransition(
+              child: SettingsScreen(),
+              duration: Duration(milliseconds: 375),
+              settings: settings,
+            );
+        }
+      },
     );
   }
 }
@@ -311,7 +323,7 @@ class HomePageState extends State<HomePage> {
     double size = 50;
     if (HomePageState.platform.contains('android') ||
         HomePageState.platform.contains('ios')) {
-      size = 38;
+      size = MediaQuery.of(context).size.width * 0.09;
     }
     return size;
   }
@@ -361,8 +373,8 @@ class HomePageState extends State<HomePage> {
               : () async {
                   selectedgameButton = [k, i];
 
-                  callback([k, i], number);
-                  number = null;
+                  // callback([k, i], number);
+                  // number = null;
 
                   // showAnimatedDialog<void>(
                   //     barrierDismissible: true,
@@ -638,7 +650,24 @@ class HomePageState extends State<HomePage> {
                       elevation: 0.0,
                       iconTheme: IconThemeData(color: Colors.black),
                     )),
-          endDrawer: Container(color: Colors.black, child: Text('HEY')),
+          endDrawer: Padding(
+            padding: const EdgeInsets.only(top: 60.0),
+            child: Container(
+              color: Colors.black,
+              width: MediaQuery.of(context).size.width * 0.8,
+              height: MediaQuery.of(context).size.width * 0.8,
+              child: ListView(
+                children: [
+                  ListTile(
+                    title: Text('Hey'),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ],
+              ),
+            ),
+          ),
           body: Builder(builder: (builder) {
             return Column(
               children: [
@@ -668,115 +697,169 @@ class HomePageState extends State<HomePage> {
                       children: [
                         GestureDetector(
                             child: Container(
-                                color: Color(0xffCECECE),
                                 height: 50,
                                 width: 50,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffCECECE),
+                                    borderRadius: BorderRadius.circular(12.0)),
                                 child: Center(
                                     child: Text('1',
                                         style: TextStyle(fontSize: 32)))),
                             onTap: () => setState(() {
                                   number = 1;
+                                  callback(selectedgameButton, number);
+                                  ValidateInput();
+                                  number = null;
                                 })),
-                        SizedBox(width: 25),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.05),
                         GestureDetector(
                             child: Container(
-                                color: Color(0xffCECECE),
                                 height: 50,
                                 width: 50,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffCECECE),
+                                    borderRadius: BorderRadius.circular(12.0)),
                                 child: Center(
                                     child: Text('2',
                                         style: TextStyle(fontSize: 32)))),
                             onTap: () => setState(() {
                                   number = 2;
+                                  callback(selectedgameButton, number);
+                                  ValidateInput();
+                                  number = null;
                                 })),
-                        SizedBox(width: 25),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.05),
                         GestureDetector(
                             child: Container(
-                                color: Color(0xffCECECE),
                                 height: 50,
                                 width: 50,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffCECECE),
+                                    borderRadius: BorderRadius.circular(12.0)),
                                 child: Center(
                                     child: Text('3',
                                         style: TextStyle(fontSize: 32)))),
                             onTap: () => setState(() {
                                   number = 3;
+                                  callback(selectedgameButton, number);
+                                  ValidateInput();
+                                  number = null;
                                 })),
-                        SizedBox(width: 25),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.05),
                         GestureDetector(
                             child: Container(
-                                color: Color(0xffCECECE),
                                 height: 50,
                                 width: 50,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffCECECE),
+                                    borderRadius: BorderRadius.circular(12.0)),
                                 child: Center(
                                     child: Text('4',
                                         style: TextStyle(fontSize: 32)))),
                             onTap: () => setState(() {
                                   number = 4;
+                                  callback(selectedgameButton, number);
+                                  ValidateInput();
+                                  number = null;
                                 })),
-                        SizedBox(width: 25),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.05),
                         GestureDetector(
                             child: Container(
-                                color: Color(0xffCECECE),
                                 height: 50,
                                 width: 50,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffCECECE),
+                                    borderRadius: BorderRadius.circular(12.0)),
                                 child: Center(
                                     child: Text('5',
                                         style: TextStyle(fontSize: 32)))),
                             onTap: () => setState(() {
                                   number = 5;
+                                  callback(selectedgameButton, number);
+                                  ValidateInput();
+                                  number = null;
                                 }))
                       ],
                     ),
-                    SizedBox(width: 25),
+                    SizedBox(height: MediaQuery.of(context).size.width * 0.05),
                     Row(
                       children: [
                         SizedBox(width: 25),
                         GestureDetector(
                             child: Container(
-                                color: Color(0xffCECECE),
+                                // color: Color(0xffCECECE),
                                 height: 50,
                                 width: 50,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffCECECE),
+                                    borderRadius: BorderRadius.circular(12.0)),
                                 child: Center(
                                     child: Text('6',
                                         style: TextStyle(fontSize: 32)))),
                             onTap: () => setState(() {
                                   number = 6;
+                                  callback(selectedgameButton, number);
+                                  ValidateInput();
+                                  number = null;
                                 })),
-                        SizedBox(width: 25),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.05),
                         GestureDetector(
                             child: Container(
-                                color: Color(0xffCECECE),
+                                // color: Color(0xffCECECE),
                                 height: 50,
                                 width: 50,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffCECECE),
+                                    borderRadius: BorderRadius.circular(12.0)),
                                 child: Center(
                                     child: Text('7',
                                         style: TextStyle(fontSize: 32)))),
                             onTap: () => setState(() {
                                   number = 7;
+                                  callback(selectedgameButton, number);
+                                  ValidateInput();
+                                  number = null;
                                 })),
-                        SizedBox(width: 25),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.05),
                         GestureDetector(
                             child: Container(
-                                color: Color(0xffCECECE),
                                 height: 50,
                                 width: 50,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffCECECE),
+                                    borderRadius: BorderRadius.circular(12.0)),
                                 child: Center(
                                     child: Text('8',
                                         style: TextStyle(fontSize: 32)))),
                             onTap: () => setState(() {
                                   number = 8;
+                                  callback(selectedgameButton, number);
+                                  ValidateInput();
+                                  number = null;
                                 })),
-                        SizedBox(width: 25),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.05),
                         GestureDetector(
                             child: Container(
-                                color: Color(0xffCECECE),
                                 height: 50,
                                 width: 50,
+                                decoration: BoxDecoration(
+                                    color: Color(0xffCECECE),
+                                    borderRadius: BorderRadius.circular(12.0)),
                                 child: Center(
                                     child: Text('9',
                                         style: TextStyle(fontSize: 32)))),
                             onTap: () => setState(() {
                                   number = 9;
+                                  callback(selectedgameButton, number);
+                                  ValidateInput();
+                                  number = null;
                                 }))
                       ],
                     )

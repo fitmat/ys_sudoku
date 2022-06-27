@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SettingsScreen extends StatefulWidget {
+  static const String routeName = "/settings_screen";
   SettingsScreen({key}) : super(key: key);
 
   @override
