@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
 
 class HomePage extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => HomePageState();
+  HomePageState createState() => HomePageState();
 }
 
 class HomePageState extends State<HomePage> {
@@ -57,6 +57,11 @@ class HomePageState extends State<HomePage> {
   static String currentAccentColor;
   static String platform;
   static bool isDesktop;
+  List<int> selectedgameButton;
+  bool isValidInput;
+  static int mistakeCount = 0;
+  static int number;
+  static int numberSelected;
 
   @override
   void initState() {
@@ -211,17 +216,17 @@ class HomePageState extends State<HomePage> {
         break;
       case 'beginner':
         {
-          emptySquares = 18;
+          emptySquares = 27;
         }
         break;
       case 'easy':
         {
-          emptySquares = 27;
+          emptySquares = 36;
         }
         break;
       case 'medium':
         {
-          emptySquares = 36;
+          emptySquares = 45;
         }
         break;
       case 'hard':
@@ -272,6 +277,17 @@ class HomePageState extends State<HomePage> {
           isButtonDisabled ? !isButtonDisabled : isButtonDisabled;
       gameOver = false;
     });
+  }
+
+  void ValidateInput() {
+    SudokuUtilities.isValidConfiguration(game) == false
+        ? setState(() {
+            isValidInput == false;
+            mistakeCount++;
+          })
+        : setState(() {
+            isValidInput == true;
+          });
   }
 
   Color buttonColor(int k, int i) {
@@ -342,16 +358,21 @@ class HomePageState extends State<HomePage> {
         child: TextButton(
           onPressed: isButtonDisabled || gameCopy[k][i] != 0
               ? null
-              : () {
-                  showAnimatedDialog<void>(
-                      animationType: DialogTransitionType.fade,
-                      barrierDismissible: true,
-                      duration: Duration(milliseconds: 300),
-                      context: context,
-                      builder: (_) => AlertNumbersState()).whenComplete(() {
-                    callback([k, i], AlertNumbersState.number);
-                    AlertNumbersState.number = null;
-                  });
+              : () async {
+                  selectedgameButton = [k, i];
+
+                  callback([k, i], number);
+                  number = null;
+
+                  // showAnimatedDialog<void>(
+                  //     barrierDismissible: true,
+                  //     duration: Duration(milliseconds: 300),
+                  //     context: context,
+                  //     builder: (_) => InputNumbers()).whenComplete(() {
+                  //   callback([k, i], InputNumbers.number);
+                  //   InputNumbers.number = null;
+                  //   ValidateInput();
+                  // });
                 },
           onLongPress: isButtonDisabled || gameCopy[k][i] != 0
               ? null
@@ -568,7 +589,9 @@ class HomePageState extends State<HomePage> {
           return true;
         },
         child: new Scaffold(
-          backgroundColor: Styles.primaryBackgroundColor,
+          backgroundColor: Color(0xfffff9f1),
+          extendBody: false,
+          extendBodyBehindAppBar: false,
           appBar: PreferredSize(
               preferredSize: const Size.fromHeight(56.0),
               child: isDesktop
@@ -576,7 +599,7 @@ class HomePageState extends State<HomePage> {
                       child: AppBar(
                         centerTitle: true,
                         title: Text('Sudoku'),
-                        backgroundColor: Styles.primaryColor,
+                        backgroundColor: Color(0xfffff9f1),
                         actions: [
                           IconButton(
                             icon: const Icon(Icons.minimize_outlined),
@@ -602,9 +625,20 @@ class HomePageState extends State<HomePage> {
                     )
                   : AppBar(
                       centerTitle: true,
-                      title: Text('Sudoku'),
-                      backgroundColor: Styles.primaryColor,
+                      title: Text(
+                        'Sudoku',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Color(0xff004A62),
+                          fontSize: 24.0,
+                          fontFamily: 'Gugi',
+                        ),
+                      ),
+                      backgroundColor: Color(0xfffff9f1),
+                      elevation: 0.0,
+                      iconTheme: IconThemeData(color: Colors.black),
                     )),
+          endDrawer: Container(color: Colors.black, child: Text('HEY')),
           body: Builder(builder: (builder) {
             return Column(
               children: [
@@ -614,15 +648,139 @@ class HomePageState extends State<HomePage> {
                       children: [Text('Mode : $currentDifficultyLevel')],
                     ),
                     Row(
-                      children: [Text('Mistake')],
+                      children: [Text('Mistake : $mistakeCount/3')],
                     ),
                   ],
                 ),
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: createRows(),
+                Flexible(
+                  child: Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: createRows(),
+                    ),
                   ),
+                ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        GestureDetector(
+                            child: Container(
+                                color: Color(0xffCECECE),
+                                height: 50,
+                                width: 50,
+                                child: Center(
+                                    child: Text('1',
+                                        style: TextStyle(fontSize: 32)))),
+                            onTap: () => setState(() {
+                                  number = 1;
+                                })),
+                        SizedBox(width: 25),
+                        GestureDetector(
+                            child: Container(
+                                color: Color(0xffCECECE),
+                                height: 50,
+                                width: 50,
+                                child: Center(
+                                    child: Text('2',
+                                        style: TextStyle(fontSize: 32)))),
+                            onTap: () => setState(() {
+                                  number = 2;
+                                })),
+                        SizedBox(width: 25),
+                        GestureDetector(
+                            child: Container(
+                                color: Color(0xffCECECE),
+                                height: 50,
+                                width: 50,
+                                child: Center(
+                                    child: Text('3',
+                                        style: TextStyle(fontSize: 32)))),
+                            onTap: () => setState(() {
+                                  number = 3;
+                                })),
+                        SizedBox(width: 25),
+                        GestureDetector(
+                            child: Container(
+                                color: Color(0xffCECECE),
+                                height: 50,
+                                width: 50,
+                                child: Center(
+                                    child: Text('4',
+                                        style: TextStyle(fontSize: 32)))),
+                            onTap: () => setState(() {
+                                  number = 4;
+                                })),
+                        SizedBox(width: 25),
+                        GestureDetector(
+                            child: Container(
+                                color: Color(0xffCECECE),
+                                height: 50,
+                                width: 50,
+                                child: Center(
+                                    child: Text('5',
+                                        style: TextStyle(fontSize: 32)))),
+                            onTap: () => setState(() {
+                                  number = 5;
+                                }))
+                      ],
+                    ),
+                    SizedBox(width: 25),
+                    Row(
+                      children: [
+                        SizedBox(width: 25),
+                        GestureDetector(
+                            child: Container(
+                                color: Color(0xffCECECE),
+                                height: 50,
+                                width: 50,
+                                child: Center(
+                                    child: Text('6',
+                                        style: TextStyle(fontSize: 32)))),
+                            onTap: () => setState(() {
+                                  number = 6;
+                                })),
+                        SizedBox(width: 25),
+                        GestureDetector(
+                            child: Container(
+                                color: Color(0xffCECECE),
+                                height: 50,
+                                width: 50,
+                                child: Center(
+                                    child: Text('7',
+                                        style: TextStyle(fontSize: 32)))),
+                            onTap: () => setState(() {
+                                  number = 7;
+                                })),
+                        SizedBox(width: 25),
+                        GestureDetector(
+                            child: Container(
+                                color: Color(0xffCECECE),
+                                height: 50,
+                                width: 50,
+                                child: Center(
+                                    child: Text('8',
+                                        style: TextStyle(fontSize: 32)))),
+                            onTap: () => setState(() {
+                                  number = 8;
+                                })),
+                        SizedBox(width: 25),
+                        GestureDetector(
+                            child: Container(
+                                color: Color(0xffCECECE),
+                                height: 50,
+                                width: 50,
+                                child: Center(
+                                    child: Text('9',
+                                        style: TextStyle(fontSize: 32)))),
+                            onTap: () => setState(() {
+                                  number = 9;
+                                }))
+                      ],
+                    )
+                  ],
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -659,11 +817,12 @@ class HomePageState extends State<HomePage> {
                       children: [
                         Icon(FontAwesomeIcons.eraser),
                         ElevatedButton(
-                          child: Text('Erase'),
-                          style: ElevatedButton.styleFrom(
-                              primary: Color(0xffF96B3E)),
-                          onPressed: () {},
-                        )
+                            child: Text('Erase'),
+                            style: ElevatedButton.styleFrom(
+                                primary: Color(0xffF96B3E)),
+                            onPressed: () {
+                              callback(selectedgameButton, 0);
+                            })
                       ],
                     )
                   ],
@@ -680,4 +839,113 @@ class HomePageState extends State<HomePage> {
     //   child: Icon(Icons.menu_rounded),
     // )));
   }
+
+  Future<int> getNumber() async {
+    return await Future.delayed(Duration(seconds: 1), () {
+      return number;
+    });
+  }
 }
+
+// void isFilled(List<int> ButtonPosition){
+//   i
+// }
+
+
+// class InputNumbers extends StatefulWidget {
+//   @override
+//   InputNumberState createState() => InputNumberState();
+
+//   static get number {
+//     return InputNumberState.number;
+//   }
+
+//   static set number(int number) {
+//     InputNumberState.number = number;
+//   }
+// }
+
+// class InputNumberState extends State<InputNumbers> {
+//   static int number;
+//   int numberSelected;
+//   static final List<int> numberList1 = [1, 2, 3, 4, 5];
+//   static final List<int> numberList2 = [6, 7, 8, 9];
+//   // static final List<int> numberList3 = [7, 8, 9];
+
+//   List<SizedBox> createButtons(List<int> numberList) {
+//     return <SizedBox>[
+//       for (int numbers in numberList)
+//         SizedBox(
+//           width: 38,
+//           height: 38,
+//           child: TextButton(
+//             onPressed: () => {
+//               setState(() {
+//                 numberSelected = numbers;
+//                 number = numberSelected;
+//                 Navigator.pop(context);
+//               })
+//             },
+//             style: ButtonStyle(
+//               backgroundColor: MaterialStateProperty.all<Color>(
+//                   Styles.secondaryBackgroundColor),
+//               foregroundColor:
+//                   MaterialStateProperty.all<Color>(Styles.primaryColor),
+//               shape: MaterialStateProperty.all<OutlinedBorder>(
+//                   RoundedRectangleBorder(
+//                 borderRadius: BorderRadius.circular(5),
+//               )),
+//               side: MaterialStateProperty.all<BorderSide>(BorderSide(
+//                 color: Styles.foregroundColor,
+//                 width: 1,
+//                 style: BorderStyle.solid,
+//               )),
+//             ),
+//             child: Text(
+//               numbers.toString(),
+//               textAlign: TextAlign.center,
+//               style: TextStyle(fontSize: 18),
+//             ),
+//           ),
+//         )
+//     ];
+//   }
+
+//   Row oneRow(List<int> numberList) {
+//     return Row(
+//       mainAxisAlignment: MainAxisAlignment.center,
+//       children: createButtons(numberList),
+//     );
+//   }
+
+//   List<Row> createRows() {
+//     List<List> numberLists = [numberList1, numberList2];
+//     List<Row> rowList = new List<Row>.filled(2, null);
+//     for (var i = 0; i <= 1; i++) {
+//       rowList[i] = oneRow(numberLists[i]);
+//     }
+//     return rowList;
+//   }
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return
+//         // Column(
+//         // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+//         // backgroundColor: Styles.secondaryBackgroundColor,
+//         // title: Center(
+//         //     child: Text(
+//         //   'Choose a Number',
+//         //   style: TextStyle(color: Styles.foregroundColor),
+//         // )),
+//         // content:
+//         Padding(
+//       padding: const EdgeInsets.only(bottom: 25.0),
+//       child: Column(
+//         mainAxisAlignment: MainAxisAlignment.end,
+//         crossAxisAlignment: CrossAxisAlignment.center,
+//         children: createRows(),
+//       ),
+//     );
+//   }
+// }

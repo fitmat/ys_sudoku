@@ -175,9 +175,9 @@ class AlertNumbersState extends StatefulWidget {
 class AlertNumbers extends State<AlertNumbersState> {
   static int number;
   int numberSelected;
-  static final List<int> numberList1 = [1, 2, 3];
-  static final List<int> numberList2 = [4, 5, 6];
-  static final List<int> numberList3 = [7, 8, 9];
+  static final List<int> numberList1 = [1, 2, 3, 4, 5];
+  static final List<int> numberList2 = [6, 7, 8, 9];
+  // static final List<int> numberList3 = [7, 8, 9];
 
   List<SizedBox> createButtons(List<int> numberList) {
     return <SizedBox>[
@@ -226,9 +226,9 @@ class AlertNumbers extends State<AlertNumbersState> {
   }
 
   List<Row> createRows() {
-    List<List> numberLists = [numberList1, numberList2, numberList3];
-    List<Row> rowList = new List<Row>.filled(3, null);
-    for (var i = 0; i <= 2; i++) {
+    List<List> numberLists = [numberList1, numberList2];
+    List<Row> rowList = new List<Row>.filled(2, null);
+    for (var i = 0; i <= 1; i++) {
       rowList[i] = oneRow(numberLists[i]);
     }
     return rowList;
@@ -236,20 +236,24 @@ class AlertNumbers extends State<AlertNumbersState> {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        backgroundColor: Styles.secondaryBackgroundColor,
-        title: Center(
-            child: Text(
-          'Choose a Number',
-          style: TextStyle(color: Styles.foregroundColor),
-        )),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: createRows(),
-        ));
+    return
+        // Column(
+        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        // backgroundColor: Styles.secondaryBackgroundColor,
+        // title: Center(
+        //     child: Text(
+        //   'Choose a Number',
+        //   style: TextStyle(color: Styles.foregroundColor),
+        // )),
+        // content:
+        Padding(
+      padding: const EdgeInsets.only(bottom: 25.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: createRows(),
+      ),
+    );
   }
 }
 
