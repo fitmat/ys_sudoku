@@ -1,4 +1,7 @@
+// ignore_for_file: missing_required_param, missing_return
+
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -8,6 +11,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
 import 'package:sudoku/pages/HomeScreen.dart';
+import 'package:sudoku/pages/RulesPage.dart';
 import 'package:sudoku/pages/SettingsScreen.dart';
 import 'package:sudoku_solver_generator/sudoku_solver_generator.dart';
 import 'Styles.dart';
@@ -24,7 +28,7 @@ void main() {
 
 class MyApp extends StatelessWidget {
   static final String versionNumber = kIsWeb ? '2.4.1' : '2.4.0';
-
+  static bool restartGame = false;
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -44,6 +48,18 @@ class MyApp extends StatelessWidget {
               duration: Duration(milliseconds: 375),
               settings: settings,
             );
+          case HomePage.routeName:
+            return PageTransition(
+              child: HomePage(),
+              duration: Duration(milliseconds: 375),
+              settings: settings,
+            );
+          case RulesPage.routeName:
+            return PageTransition(
+              child: RulesPage(),
+              duration: Duration(milliseconds: 375),
+              settings: settings,
+            );
         }
       },
     );
@@ -51,6 +67,7 @@ class MyApp extends StatelessWidget {
 }
 
 class HomePage extends StatefulWidget {
+  static const String routeName = "/home_page";
   @override
   HomePageState createState() => HomePageState();
 }
@@ -64,16 +81,21 @@ class HomePageState extends State<HomePage> {
   List<List<int>> game;
   List<List<int>> gameCopy;
   List<List<int>> gameSolved;
+  int hint;
   static String currentDifficultyLevel;
   static String currentTheme;
   static String currentAccentColor;
   static String platform;
   static bool isDesktop;
   List<int> selectedgameButton;
-  bool isValidInput;
+  static bool isValidInput;
   static int mistakeCount = 0;
   static int number;
   static int numberSelected;
+  int _counter = 720;
+  Timer _timer;
+  static int i;
+  static int j;
 
   @override
   void initState() {
@@ -121,18 +143,43 @@ class HomePageState extends State<HomePage> {
           .toLowerCase();
       isDesktop = ['windows', 'linux', 'macos'].contains(platform);
     }
+    _startTimerForOTP();
   }
 
-  Future<void> getPrefs() async {
-    final prefs = await SharedPreferences.getInstance();
-    setState(() {
-      currentDifficultyLevel = prefs.getString('currentDifficultyLevel');
-      currentTheme = prefs.getString('currentTheme');
-      currentAccentColor = prefs.getString('currentAccentColor');
+  void _startTimerForOTP() {
+    _counter = 720;
+    if (_timer != null) {
+      _timer.cancel();
+    }
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_counter > 0) {
+        setState(() {
+          _counter--;
+        });
+      } else {
+        setState(() {
+          _counter = 720;
+          _timer.cancel();
+        });
+      }
     });
   }
 
-  setPrefs(String property) async {
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  static Future<void> getPrefs() async {
+    final prefs = await SharedPreferences.getInstance();
+    // setState(() {
+    currentDifficultyLevel = prefs.getString('currentDifficultyLevel');
+    currentTheme = prefs.getString('currentTheme');
+    currentAccentColor = prefs.getString('currentAccentColor');
+    // });
+  }
+
+  static setPrefs(String property) async {
     final prefs = await SharedPreferences.getInstance();
     if (property == 'currentDifficultyLevel') {
       prefs.setString('currentDifficultyLevel', currentDifficultyLevel);
@@ -218,32 +265,38 @@ class HomePageState extends State<HomePage> {
     }
   }
 
+  static int emptyBoxes;
   static List<List<List<int>>> getNewGame([String difficulty = 'easy']) {
     int emptySquares;
     switch (difficulty) {
       case 'test':
         {
           emptySquares = 2;
+          emptyBoxes = 2;
         }
         break;
       case 'beginner':
         {
           emptySquares = 27;
+          emptyBoxes = 27;
         }
         break;
       case 'easy':
         {
           emptySquares = 36;
+          emptyBoxes = 36;
         }
         break;
       case 'medium':
         {
           emptySquares = 45;
+          emptyBoxes = 45;
         }
         break;
       case 'hard':
         {
           emptySquares = 54;
+          emptyBoxes = 54;
         }
         break;
     }
@@ -273,6 +326,16 @@ class HomePageState extends State<HomePage> {
     });
   }
 
+  void showHint() {
+    setState(() {
+      game[i][j] = gameSolved[i][j];
+      setState(() {
+        game[i][j] = hint;
+      });
+      print("HINT IS: $hint");
+    });
+  }
+
   void newGame([String difficulty = 'easy']) {
     setState(() {
       setGame(2, difficulty);
@@ -296,6 +359,12 @@ class HomePageState extends State<HomePage> {
         ? setState(() {
             isValidInput == false;
             mistakeCount++;
+            if (mistakeCount == 3) {
+              setState(() {
+                restartGame();
+                mistakeCount = 0;
+              });
+            }
           })
         : setState(() {
             isValidInput == true;
@@ -372,7 +441,8 @@ class HomePageState extends State<HomePage> {
               ? null
               : () async {
                   selectedgameButton = [k, i];
-
+                  i = k;
+                  j = i;
                   // callback([k, i], number);
                   // number = null;
 
@@ -399,9 +469,8 @@ class HomePageState extends State<HomePage> {
                     ? emptyColor
                     : Styles.foregroundColor;
               }
-              return game[k][i] == 0
-                  ? buttonColor(k, i)
-                  : Styles.secondaryColor;
+              return game[k][i] == 0 ? buttonColor(k, i) : Colors.green;
+              // Styles.secondaryColor;
             }),
             shape: MaterialStateProperty.all<OutlinedBorder>(
                 RoundedRectangleBorder(
@@ -636,6 +705,7 @@ class HomePageState extends State<HomePage> {
                       ),
                     )
                   : AppBar(
+                      automaticallyImplyLeading: false,
                       centerTitle: true,
                       title: Text(
                         'Sudoku',
@@ -649,35 +719,113 @@ class HomePageState extends State<HomePage> {
                       backgroundColor: Color(0xfffff9f1),
                       elevation: 0.0,
                       iconTheme: IconThemeData(color: Colors.black),
-                    )),
-          endDrawer: Padding(
-            padding: const EdgeInsets.only(top: 60.0),
-            child: Container(
-              color: Colors.black,
-              width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.width * 0.8,
-              child: ListView(
-                children: [
-                  ListTile(
-                    title: Text('Hey'),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ),
+                      actions: [
+                          PopupMenuButton<int>(
+                            icon: Icon(Icons.menu_outlined),
+                            itemBuilder: (context) => <PopupMenuItem<int>>[
+                              PopupMenuItem(
+                                value: 0,
+                                child: GestureDetector(
+                                    child: Text('Restart Game'),
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                      restartGame();
+                                    }),
+                              ),
+                              PopupMenuItem(
+                                value: 1,
+                                child: GestureDetector(
+                                  child: Text('Show Solution'),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    showSolution();
+                                  },
+                                ),
+                              ),
+                              PopupMenuItem(
+                                value: 2,
+                                child: GestureDetector(
+                                  child: Text('End Game'),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    return AlertDialog(
+                                      shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      backgroundColor:
+                                          Styles.secondaryBackgroundColor,
+                                      title: Text(
+                                        'Exit Game',
+                                        style: TextStyle(
+                                            color: Styles.foregroundColor),
+                                      ),
+                                      content: Text(
+                                        'Are you sure you want to exit the game ?',
+                                        style: TextStyle(
+                                            color: Styles.foregroundColor),
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          style: ButtonStyle(
+                                              foregroundColor:
+                                                  MaterialStateProperty.all<
+                                                          Color>(
+                                                      Styles.primaryColor)),
+                                          onPressed: () {
+                                            Navigator.pop(context);
+                                          },
+                                          child: Text('No'),
+                                        ),
+                                        TextButton(
+                                          style: ButtonStyle(
+                                              foregroundColor:
+                                                  MaterialStateProperty.all<
+                                                          Color>(
+                                                      Styles.primaryColor)),
+                                          onPressed: () {
+                                            if (HomePageState.isDesktop) {
+                                              exit(0);
+                                            } else if (HomePageState.platform ==
+                                                'android') {
+                                              SystemNavigator.pop();
+                                            }
+                                          },
+                                          child: Text('Yes'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                ),
+                              ),
+                            ],
+                          )
+                        ])),
           body: Builder(builder: (builder) {
             return Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Column(
                   children: [
-                    Row(
-                      children: [Text('Mode : $currentDifficultyLevel')],
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Mode : $currentDifficultyLevel'),
+                          _buildValidityDisplayTimer(context)
+                        ],
+                      ),
                     ),
-                    Row(
-                      children: [Text('Mistake : $mistakeCount/3')],
+                    Padding(
+                      padding: const EdgeInsets.only(left: 8.0, right: 8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Mistake : $mistakeCount/3'),
+                          Text('0/$emptyBoxes')
+                        ],
+                      ),
                     ),
                   ],
                 ),
@@ -689,228 +837,246 @@ class HomePageState extends State<HomePage> {
                     ),
                   ),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        GestureDetector(
-                            child: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                    color: Color(0xffCECECE),
-                                    borderRadius: BorderRadius.circular(12.0)),
-                                child: Center(
-                                    child: Text('1',
-                                        style: TextStyle(fontSize: 32)))),
-                            onTap: () => setState(() {
-                                  number = 1;
-                                  callback(selectedgameButton, number);
-                                  ValidateInput();
-                                  number = null;
-                                })),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.05),
-                        GestureDetector(
-                            child: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                    color: Color(0xffCECECE),
-                                    borderRadius: BorderRadius.circular(12.0)),
-                                child: Center(
-                                    child: Text('2',
-                                        style: TextStyle(fontSize: 32)))),
-                            onTap: () => setState(() {
-                                  number = 2;
-                                  callback(selectedgameButton, number);
-                                  ValidateInput();
-                                  number = null;
-                                })),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.05),
-                        GestureDetector(
-                            child: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                    color: Color(0xffCECECE),
-                                    borderRadius: BorderRadius.circular(12.0)),
-                                child: Center(
-                                    child: Text('3',
-                                        style: TextStyle(fontSize: 32)))),
-                            onTap: () => setState(() {
-                                  number = 3;
-                                  callback(selectedgameButton, number);
-                                  ValidateInput();
-                                  number = null;
-                                })),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.05),
-                        GestureDetector(
-                            child: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                    color: Color(0xffCECECE),
-                                    borderRadius: BorderRadius.circular(12.0)),
-                                child: Center(
-                                    child: Text('4',
-                                        style: TextStyle(fontSize: 32)))),
-                            onTap: () => setState(() {
-                                  number = 4;
-                                  callback(selectedgameButton, number);
-                                  ValidateInput();
-                                  number = null;
-                                })),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.05),
-                        GestureDetector(
-                            child: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                    color: Color(0xffCECECE),
-                                    borderRadius: BorderRadius.circular(12.0)),
-                                child: Center(
-                                    child: Text('5',
-                                        style: TextStyle(fontSize: 32)))),
-                            onTap: () => setState(() {
-                                  number = 5;
-                                  callback(selectedgameButton, number);
-                                  ValidateInput();
-                                  number = null;
-                                }))
-                      ],
-                    ),
-                    SizedBox(height: MediaQuery.of(context).size.width * 0.05),
-                    Row(
-                      children: [
-                        SizedBox(width: 25),
-                        GestureDetector(
-                            child: Container(
-                                // color: Color(0xffCECECE),
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                    color: Color(0xffCECECE),
-                                    borderRadius: BorderRadius.circular(12.0)),
-                                child: Center(
-                                    child: Text('6',
-                                        style: TextStyle(fontSize: 32)))),
-                            onTap: () => setState(() {
-                                  number = 6;
-                                  callback(selectedgameButton, number);
-                                  ValidateInput();
-                                  number = null;
-                                })),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.05),
-                        GestureDetector(
-                            child: Container(
-                                // color: Color(0xffCECECE),
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                    color: Color(0xffCECECE),
-                                    borderRadius: BorderRadius.circular(12.0)),
-                                child: Center(
-                                    child: Text('7',
-                                        style: TextStyle(fontSize: 32)))),
-                            onTap: () => setState(() {
-                                  number = 7;
-                                  callback(selectedgameButton, number);
-                                  ValidateInput();
-                                  number = null;
-                                })),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.05),
-                        GestureDetector(
-                            child: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                    color: Color(0xffCECECE),
-                                    borderRadius: BorderRadius.circular(12.0)),
-                                child: Center(
-                                    child: Text('8',
-                                        style: TextStyle(fontSize: 32)))),
-                            onTap: () => setState(() {
-                                  number = 8;
-                                  callback(selectedgameButton, number);
-                                  ValidateInput();
-                                  number = null;
-                                })),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.05),
-                        GestureDetector(
-                            child: Container(
-                                height: 50,
-                                width: 50,
-                                decoration: BoxDecoration(
-                                    color: Color(0xffCECECE),
-                                    borderRadius: BorderRadius.circular(12.0)),
-                                child: Center(
-                                    child: Text('9',
-                                        style: TextStyle(fontSize: 32)))),
-                            onTap: () => setState(() {
-                                  number = 9;
-                                  callback(selectedgameButton, number);
-                                  ValidateInput();
-                                  number = null;
-                                }))
-                      ],
-                    )
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Row(
+                        children: [
+                          GestureDetector(
+                              child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffCECECE),
+                                      borderRadius:
+                                          BorderRadius.circular(12.0)),
+                                  child: Center(
+                                      child: Text('1',
+                                          style: TextStyle(fontSize: 32)))),
+                              onTap: () => setState(() {
+                                    number = 1;
+                                    callback(selectedgameButton, number);
+                                    ValidateInput();
+                                    number = null;
+                                  })),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.05),
+                          GestureDetector(
+                              child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffCECECE),
+                                      borderRadius:
+                                          BorderRadius.circular(12.0)),
+                                  child: Center(
+                                      child: Text('2',
+                                          style: TextStyle(fontSize: 32)))),
+                              onTap: () => setState(() {
+                                    number = 2;
+                                    callback(selectedgameButton, number);
+                                    ValidateInput();
+                                    number = null;
+                                  })),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.05),
+                          GestureDetector(
+                              child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffCECECE),
+                                      borderRadius:
+                                          BorderRadius.circular(12.0)),
+                                  child: Center(
+                                      child: Text('3',
+                                          style: TextStyle(fontSize: 32)))),
+                              onTap: () => setState(() {
+                                    number = 3;
+                                    callback(selectedgameButton, number);
+                                    ValidateInput();
+                                    number = null;
+                                  })),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.05),
+                          GestureDetector(
+                              child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffCECECE),
+                                      borderRadius:
+                                          BorderRadius.circular(12.0)),
+                                  child: Center(
+                                      child: Text('4',
+                                          style: TextStyle(fontSize: 32)))),
+                              onTap: () => setState(() {
+                                    number = 4;
+                                    callback(selectedgameButton, number);
+                                    ValidateInput();
+                                    number = null;
+                                  })),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.05),
+                          GestureDetector(
+                              child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffCECECE),
+                                      borderRadius:
+                                          BorderRadius.circular(12.0)),
+                                  child: Center(
+                                      child: Text('5',
+                                          style: TextStyle(fontSize: 32)))),
+                              onTap: () => setState(() {
+                                    number = 5;
+                                    callback(selectedgameButton, number);
+                                    ValidateInput();
+                                    number = null;
+                                  }))
+                        ],
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.width * 0.05),
+                      Row(
+                        children: [
+                          SizedBox(width: 25),
+                          GestureDetector(
+                              child: Container(
+                                  // color: Color(0xffCECECE),
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffCECECE),
+                                      borderRadius:
+                                          BorderRadius.circular(12.0)),
+                                  child: Center(
+                                      child: Text('6',
+                                          style: TextStyle(fontSize: 32)))),
+                              onTap: () => setState(() {
+                                    number = 6;
+                                    callback(selectedgameButton, number);
+                                    ValidateInput();
+                                    number = null;
+                                  })),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.05),
+                          GestureDetector(
+                              child: Container(
+                                  // color: Color(0xffCECECE),
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffCECECE),
+                                      borderRadius:
+                                          BorderRadius.circular(12.0)),
+                                  child: Center(
+                                      child: Text('7',
+                                          style: TextStyle(fontSize: 32)))),
+                              onTap: () => setState(() {
+                                    number = 7;
+                                    callback(selectedgameButton, number);
+                                    ValidateInput();
+                                    number = null;
+                                  })),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.05),
+                          GestureDetector(
+                              child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffCECECE),
+                                      borderRadius:
+                                          BorderRadius.circular(12.0)),
+                                  child: Center(
+                                      child: Text('8',
+                                          style: TextStyle(fontSize: 32)))),
+                              onTap: () => setState(() {
+                                    number = 8;
+                                    callback(selectedgameButton, number);
+                                    ValidateInput();
+                                    number = null;
+                                  })),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.05),
+                          GestureDetector(
+                              child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffCECECE),
+                                      borderRadius:
+                                          BorderRadius.circular(12.0)),
+                                  child: Center(
+                                      child: Text('9',
+                                          style: TextStyle(fontSize: 32)))),
+                              onTap: () => setState(() {
+                                    number = 9;
+                                    callback(selectedgameButton, number);
+                                    ValidateInput();
+                                    number = null;
+                                  }))
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Column(
-                      children: [
-                        Icon(FontAwesomeIcons.undo),
-                        ElevatedButton(
-                          child: Text('Undo'),
-                          style: ElevatedButton.styleFrom(
-                              primary: Color(0xffF96B3E)),
-                          onPressed: () {},
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.1,
-                    ),
-                    Column(
-                      children: [
-                        Icon(Icons.lightbulb_outlined),
-                        ElevatedButton(
-                          child: Text('Hints'),
-                          style: ElevatedButton.styleFrom(
-                              primary: Color(0xffF96B3E)),
-                          onPressed: () {},
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width * 0.1,
-                    ),
-                    Column(
-                      children: [
-                        Icon(FontAwesomeIcons.eraser),
-                        ElevatedButton(
-                            child: Text('Erase'),
+                Padding(
+                  padding: const EdgeInsets.all(4.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Column(
+                        children: [
+                          Icon(FontAwesomeIcons.undo),
+                          ElevatedButton(
+                            child: Text('Undo'),
+                            style: ElevatedButton.styleFrom(
+                                primary: Color(0xffF96B3E)),
+                            onPressed: () {},
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.1,
+                      ),
+                      Column(
+                        children: [
+                          Icon(Icons.lightbulb_outlined),
+                          ElevatedButton(
+                            child: Text('Hints'),
                             style: ElevatedButton.styleFrom(
                                 primary: Color(0xffF96B3E)),
                             onPressed: () {
-                              callback(selectedgameButton, 0);
-                            })
-                      ],
-                    )
-                  ],
+                              showHint();
+                            },
+                          )
+                        ],
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.1,
+                      ),
+                      Column(
+                        children: [
+                          Icon(FontAwesomeIcons.eraser),
+                          ElevatedButton(
+                              child: Text('Erase'),
+                              style: ElevatedButton.styleFrom(
+                                  primary: Color(0xffF96B3E)),
+                              onPressed: () {
+                                callback(selectedgameButton, 0);
+                              })
+                        ],
+                      )
+                    ],
+                  ),
                 ),
-                Text('Bingo')
+                // Text('Bingo')
               ],
             );
           }),
@@ -928,107 +1094,24 @@ class HomePageState extends State<HomePage> {
       return number;
     });
   }
+
+  Widget _buildValidityDisplayTimer(BuildContext context) {
+    Duration clockTimer = Duration(seconds: _counter);
+    String newClockTimer =
+        '${clockTimer.inMinutes.remainder(60).toString()}:${(clockTimer.inSeconds.remainder(60) % 60).toString().padLeft(2, '0')}';
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Icon(FontAwesomeIcons.clock),
+        Text(
+          " $newClockTimer",
+          style: Theme.of(context)
+              .textTheme
+              .subtitle2
+              .copyWith(color: Colors.green),
+        ),
+      ],
+    );
+  }
 }
-
-// void isFilled(List<int> ButtonPosition){
-//   i
-// }
-
-
-// class InputNumbers extends StatefulWidget {
-//   @override
-//   InputNumberState createState() => InputNumberState();
-
-//   static get number {
-//     return InputNumberState.number;
-//   }
-
-//   static set number(int number) {
-//     InputNumberState.number = number;
-//   }
-// }
-
-// class InputNumberState extends State<InputNumbers> {
-//   static int number;
-//   int numberSelected;
-//   static final List<int> numberList1 = [1, 2, 3, 4, 5];
-//   static final List<int> numberList2 = [6, 7, 8, 9];
-//   // static final List<int> numberList3 = [7, 8, 9];
-
-//   List<SizedBox> createButtons(List<int> numberList) {
-//     return <SizedBox>[
-//       for (int numbers in numberList)
-//         SizedBox(
-//           width: 38,
-//           height: 38,
-//           child: TextButton(
-//             onPressed: () => {
-//               setState(() {
-//                 numberSelected = numbers;
-//                 number = numberSelected;
-//                 Navigator.pop(context);
-//               })
-//             },
-//             style: ButtonStyle(
-//               backgroundColor: MaterialStateProperty.all<Color>(
-//                   Styles.secondaryBackgroundColor),
-//               foregroundColor:
-//                   MaterialStateProperty.all<Color>(Styles.primaryColor),
-//               shape: MaterialStateProperty.all<OutlinedBorder>(
-//                   RoundedRectangleBorder(
-//                 borderRadius: BorderRadius.circular(5),
-//               )),
-//               side: MaterialStateProperty.all<BorderSide>(BorderSide(
-//                 color: Styles.foregroundColor,
-//                 width: 1,
-//                 style: BorderStyle.solid,
-//               )),
-//             ),
-//             child: Text(
-//               numbers.toString(),
-//               textAlign: TextAlign.center,
-//               style: TextStyle(fontSize: 18),
-//             ),
-//           ),
-//         )
-//     ];
-//   }
-
-//   Row oneRow(List<int> numberList) {
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       children: createButtons(numberList),
-//     );
-//   }
-
-//   List<Row> createRows() {
-//     List<List> numberLists = [numberList1, numberList2];
-//     List<Row> rowList = new List<Row>.filled(2, null);
-//     for (var i = 0; i <= 1; i++) {
-//       rowList[i] = oneRow(numberLists[i]);
-//     }
-//     return rowList;
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return
-//         // Column(
-//         // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-//         // backgroundColor: Styles.secondaryBackgroundColor,
-//         // title: Center(
-//         //     child: Text(
-//         //   'Choose a Number',
-//         //   style: TextStyle(color: Styles.foregroundColor),
-//         // )),
-//         // content:
-//         Padding(
-//       padding: const EdgeInsets.only(bottom: 25.0),
-//       child: Column(
-//         mainAxisAlignment: MainAxisAlignment.end,
-//         crossAxisAlignment: CrossAxisAlignment.center,
-//         children: createRows(),
-//       ),
-//     );
-//   }
-// }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sudoku/main.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({key}) : super(key: key);
@@ -120,35 +121,46 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Settings',
           ),
           BottomNavigationBarItem(
-            icon: Column(
-              children: [
-                Container(
-                  height: 30,
-                  width: 30,
-                  child: Icon(
-                    FontAwesomeIcons.play,
+            icon: GestureDetector(
+              child: Column(
+                children: [
+                  Container(
+                    height: 30,
+                    width: 30,
+                    child: Icon(
+                      FontAwesomeIcons.play,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
+              onTap: () {
+                Navigator.of(context).pushNamed('/home_page');
+              },
             ),
             label: ('Play'),
           ),
           BottomNavigationBarItem(
-            icon: Column(
-              children: [
-                Container(
-                  height: 30,
-                  width: 30,
-                  child: Padding(
-                    padding: EdgeInsets.all(0),
-                    child: GestureDetector(
-                      child: Icon(
-                        Icons.help_rounded,
+            icon: GestureDetector(
+              child: Column(
+                children: [
+                  Container(
+                    height: 30,
+                    width: 30,
+                    child: Padding(
+                      padding: EdgeInsets.all(0),
+                      child: GestureDetector(
+                        child: Icon(
+                          Icons.help_rounded,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
+              onTap:(){
+                Navigator.of(context).pushNamed('/rules_page');
+              },
+              
             ),
             label: ('Rules'),
           ),

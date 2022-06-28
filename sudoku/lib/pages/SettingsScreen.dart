@@ -1,5 +1,10 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sudoku/Alerts.dart';
+import 'package:sudoku/main.dart';
 
 class SettingsScreen extends StatefulWidget {
   static const String routeName = "/settings_screen";
@@ -63,51 +68,74 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(12.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Difficulty",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 32,
-                              ),
-                            ),
-                            Container(
-                              width: 75,
-                              height: 38,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Color(0xffd9d9d9),
-                              ),
-                              padding: const EdgeInsets.only(
-                                top: 3,
-                                bottom: 13,
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    width: 69,
-                                    height: 22,
-                                    child: Text(
-                                      "low",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 24,
-                                      ),
-                                    ),
+                        child: GestureDetector(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Difficulty",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 32,
                                   ),
-                                ],
-                              ),
+                                ),
+                                Container(
+                                  width: 75,
+                                  height: 38,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Color(0xffd9d9d9),
+                                  ),
+                                  padding: const EdgeInsets.only(
+                                    top: 3,
+                                    bottom: 13,
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        width: 69,
+                                        height: 22,
+                                        child: Text(
+                                          'low',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 24,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                            onTap: () {
+                              showAnimatedDialog<void>(
+                                  animationType: DialogTransitionType.fadeScale,
+                                  barrierDismissible: true,
+                                  duration: Duration(milliseconds: 350),
+                                  context: context,
+                                  builder: (_) => AlertDifficultyState(
+                                      HomePageState
+                                          .currentDifficultyLevel)).whenComplete(
+                                  () {
+                                if (AlertDifficultyState.difficulty != null) {
+                                  Timer(Duration(milliseconds: 300), () {
+                                    HomePageState.currentDifficultyLevel =
+                                        AlertDifficultyState.difficulty;
+                                    AlertDifficultyState.difficulty = null;
+                                    HomePageState.setPrefs(
+                                        'currentDifficultyLevel');
+                                  });
+                                }
+                              });
+                            }),
                       ),
                       Divider(
                         height: 1,
@@ -115,51 +143,77 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(12.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Color",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 32,
-                              ),
-                            ),
-                            Container(
-                              width: 75,
-                              height: 38,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(12),
-                                color: Color(0xffd9d9d9),
-                              ),
-                              padding: const EdgeInsets.only(
-                                top: 3,
-                                bottom: 13,
-                              ),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(
-                                    width: 69,
-                                    height: 22,
-                                    child: Text(
-                                      "low",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                        color: Colors.black,
-                                        fontSize: 24,
-                                      ),
-                                    ),
+                        child: GestureDetector(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Color",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 32,
                                   ),
-                                ],
-                              ),
+                                ),
+                                Container(
+                                  width: 75,
+                                  height: 38,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(12),
+                                    color: Color(0xffd9d9d9),
+                                  ),
+                                  padding: const EdgeInsets.only(
+                                    top: 3,
+                                    bottom: 13,
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(
+                                        width: 69,
+                                        height: 22,
+                                        child: Text(
+                                          "",
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 24,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                            onTap: () {
+                              showAnimatedDialog<void>(
+                                  animationType: DialogTransitionType.fadeScale,
+                                  barrierDismissible: true,
+                                  duration: Duration(milliseconds: 350),
+                                  context: context,
+                                  builder: (_) => AlertAccentColorsState(
+                                      HomePageState
+                                          .currentAccentColor)).whenComplete(
+                                  () {
+                                if (AlertAccentColorsState.accentColor !=
+                                    null) {
+                                  Timer(Duration(milliseconds: 300), () {
+                                    HomePageState.currentAccentColor =
+                                        AlertAccentColorsState.accentColor;
+                                    // changeAccentColor(
+                                    //     currentAccentColor.toString());
+                                    AlertAccentColorsState.accentColor = null;
+                                    HomePageState.setPrefs(
+                                        'currentAccentColor');
+                                  });
+                                }
+                              });
+                            }),
                       ),
                       Divider(
                         height: 1,
@@ -277,24 +331,33 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       ),
                       Padding(
                         padding: const EdgeInsets.all(12.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              "About",
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 32,
-                              ),
+                        child: GestureDetector(
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "About",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 32,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: Icon(FontAwesomeIcons.infoCircle),
+                                )
+                              ],
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: Icon(FontAwesomeIcons.infoCircle),
-                            )
-                          ],
-                        ),
+                            onTap: () {
+                              showAnimatedDialog<void>(
+                                  animationType: DialogTransitionType.fadeScale,
+                                  barrierDismissible: true,
+                                  duration: Duration(milliseconds: 350),
+                                  context: context,
+                                  builder: (_) => AlertAbout());
+                            }),
                       ),
                       Divider(
                         height: 1,

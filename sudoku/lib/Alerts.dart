@@ -7,8 +7,8 @@ import 'main.dart';
 
 class AlertGameOver extends StatelessWidget {
   static bool newGame = false;
-  static bool restartGame = false;
 
+  static bool restartGame = false;
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -85,13 +85,19 @@ class AlertDifficulty extends State<AlertDifficultyState> {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(color: Color(0xffF96B3E), width: 3.0)),
       title: Center(
           child: Text(
-        'Select Difficulty Level',
-        style: TextStyle(color: Styles.foregroundColor),
+        'Set Difficulty ',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: Colors.black,
+          fontFamily: 'Gugi',
+        ),
       )),
-      backgroundColor: Styles.secondaryBackgroundColor,
+      // backgroundColor: Styles.secondaryBackgroundColor,
       contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       children: <Widget>[
         for (String level in difficulties)
@@ -104,13 +110,18 @@ class AlertDifficulty extends State<AlertDifficultyState> {
               }
               Navigator.pop(context);
             },
-            child: Text(level[0].toUpperCase() + level.substring(1),
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 15,
-                    color: level == this.currentDifficultyLevel
-                        ? Styles.primaryColor
-                        : Styles.foregroundColor)),
+            child: Column(
+              children: [
+                Divider(color: Colors.black),
+                Text(level[0].toUpperCase() + level.substring(1),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: level == this.currentDifficultyLevel
+                            ? Styles.primaryColor
+                            : Colors.black)),
+              ],
+            ),
           ),
       ],
     );
@@ -289,13 +300,14 @@ class AlertAccentColors extends State<AlertAccentColorsState> {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(color: Color(0xffF96B3E), width: 3.0)),
       title: Center(
           child: Text(
-        'Select Accent Color',
-        style: TextStyle(color: Styles.foregroundColor),
+        'Select  Color',
+        style: TextStyle(color: Colors.black),
       )),
-      backgroundColor: Styles.secondaryBackgroundColor,
       contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       children: <Widget>[
         for (String color in accentColors)
@@ -308,13 +320,18 @@ class AlertAccentColors extends State<AlertAccentColorsState> {
               }
               Navigator.pop(context);
             },
-            child: Text(color,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                    fontSize: 15,
-                    color: color == this.currentAccentColor
-                        ? Styles.primaryColor
-                        : Styles.foregroundColor)),
+            child: Column(
+              children: [
+                Divider(color: Colors.black),
+                Text(color,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: color == this.currentAccentColor
+                            ? Styles.primaryColor
+                            : Colors.black)),
+              ],
+            ),
           ),
       ],
     );
@@ -322,23 +339,16 @@ class AlertAccentColors extends State<AlertAccentColorsState> {
 }
 
 class AlertAbout extends StatelessWidget {
-  static const String authorURL = "https://www.github.com/VarunS2002/";
-  static const String releasesURL =
-      "https://github.com/VarunS2002/Flutter-Sudoku/releases/";
-  static const String sourceURL =
-      "https://github.com/VarunS2002/Flutter-Sudoku/";
-  static const String licenseURL =
-      "https://github.com/VarunS2002/Flutter-Sudoku/blob/master/LICENSE";
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      backgroundColor: Styles.secondaryBackgroundColor,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(color: Color(0xffF96B3E), width: 3.0)),
       title: Center(
         child: Text(
           'About',
-          style: TextStyle(color: Styles.foregroundColor),
+          style: TextStyle(color: Colors.black),
         ),
       ),
       content: Column(
@@ -349,13 +359,13 @@ class AlertAbout extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Image.asset('assets/icon/icon_round.png',
-                  height: 48.0, width: 48.0, fit: BoxFit.contain),
+              // Image.asset('assets/icon/icon_round.png',
+              //     height: 48.0, width: 48.0, fit: BoxFit.contain),
               Text(
                 '   Sudoku',
                 style: TextStyle(
-                    color: Styles.foregroundColor,
-                    fontFamily: 'roboto',
+                    color: Colors.black,
+                    fontFamily: 'Gugi',
                     fontSize: 22,
                     fontWeight: FontWeight.bold),
               ),
@@ -367,9 +377,7 @@ class AlertAbout extends StatelessWidget {
               Text(
                 '                ',
                 style: TextStyle(
-                    color: Styles.foregroundColor,
-                    fontFamily: 'roboto',
-                    fontSize: 15),
+                    color: Colors.black, fontFamily: 'Gugi', fontSize: 15),
               ),
             ],
           ),
@@ -377,30 +385,9 @@ class AlertAbout extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                'Version: ',
+                'Version: 1.0.001 ',
                 style: TextStyle(
-                    color: Styles.foregroundColor,
-                    fontFamily: 'roboto',
-                    fontSize: 15),
-              ),
-              InkWell(
-                onTap: () async {
-                  await launch(AlertAbout.releasesURL);
-                },
-                child: Text(
-                  MyApp.versionNumber + ' ',
-                  style: TextStyle(
-                      color: Styles.primaryColor,
-                      fontFamily: 'roboto',
-                      fontSize: 15),
-                ),
-              ),
-              Text(
-                HomePageState.platform,
-                style: TextStyle(
-                    color: Styles.foregroundColor,
-                    fontFamily: 'roboto',
-                    fontSize: 15),
+                    color: Colors.black, fontFamily: 'Gugi', fontSize: 15),
               ),
             ],
           ),
@@ -410,98 +397,7 @@ class AlertAbout extends StatelessWidget {
               Text(
                 '                ',
                 style: TextStyle(
-                    color: Styles.foregroundColor,
-                    fontFamily: 'roboto',
-                    fontSize: 15),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'Author: ',
-                style: TextStyle(
-                    color: Styles.foregroundColor,
-                    fontFamily: 'roboto',
-                    fontSize: 15),
-              ),
-              InkWell(
-                onTap: () async {
-                  await launch(AlertAbout.authorURL);
-                },
-                child: Text(
-                  'VarunS2002',
-                  style: TextStyle(
-                      color: Styles.primaryColor,
-                      fontFamily: 'roboto',
-                      fontSize: 15),
-                ),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '                ',
-                style: TextStyle(
-                    color: Styles.foregroundColor,
-                    fontFamily: 'roboto',
-                    fontSize: 15),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                'License: ',
-                style: TextStyle(
-                    color: Styles.foregroundColor,
-                    fontFamily: 'roboto',
-                    fontSize: 15),
-              ),
-              InkWell(
-                onTap: () async {
-                  await launch(AlertAbout.licenseURL);
-                },
-                child: Text(
-                  'GNU GPLv3',
-                  style: TextStyle(
-                      color: Styles.primaryColor,
-                      fontFamily: 'roboto',
-                      fontSize: 15),
-                ),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(
-                '                ',
-                style: TextStyle(
-                    color: Styles.foregroundColor,
-                    fontFamily: 'roboto',
-                    fontSize: 15),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              InkWell(
-                onTap: () async {
-                  await launch(AlertAbout.sourceURL);
-                },
-                child: Text(
-                  'Source Code',
-                  style: TextStyle(
-                      color: Styles.primaryColor,
-                      fontFamily: 'roboto',
-                      fontSize: 15),
-                ),
+                    color: Colors.black, fontFamily: 'Gugi', fontSize: 15),
               ),
             ],
           ),
