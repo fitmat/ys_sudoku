@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:sudoku/main.dart';
+
+import '../Alerts.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({key}) : super(key: key);
@@ -134,7 +137,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               onTap: () {
-                Navigator.of(context).pushNamed('/home_page');
+                showAnimatedDialog<void>(
+                    animationType: DialogTransitionType.fadeScale,
+                    barrierDismissible: true,
+                    duration: Duration(milliseconds: 350),
+                    context: context,
+                    builder: (_) => AlertStartGame());
+                Future.delayed(Duration(seconds: 4), () {
+                  Navigator.of(context).pushNamed('/home_page');
+                });
               },
             ),
             label: ('Play'),
@@ -157,10 +168,9 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              onTap:(){
+              onTap: () {
                 Navigator.of(context).pushNamed('/rules_page');
               },
-              
             ),
             label: ('Rules'),
           ),

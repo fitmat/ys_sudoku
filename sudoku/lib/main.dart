@@ -7,9 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:bitsdojo_window/bitsdojo_window.dart';
+import 'package:sudoku/pages/GamePreferences.dart';
 import 'package:sudoku/pages/HomeScreen.dart';
 import 'package:sudoku/pages/RulesPage.dart';
 import 'package:sudoku/pages/SettingsScreen.dart';
@@ -31,37 +33,42 @@ class MyApp extends StatelessWidget {
   static bool restartGame = false;
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Sudoku',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        primarySwatch: Styles.primaryColor,
+    return MultiProvider(
+      child: MaterialApp(
+        title: 'Sudoku',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          primarySwatch: Styles.primaryColor,
+        ),
+        home: HomeScreen(),
+        onGenerateRoute: (settings) {
+          switch (settings.name) {
+            case SettingsScreen.routeName:
+              return PageTransition(
+                child: SettingsScreen(),
+                duration: Duration(milliseconds: 375),
+                settings: settings,
+              );
+            case HomePage.routeName:
+              return PageTransition(
+                child: HomePage(),
+                duration: Duration(milliseconds: 375),
+                settings: settings,
+              );
+            case RulesPage.routeName:
+              return PageTransition(
+                child: RulesPage(),
+                duration: Duration(milliseconds: 375),
+                settings: settings,
+              );
+          }
+        },
       ),
-      home:
-          // HomePage(),
-          HomeScreen(),
-      onGenerateRoute: (settings) {
-        switch (settings.name) {
-          case SettingsScreen.routeName:
-            return PageTransition(
-              child: SettingsScreen(),
-              duration: Duration(milliseconds: 375),
-              settings: settings,
-            );
-          case HomePage.routeName:
-            return PageTransition(
-              child: HomePage(),
-              duration: Duration(milliseconds: 375),
-              settings: settings,
-            );
-          case RulesPage.routeName:
-            return PageTransition(
-              child: RulesPage(),
-              duration: Duration(milliseconds: 375),
-              settings: settings,
-            );
-        }
-      },
+      providers: [
+        ChangeNotifierProvider<GamePreferences>(
+          create: (context) => new GamePreferences(),
+        ),
+      ],
     );
   }
 }
@@ -81,6 +88,7 @@ class HomePageState extends State<HomePage> {
   List<List<int>> game;
   List<List<int>> gameCopy;
   List<List<int>> gameSolved;
+  List<List<int>> hintList;
   int hint;
   static String currentDifficultyLevel;
   static String currentTheme;
@@ -94,8 +102,9 @@ class HomePageState extends State<HomePage> {
   static int numberSelected;
   int _counter = 720;
   Timer _timer;
-  static int i;
-  static int j;
+  static int rowNo;
+  static int columnNo;
+  int hintCount = 0;
 
   @override
   void initState() {
@@ -327,13 +336,21 @@ class HomePageState extends State<HomePage> {
   }
 
   void showHint() {
-    setState(() {
-      game[i][j] = gameSolved[i][j];
-      setState(() {
-        game[i][j] = hint;
-      });
-      print("HINT IS: $hint");
-    });
+    hintCount >= 1
+        ? setState(() {
+            final snackBar =
+                SnackBar(content: Text('OOPS! You have used all your hints.'));
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          })
+        : setState(() {
+            hintList = SudokuUtilities.copySudoku(gameSolved);
+
+            hint = hintList[rowNo][columnNo];
+            setState(() {
+              game[rowNo][columnNo] = hint;
+              hintCount++;
+            });
+          });
   }
 
   void newGame([String difficulty = 'easy']) {
@@ -441,8 +458,9 @@ class HomePageState extends State<HomePage> {
               ? null
               : () async {
                   selectedgameButton = [k, i];
-                  i = k;
-                  j = i;
+                  var val = selectedgameButton;
+                  rowNo = val[0];
+                  columnNo = val[1];
                   // callback([k, i], number);
                   // number = null;
 
@@ -1049,7 +1067,7 @@ class HomePageState extends State<HomePage> {
                         children: [
                           Icon(Icons.lightbulb_outlined),
                           ElevatedButton(
-                            child: Text('Hints'),
+                            child: Text('Hint $hintCount/1'),
                             style: ElevatedButton.styleFrom(
                                 primary: Color(0xffF96B3E)),
                             onPressed: () {
@@ -1115,3 +1133,18 @@ class HomePageState extends State<HomePage> {
     );
   }
 }
+
+// class SudokuModel extends ChangeNotifier {
+//   String difficultyLevel;
+
+//   GamePreferences _preferences = GamePreferences();
+
+//   SudokuModel() {
+//     setDifficultyLevel();
+//   }
+
+//   setDifficultyLevel() async {
+//     difficultyLevel = await _preferences.getDifficultyLevel();
+//     notifyListeners();
+//   }
+// }

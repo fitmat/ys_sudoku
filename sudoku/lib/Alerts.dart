@@ -1,9 +1,15 @@
+import 'dart:async';
 import 'dart:io';
+import 'package:circular_countdown/circular_countdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:sudoku/pages/GamePreferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'Styles.dart';
 import 'main.dart';
+
+import 'dart:math' as math;
 
 class AlertGameOver extends StatelessWidget {
   static bool newGame = false;
@@ -13,37 +19,80 @@ class AlertGameOver extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      backgroundColor: Styles.secondaryBackgroundColor,
-      title: Text(
-        'Game Over',
-        style: TextStyle(color: Styles.foregroundColor),
-      ),
-      content: Text(
-        'You successfully solved the Sudoku',
-        style: TextStyle(color: Styles.foregroundColor),
-      ),
-      actions: [
-        TextButton(
-          style: ButtonStyle(
-              foregroundColor:
-                  MaterialStateProperty.all<Color>(Styles.primaryColor)),
-          onPressed: () {
-            Navigator.pop(context);
-            restartGame = true;
-          },
-          child: Text('Restart Game'),
+      backgroundColor: Color(0xffFFC8B7),
+      title: Center(
+        child: Text(
+          'Game Over',
+          style:
+              TextStyle(color: Colors.black, fontFamily: 'Gugi', fontSize: 30),
         ),
-        TextButton(
-          style: ButtonStyle(
-              foregroundColor:
-                  MaterialStateProperty.all<Color>(Styles.primaryColor)),
-          onPressed: () {
-            Navigator.pop(context);
-            newGame = true;
-          },
-          child: Text('New Game'),
+      ),
+      content: Container(
+        height: MediaQuery.of(context).size.height * 0.3,
+        width: MediaQuery.of(context).size.width * 0.5,
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(children: [
+                  Text('Time : '),
+                  Icon(FontAwesomeIcons.stopwatch)
+                ]),
+                Column(children: [
+                  Text('${HomePageState.emptyBoxes}'),
+                  Icon(FontAwesomeIcons.award)
+                ]),
+              ],
+            ),
+            Text('Bingo !',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 30,
+                    fontWeight: FontWeight.bold)),
+            SizedBox(height: 10),
+            Container(
+              height: MediaQuery.of(context).size.width * 0.2,
+              width: MediaQuery.of(context).size.width * 0.5,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                  border: Border.all(color: Color(0xffF96B3E), width: 5.0)),
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Icon(FontAwesomeIcons.home, size: 40),
+                    SizedBox(width: 10),
+                    Icon(Icons.restart_alt, size: 40)
+                  ]),
+            )
+          ],
         ),
-      ],
+      ),
+      // actions: [
+      //   Icon(FontAwesomeIcons.home),
+      //   TextButton(
+      //     style: ButtonStyle(
+      //         foregroundColor:
+      //             MaterialStateProperty.all<Color>(Styles.primaryColor)),
+      //     onPressed: () {
+      //       Navigator.pop(context);
+      //       restartGame = true;
+      //     },
+      //     child: Text('Restart Game'),
+      //   ),
+      //   TextButton(
+      //     style: ButtonStyle(
+      //         foregroundColor:
+      //             MaterialStateProperty.all<Color>(Styles.primaryColor)),
+      //     onPressed: () {
+      //       Navigator.pop(context);
+      //       newGame = true;
+      //     },
+      //     child: Text('New Game'),
+      //   ),
+      // ],
     );
   }
 }
@@ -106,6 +155,7 @@ class AlertDifficulty extends State<AlertDifficultyState> {
               if (level != this.currentDifficultyLevel) {
                 setState(() {
                   difficulty = level;
+                  GamePreferences.setDifficultyLevel(level);
                 });
               }
               Navigator.pop(context);
@@ -403,6 +453,296 @@ class AlertAbout extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class AlertStartGame extends StatefulWidget {
+  const AlertStartGame({Key key}) : super(key: key);
+
+  @override
+  State<AlertStartGame> createState() => _AlertStartGameState();
+}
+
+class _AlertStartGameState extends State<AlertStartGame> {
+  int _counter = 4;
+  Timer _timer;
+  void _startTimerForOTP() {
+    _counter = 4;
+    if (_timer != null) {
+      _timer.cancel();
+    }
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_counter > 0) {
+        setState(() {
+          _counter--;
+        });
+      } else {
+        setState(() {
+          _counter = 4;
+          _timer.cancel();
+        });
+      }
+    });
+  }
+
+  void initState() {
+    super.initState();
+    _startTimerForOTP();
+  }
+
+  void dispose() {
+    _timer.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: BorderSide(color: Color(0xffF96B3E), width: 3.0)),
+        title: Center(
+          child: Text(
+            'Sudoku',
+            style: TextStyle(color: Color(0xff004A62)),
+          ),
+        ),
+        content: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text('Game Details'),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.6,
+                height: MediaQuery.of(context).size.width * 0.6,
+                child: Stack(
+                  children: <Widget>[
+                    Positioned(
+                        top: 4,
+                        left: 0,
+                        child: Container(
+                            width: 142.5748291015625,
+                            height: 46.78476333618164,
+                            child: Stack(children: <Widget>[
+                              Positioned(
+                                  top: 20,
+                                  left: 0,
+                                  child: Text(
+                                    'Difficulty',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color.fromRGBO(0, 0, 0, 1),
+                                        fontFamily: 'Gugi',
+                                        fontSize: 14,
+                                        letterSpacing:
+                                            0 /*percentages not used in flutter. defaulting to zero*/,
+                                        fontWeight: FontWeight.normal,
+                                        height: 1),
+                                  )),
+                              Positioned(
+                                  top: -0.000011207595889572985,
+                                  left: 24.758502960205078,
+                                  child: Text(
+                                    'Easy',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color.fromRGBO(0, 0, 0, 1),
+                                        fontFamily: 'Gugi',
+                                        fontSize: 24,
+                                        letterSpacing:
+                                            0 /*percentages not used in flutter. defaulting to zero*/,
+                                        fontWeight: FontWeight.normal,
+                                        height: 1),
+                                  )),
+                            ]))),
+                    Positioned(
+                        top: 67.00894165039062,
+                        left: 13.659863471984863,
+                        child: Container(
+                            width: 122.08503723144531,
+                            height: 38.95964431762695,
+                            child: Stack(children: <Widget>[
+                              Positioned(
+                                  top: 28.4080753326416,
+                                  left: 0.000012871359103883151,
+                                  child: Text(
+                                    'Hints',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color.fromRGBO(0, 0, 0, 1),
+                                        fontFamily: 'Gugi',
+                                        fontSize: 14,
+                                        letterSpacing:
+                                            0 /*percentages not used in flutter. defaulting to zero*/,
+                                        fontWeight: FontWeight.normal,
+                                        height: 1),
+                                  )),
+                              Positioned(
+                                  top: 0.0000017772096043700003,
+                                  left: 14.513618469238281,
+                                  child: Text(
+                                    '1',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color.fromRGBO(0, 0, 0, 1),
+                                        fontFamily: 'Gugi',
+                                        fontSize: 24,
+                                        letterSpacing:
+                                            0 /*percentages not used in flutter. defaulting to zero*/,
+                                        fontWeight: FontWeight.normal,
+                                        height: 1),
+                                  )),
+                            ]))),
+                    Positioned(
+                        top: 67.00894165039062,
+                        left: 108.4251708984375,
+                        child: Container(
+                            width: 142.5748291015625,
+                            height: 51.1345329284668,
+                            child: Stack(children: <Widget>[
+                              Positioned(
+                                  top: 24.34977912902832,
+                                  left: -8.304102721012896e-7,
+                                  child: Text(
+                                    'Mistakes allowed',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color.fromRGBO(0, 0, 0, 1),
+                                        fontFamily: 'Gugi',
+                                        fontSize: 14,
+                                        letterSpacing:
+                                            0 /*percentages not used in flutter. defaulting to zero*/,
+                                        fontWeight: FontWeight.normal,
+                                        height: 1),
+                                  )),
+                              Positioned(
+                                  top: 0.0000017772096043700003,
+                                  left: 26.465986251831055,
+                                  child: Text(
+                                    '3',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color.fromRGBO(0, 0, 0, 1),
+                                        fontFamily: 'Gugi',
+                                        fontSize: 24,
+                                        letterSpacing:
+                                            0 /*percentages not used in flutter. defaulting to zero*/,
+                                        fontWeight: FontWeight.normal,
+                                        height: 1),
+                                  )),
+                            ]))),
+                    Positioned(
+                        top: 4,
+                        left: 119,
+                        child: Container(
+                            width: 128.9149627685547,
+                            height: 39.986549377441406,
+                            child: Stack(children: <Widget>[
+                              Positioned(
+                                  top: 27,
+                                  left: 0,
+                                  child: Text(
+                                    'Time',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color.fromRGBO(0, 0, 0, 1),
+                                        fontFamily: 'Gugi',
+                                        fontSize: 14,
+                                        letterSpacing:
+                                            0 /*percentages not used in flutter. defaulting to zero*/,
+                                        fontWeight: FontWeight.normal,
+                                        height: 1),
+                                  )),
+                              Positioned(
+                                  top: 0,
+                                  left: 9.0986328125,
+                                  child: Text(
+                                    '12:00',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color.fromRGBO(0, 0, 0, 1),
+                                        fontFamily: 'Gugi',
+                                        fontSize: 24,
+                                        letterSpacing:
+                                            0 /*percentages not used in flutter. defaulting to zero*/,
+                                        fontWeight: FontWeight.normal,
+                                        height: 1),
+                                  )),
+                            ]))),
+                    Positioned(
+                        top: 175,
+                        // left: MediaQuery.of(context).size.height * 0.2,
+                        child: Transform.rotate(
+                          angle: -0.47160482670297993 * (math.pi / 180),
+                          child: Divider(
+                              color: Color.fromRGBO(0, 0, 0, 1), thickness: 1),
+                        )),
+                    Positioned(
+                      top: 0,
+                      left: 10,
+                      child:
+                          // Transform.rotate(
+                          //   angle: -90 * (math.pi / 180),
+                          // child:
+                          Divider(
+                              color: Color.fromRGBO(0, 0, 0, 1), thickness: 1),
+                      // )
+                    ),
+                    Positioned(
+                      top: 150,
+                      left: 80,
+                      child: Row(
+                        children: [
+                          Text('Starting in'),
+                          _buildValidityDisplayTimer(context),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ]));
+  }
+
+  Widget _buildValidityDisplayTimer(BuildContext context) {
+    Duration clockTimer = Duration(seconds: _counter);
+    String newClockTimer =
+        '${(clockTimer.inSeconds.remainder(60) % 60).toString()}';
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: MediaQuery.of(context).size.width * 0.08,
+          height: MediaQuery.of(context).size.width * 0.08,
+          child: Stack(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width * 0.07,
+                height: MediaQuery.of(context).size.width * 0.07,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: Color(0xffd9d9d9),
+                ),
+              ),
+              Positioned.fill(
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    " $newClockTimer",
+                    style: Theme.of(context)
+                        .textTheme
+                        .subtitle2
+                        .copyWith(color: Colors.black),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
     );
   }
 }
