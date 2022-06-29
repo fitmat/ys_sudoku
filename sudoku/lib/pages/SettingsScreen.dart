@@ -91,9 +91,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         Flexible(
                                           child: SizedBox(
                                             child: Text(
-                                              '${GamePreferences.getDifficultyLevel()}',
-                                              // '${sudokuPref.difficultyLevel}',
-                                              // '${HomePageState.currentDifficultyLevel}',
+                                              '${Provider.of<GamePreferences>(context).difficultyLevel}',
                                               textAlign: TextAlign.center,
                                               style: TextStyle(
                                                 color: Colors.black,
@@ -124,6 +122,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       HomePageState.currentDifficultyLevel =
                                           AlertDifficultyState.difficulty;
                                       AlertDifficultyState.difficulty = null;
+                                      HomePageState.setPrefs(
+                                          'currentDifficultyLevel');
                                     });
                                   }
                                 });

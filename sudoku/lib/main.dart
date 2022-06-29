@@ -25,7 +25,8 @@ void main() {
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]);
   // SystemChrome.setEnabledSystemUIOverlays([]);
-  runApp(MyApp());
+  runApp(
+      ChangeNotifierProvider(create: (_) => GamePreferences(), child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -33,42 +34,35 @@ class MyApp extends StatelessWidget {
   static bool restartGame = false;
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      child: MaterialApp(
-        title: 'Sudoku',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Styles.primaryColor,
-        ),
-        home: HomeScreen(),
-        onGenerateRoute: (settings) {
-          switch (settings.name) {
-            case SettingsScreen.routeName:
-              return PageTransition(
-                child: SettingsScreen(),
-                duration: Duration(milliseconds: 375),
-                settings: settings,
-              );
-            case HomePage.routeName:
-              return PageTransition(
-                child: HomePage(),
-                duration: Duration(milliseconds: 375),
-                settings: settings,
-              );
-            case RulesPage.routeName:
-              return PageTransition(
-                child: RulesPage(),
-                duration: Duration(milliseconds: 375),
-                settings: settings,
-              );
-          }
-        },
+    return MaterialApp(
+      title: 'Sudoku',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primarySwatch: Styles.primaryColor,
       ),
-      providers: [
-        ChangeNotifierProvider<GamePreferences>(
-          create: (context) => new GamePreferences(),
-        ),
-      ],
+      home: HomeScreen(),
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case SettingsScreen.routeName:
+            return PageTransition(
+              child: SettingsScreen(),
+              duration: Duration(milliseconds: 375),
+              settings: settings,
+            );
+          case HomePage.routeName:
+            return PageTransition(
+              child: HomePage(),
+              duration: Duration(milliseconds: 375),
+              settings: settings,
+            );
+          case RulesPage.routeName:
+            return PageTransition(
+              child: RulesPage(),
+              duration: Duration(milliseconds: 375),
+              settings: settings,
+            );
+        }
+      },
     );
   }
 }

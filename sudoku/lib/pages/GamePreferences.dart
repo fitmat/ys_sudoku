@@ -1,33 +1,22 @@
 import 'package:flutter/cupertino.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class GamePreferences extends ChangeNotifier {
-  static const DIFFICULTY_PREF = "difficulty";
-  static String difficultyLevel = "Easy";
+  String difficultyLevel = "Easy";
+  String theme = "Light";
+  String color = "Cyan";
 
-  static setDifficultyLevel(String difficulty) async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    await sharedPreferences.setString(DIFFICULTY_PREF, difficulty);
+  void changeDifficulty(String difficulty) {
+    difficultyLevel = difficulty;
+    notifyListeners();
   }
 
-  static getDifficultyLevel() async {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    String difficulty = sharedPreferences.getString(DIFFICULTY_PREF);
-    return difficulty ?? "Easy";
+  void changeTheme(String selectedTheme) {
+    theme = theme;
+    notifyListeners();
+  }
+
+  void changeColor(String selectedColor) {
+    color = selectedColor;
+    notifyListeners();
   }
 }
-
-// class GamePreferences extends ChangeNotifier {
-//   String difficultyLevel = "Easy";
-
-//   setDifficultyLevel(String difficulty) async {
-//     difficultyLevel = difficulty;
-//     notifyListeners();
-//   }
-
-//   // static getDifficultyLevel() async {
-//   //   SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-//   //   String difficulty = sharedPreferences.getString(DIFFICULTY_PREF);
-//   //   return difficulty ?? "Easy";
-//   // }
-// }

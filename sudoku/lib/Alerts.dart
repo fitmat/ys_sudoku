@@ -4,6 +4,7 @@ import 'package:circular_countdown/circular_countdown.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:sudoku/pages/GamePreferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'Styles.dart';
@@ -146,7 +147,6 @@ class AlertDifficulty extends State<AlertDifficultyState> {
           fontFamily: 'Gugi',
         ),
       )),
-      // backgroundColor: Styles.secondaryBackgroundColor,
       contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       children: <Widget>[
         for (String level in difficulties)
@@ -155,7 +155,8 @@ class AlertDifficulty extends State<AlertDifficultyState> {
               if (level != this.currentDifficultyLevel) {
                 setState(() {
                   difficulty = level;
-                  GamePreferences.setDifficultyLevel(level);
+                  Provider.of<GamePreferences>(context, listen: false)
+                      .changeDifficulty(difficulty);
                 });
               }
               Navigator.pop(context);
