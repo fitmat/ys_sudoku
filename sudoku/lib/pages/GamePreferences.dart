@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:sudoku/main.dart';
 
 class GamePreferences extends ChangeNotifier {
-  String difficultyLevel = "Easy";
+  String difficultyLevel = HomePageState.currentDifficultyLevel ?? "Easy";
   String theme = "Light";
   String color = "Cyan";
 

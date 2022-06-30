@@ -23,23 +23,31 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<GamePreferences>(builder: (context, sudokuPref, child) {
-      return SafeArea(
+    return WillPopScope(
+      onWillPop: () async {
+        Navigator.of(context).pushNamed('/home_screen');
+        return false;
+      },
+      child: SafeArea(
           child: Scaffold(
               backgroundColor: Color(0xfffff9f1),
               appBar: PreferredSize(
-                preferredSize: Size.fromHeight(100.0),
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Text(
+                preferredSize: Size.fromHeight(50.0),
+                child: AppBar(
+                  // automaticallyImplyLeading: false,
+                  centerTitle: true,
+                  title: Text(
                     'Settings',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Color(0xff004A62),
-                      fontSize: 32.0,
+                      fontSize: 24.0,
                       fontFamily: 'Gugi',
                     ),
                   ),
+                  backgroundColor: Color(0xfffff9f1),
+                  elevation: 0.0,
+                  iconTheme: IconThemeData(color: Colors.black),
                 ),
               ),
               body: Column(
@@ -392,7 +400,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   )
                 ],
-              )));
-    });
+              ))),
+    );
   }
 }

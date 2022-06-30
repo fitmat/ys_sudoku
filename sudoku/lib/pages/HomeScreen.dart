@@ -7,6 +7,7 @@ import 'package:sudoku/main.dart';
 import '../Alerts.dart';
 
 class HomeScreen extends StatefulWidget {
+  static const String routeName = "/home_screen";
   HomeScreen({key}) : super(key: key);
 
   @override

@@ -183,14 +183,15 @@ class AlertExit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      backgroundColor: Styles.secondaryBackgroundColor,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(color: Color(0xffF96B3E), width: 3.0)),
       title: Text(
-        'Exit Game',
+        'End Game',
         style: TextStyle(color: Styles.foregroundColor),
       ),
       content: Text(
-        'Are you sure you want to exit the game ?',
+        'Are you sure you want to end the game ?',
         style: TextStyle(color: Styles.foregroundColor),
       ),
       actions: [
@@ -208,11 +209,7 @@ class AlertExit extends StatelessWidget {
               foregroundColor:
                   MaterialStateProperty.all<Color>(Styles.primaryColor)),
           onPressed: () {
-            if (HomePageState.isDesktop) {
-              exit(0);
-            } else if (HomePageState.platform == 'android') {
-              SystemNavigator.pop();
-            }
+            Navigator.of(context).pushNamed('/home_screen');
           },
           child: Text('Yes'),
         ),
@@ -546,7 +543,7 @@ class _AlertStartGameState extends State<AlertStartGame> {
                                   top: -0.000011207595889572985,
                                   left: 24.758502960205078,
                                   child: Text(
-                                    'Easy',
+                                    '${Provider.of<GamePreferences>(context).difficultyLevel}',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Color.fromRGBO(0, 0, 0, 1),

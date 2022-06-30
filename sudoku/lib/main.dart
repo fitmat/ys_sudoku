@@ -61,6 +61,12 @@ class MyApp extends StatelessWidget {
               duration: Duration(milliseconds: 375),
               settings: settings,
             );
+          case HomeScreen.routeName:
+            return PageTransition(
+              child: HomeScreen(),
+              duration: Duration(milliseconds: 375),
+              settings: settings,
+            );
         }
       },
     );
@@ -452,11 +458,6 @@ class HomePageState extends State<HomePage> {
               ? null
               : () async {
                   selectedgameButton = [k, i];
-                  var val = selectedgameButton;
-                  rowNo = val[0];
-                  columnNo = val[1];
-                  // callback([k, i], number);
-                  // number = null;
 
                   // showAnimatedDialog<void>(
                   //     barrierDismissible: true,
@@ -672,12 +673,13 @@ class HomePageState extends State<HomePage> {
           if (kIsWeb) {
             return false;
           } else {
-            showAnimatedDialog<void>(
-                animationType: DialogTransitionType.fadeScale,
-                barrierDismissible: true,
-                duration: Duration(milliseconds: 350),
-                context: context,
-                builder: (_) => AlertExit());
+            Navigator.of(context).pushNamed('/settings_screen');
+            // showAnimatedDialog<void>(
+            //     animationType: DialogTransitionType.fadeScale,
+            //     barrierDismissible: true,
+            //     duration: Duration(milliseconds: 350),
+            //     context: context,
+            //     builder: (_) => AlertExit());
           }
           return true;
         },
@@ -717,7 +719,7 @@ class HomePageState extends State<HomePage> {
                       ),
                     )
                   : AppBar(
-                      automaticallyImplyLeading: false,
+                      // automaticallyImplyLeading: false,
                       centerTitle: true,
                       title: Text(
                         'Sudoku',
@@ -760,52 +762,13 @@ class HomePageState extends State<HomePage> {
                                   child: Text('End Game'),
                                   onTap: () {
                                     Navigator.pop(context);
-                                    return AlertDialog(
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      backgroundColor:
-                                          Styles.secondaryBackgroundColor,
-                                      title: Text(
-                                        'Exit Game',
-                                        style: TextStyle(
-                                            color: Styles.foregroundColor),
-                                      ),
-                                      content: Text(
-                                        'Are you sure you want to exit the game ?',
-                                        style: TextStyle(
-                                            color: Styles.foregroundColor),
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          style: ButtonStyle(
-                                              foregroundColor:
-                                                  MaterialStateProperty.all<
-                                                          Color>(
-                                                      Styles.primaryColor)),
-                                          onPressed: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Text('No'),
-                                        ),
-                                        TextButton(
-                                          style: ButtonStyle(
-                                              foregroundColor:
-                                                  MaterialStateProperty.all<
-                                                          Color>(
-                                                      Styles.primaryColor)),
-                                          onPressed: () {
-                                            if (HomePageState.isDesktop) {
-                                              exit(0);
-                                            } else if (HomePageState.platform ==
-                                                'android') {
-                                              SystemNavigator.pop();
-                                            }
-                                          },
-                                          child: Text('Yes'),
-                                        ),
-                                      ],
-                                    );
+                                    showAnimatedDialog<void>(
+                                        animationType:
+                                            DialogTransitionType.fadeScale,
+                                        barrierDismissible: true,
+                                        duration: Duration(milliseconds: 350),
+                                        context: context,
+                                        builder: (_) => AlertExit());
                                   },
                                 ),
                               ),
