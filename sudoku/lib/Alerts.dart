@@ -1,23 +1,41 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:circular_countdown/circular_countdown.dart';
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sudoku/pages/GamePreferences.dart';
+import 'package:sudoku/pages/HomeScreen.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'Styles.dart';
 import 'main.dart';
 
 import 'dart:math' as math;
 
-class AlertGameOver extends StatelessWidget {
+class AlertGameOver extends StatefulWidget {
   static bool newGame = false;
-
   static bool restartGame = false;
   @override
+  State<AlertGameOver> createState() => _AlertGameOverState();
+}
+
+class _AlertGameOverState extends State<AlertGameOver> {
+  bool isPlaying = true;
+  final controller = ConfettiController();
+  void initState() {
+    super.initState();
+    controller.addListener(() {
+      setState(() {
+        isPlaying = controller.state == ConfettiControllerState.playing;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
+    controller.play();
     return AlertDialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       backgroundColor: Color(0xffFFC8B7),
@@ -46,6 +64,10 @@ class AlertGameOver extends StatelessWidget {
                 ]),
               ],
             ),
+            ConfettiWidget(
+              confettiController: controller,
+              blastDirectionality: BlastDirectionality.explosive,
+            ),
             Text('Bingo !',
                 style: TextStyle(
                     color: Colors.black,
@@ -63,9 +85,18 @@ class AlertGameOver extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Icon(FontAwesomeIcons.home, size: 40),
+                    GestureDetector(
+                        child: Icon(FontAwesomeIcons.home, size: 40),
+                        onTap: () {
+                          Navigator.of(context).pushNamed('/home_screen');
+                        }),
                     SizedBox(width: 10),
-                    Icon(Icons.restart_alt, size: 40)
+                    GestureDetector(
+                      child: Icon(Icons.restart_alt, size: 40),
+                      onTap: () {
+                        Navigator.of(context).pushNamed('/home_page');
+                      },
+                    )
                   ]),
             )
           ],
@@ -364,6 +395,8 @@ class AlertAccentColors extends State<AlertAccentColorsState> {
               if (color != this.currentAccentColor) {
                 setState(() {
                   accentColor = color;
+                  Provider.of<GamePreferences>(context, listen: false)
+                      .changeColor(color);
                 });
               }
               Navigator.pop(context);
@@ -371,13 +404,15 @@ class AlertAccentColors extends State<AlertAccentColorsState> {
             child: Column(
               children: [
                 Divider(color: Colors.black),
-                Text(color,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontSize: 15,
-                        color: color == this.currentAccentColor
-                            ? Styles.primaryColor
-                            : Colors.black)),
+                Center(
+                  child: Text(color,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontSize: 15,
+                          color: color == this.currentAccentColor
+                              ? Provider.of<GamePreferences>(context).selColor
+                              : Colors.black)),
+                ),
               ],
             ),
           ),
@@ -544,7 +579,6 @@ class _AlertStartGameState extends State<AlertStartGame> {
                                   left: 24.758502960205078,
                                   child: Text(
                                     '${Provider.of<GamePreferences>(context).difficultyLevel}',
-                                    textAlign: TextAlign.center,
                                     style: TextStyle(
                                         color: Color.fromRGBO(0, 0, 0, 1),
                                         fontFamily: 'Gugi',

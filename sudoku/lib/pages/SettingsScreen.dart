@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sudoku/Alerts.dart';
+import 'package:sudoku/Styles.dart';
 import 'package:sudoku/main.dart';
 import 'package:sudoku/pages/GamePreferences.dart';
 
@@ -85,10 +86,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       borderRadius: BorderRadius.circular(12),
                                       color: Color(0xffd9d9d9),
                                     ),
-                                    padding: const EdgeInsets.only(
-                                      top: 3,
-                                      bottom: 13,
-                                    ),
                                     child: Row(
                                       mainAxisSize: MainAxisSize.min,
                                       mainAxisAlignment:
@@ -96,14 +93,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        Flexible(
-                                          child: SizedBox(
-                                            child: Text(
-                                              '${Provider.of<GamePreferences>(context).difficultyLevel}',
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                color: Colors.black,
-                                              ),
+                                        Center(
+                                          child: Text(
+                                            '${Provider.of<GamePreferences>(context).difficultyLevel}',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                              color: Colors.black,
                                             ),
                                           ),
                                         ),
@@ -162,32 +157,13 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     height: 38,
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(12),
-                                      color: Color(0xffd9d9d9),
+                                      color:
+                                          Provider.of<GamePreferences>(context)
+                                              .selColor,
                                     ),
                                     padding: const EdgeInsets.only(
                                       top: 3,
                                       bottom: 13,
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: 69,
-                                          height: 22,
-                                          child: Text(
-                                            "",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 24,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
                                     ),
                                   ),
                                 ],

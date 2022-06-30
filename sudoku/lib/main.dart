@@ -131,7 +131,7 @@ class HomePageState extends State<HomePage> {
         setPrefs('currentTheme');
       }
       if (currentAccentColor == null) {
-        currentAccentColor = 'Blue';
+        currentAccentColor = 'Cyan';
         setPrefs('currentAccentColor');
       }
       newGame(currentDifficultyLevel);
@@ -396,10 +396,11 @@ class HomePageState extends State<HomePage> {
       if (Styles.primaryBackgroundColor == Styles.darkGrey) {
         color = Styles.grey;
       } else {
-        color = Colors.grey[300];
+        color =
+            Provider.of<GamePreferences>(context).selColor.withOpacity(0.25);
       }
     } else {
-      color = Styles.primaryBackgroundColor;
+      color = Provider.of<GamePreferences>(context).selColor.withOpacity(0.15);
     }
 
     return color;
@@ -482,8 +483,10 @@ class HomePageState extends State<HomePage> {
                     ? emptyColor
                     : Styles.foregroundColor;
               }
-              return game[k][i] == 0 ? buttonColor(k, i) : Colors.green;
-              // Styles.secondaryColor;
+              return game[k][i] == 0
+                  ? buttonColor(k, i)
+                  : Provider.of<GamePreferences>(context).selColor;
+              // : Styles.secondaryColor;
             }),
             shape: MaterialStateProperty.all<OutlinedBorder>(
                 RoundedRectangleBorder(
@@ -813,10 +816,10 @@ class HomePageState extends State<HomePage> {
                   ),
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.only(left: 20.0, right: 10.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Row(
                         children: [
@@ -1084,7 +1087,7 @@ class HomePageState extends State<HomePage> {
           style: Theme.of(context)
               .textTheme
               .subtitle2
-              .copyWith(color: Colors.green),
+              .copyWith(color: Provider.of<GamePreferences>(context).selColor),
         ),
       ],
     );
