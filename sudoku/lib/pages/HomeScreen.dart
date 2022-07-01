@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:sudoku/main.dart';
 
 import '../Alerts.dart';
@@ -30,11 +31,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text(
                       'Sudoku',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: Color(0xff004A62),
-                        fontSize: 43.0,
-                        fontFamily: 'Gugi',
-                      ),
+                      style: GoogleFonts.getFont('Gugi',
+                          color: Color(0xff004A62),
+                          fontSize: 40,
+                          fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
@@ -45,12 +45,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Stack(children: <Widget>[
                   Positioned(
                       top: 275.7897033691406,
-                      left: 90.8812484741211,
+                      left: 60.8812484741211,
                       child: Transform.rotate(
                           angle: -1.13,
                           child: Container(
-                              width: MediaQuery.of(context).size.width * 0.65,
-                              height: MediaQuery.of(context).size.width * 0.65,
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              height: MediaQuery.of(context).size.width * 0.8,
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                     image: AssetImage(
@@ -58,13 +58,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                     fit: BoxFit.fitWidth),
                               )))),
                   Positioned(
-                      top: 100,
+                      top: 80,
                       left: 170.8812484741211,
                       child: Transform.rotate(
                         angle: -16,
                         child: Container(
-                            width: MediaQuery.of(context).size.width * 0.65,
-                            height: MediaQuery.of(context).size.width * 0.65,
+                            width: MediaQuery.of(context).size.width * 0.8,
+                            height: MediaQuery.of(context).size.width * 0.8,
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                   image: AssetImage(
@@ -78,8 +78,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Transform.rotate(
                           angle: 0.24,
                           child: Container(
-                              width: MediaQuery.of(context).size.width * 0.65,
-                              height: MediaQuery.of(context).size.width * 0.65,
+                              width: MediaQuery.of(context).size.width * 0.8,
+                              height: MediaQuery.of(context).size.width * 0.8,
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                     image: AssetImage(
@@ -110,12 +110,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Container(
-                      height: 30,
-                      width: 30,
-                      child: Icon(
-                        FontAwesomeIcons.cog,
-                      )),
+                  Center(
+                    child: Container(
+                        height: 30,
+                        width: 30,
+                        child: Icon(
+                          FontAwesomeIcons.cog,
+                          color: Colors.white,
+                          size: 30.0,
+                        )),
+                  ),
                 ],
               ),
               onTap: () {
@@ -128,11 +132,14 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: GestureDetector(
               child: Column(
                 children: [
-                  Container(
-                    height: 30,
-                    width: 30,
-                    child: Icon(
-                      FontAwesomeIcons.play,
+                  Center(
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      child: Icon(
+                        FontAwesomeIcons.play,
+                        size: 30.0,
+                      ),
                     ),
                   ),
                 ],
@@ -155,14 +162,17 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: GestureDetector(
               child: Column(
                 children: [
-                  Container(
-                    height: 30,
-                    width: 30,
-                    child: Padding(
-                      padding: EdgeInsets.all(0),
-                      child: GestureDetector(
-                        child: Icon(
-                          Icons.help_rounded,
+                  Center(
+                    child: Container(
+                      height: 30,
+                      width: 30,
+                      child: Padding(
+                        padding: EdgeInsets.all(0),
+                        child: GestureDetector(
+                          child: Icon(
+                            Icons.help_rounded,
+                            size: 30.0,
+                          ),
                         ),
                       ),
                     ),

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sudoku/Alerts.dart';
@@ -40,11 +41,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   title: Text(
                     'Settings',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: Color(0xff004A62),
-                      fontSize: 24.0,
-                      fontFamily: 'Gugi',
-                    ),
+                    style: GoogleFonts.getFont('Gugi',
+                        color: Color(0xff004A62),
+                        fontSize: 32,
+                        fontWeight: FontWeight.w500),
                   ),
                   backgroundColor: Color(0xfffff9f1),
                   elevation: 0.0,
@@ -74,35 +74,47 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   Text(
                                     "Difficulty",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 24,
-                                    ),
+                                    style: GoogleFonts.getFont('Gugi',
+                                        color: Colors.black,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w500),
                                   ),
-                                  Container(
-                                    width: 75,
-                                    height: 38,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      color: Color(0xffd9d9d9),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Center(
-                                          child: Text(
-                                            '${Provider.of<GamePreferences>(context).difficultyLevel}',
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.black,
+                                  Flexible(
+                                    child: Container(
+                                      // width: 75,
+                                      // height: 38,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(12),
+                                        color: Color(0xffd9d9d9),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8.0,
+                                            right: 8.0,
+                                            top: 8.0,
+                                            bottom: 8.0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Center(
+                                              child: Text(
+                                                '${Provider.of<GamePreferences>(context).difficultyLevel}',
+                                                textAlign: TextAlign.center,
+                                                style: GoogleFonts.getFont(
+                                                    'Gugi',
+                                                    color: Colors.black,
+                                                    fontSize: 24,
+                                                    fontWeight:
+                                                        FontWeight.w500),
+                                              ),
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                      ],
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -147,10 +159,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   Text(
                                     "Color",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 24,
-                                    ),
+                                    style: GoogleFonts.getFont('Gugi',
+                                        color: Colors.black,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w500),
                                   ),
                                   Container(
                                     width: 75,
@@ -165,6 +177,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       top: 3,
                                       bottom: 13,
                                     ),
+                                    // child: Text(
+                                    //     '${HomePageState.currentAccentColor}',
+                                    //     // '${Provider.of<GamePreferences>(context).selColor}',
+                                    //     style: TextStyle(
+                                    //         color: Colors.white,
+                                    //         fontSize: 18))
                                   ),
                                 ],
                               ),
@@ -206,10 +224,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               Text(
                                 "Theme",
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 24,
-                                ),
+                                style: GoogleFonts.getFont('Gugi',
+                                    color: Colors.black,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w500),
                               ),
                               Row(
                                 children: [
@@ -234,10 +252,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                           child: Text(
                                             "Light",
                                             textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Color(0xff636363),
-                                              fontSize: 24,
-                                            ),
+                                            style: GoogleFonts.getFont('Gugi',
+                                                color: Colors.black,
+                                                fontSize: 24,
+                                                fontWeight: FontWeight.w500),
                                           ),
                                         ),
                                       ],
@@ -257,17 +275,15 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                           width: 75,
                                           height: 38,
                                           color: Color(0xff080202),
-                                          padding: const EdgeInsets.only(
-                                            top: 5,
-                                            bottom: 11,
-                                          ),
-                                          child: Text(
-                                            "Dark",
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 24,
-                                            ),
+                                          child: Center(
+                                            child: Text("Dark",
+                                                textAlign: TextAlign.center,
+                                                style: GoogleFonts.getFont(
+                                                    'Gugi',
+                                                    color: Colors.white,
+                                                    fontSize: 24,
+                                                    fontWeight:
+                                                        FontWeight.w500)),
                                           ),
                                         ),
                                       ],
@@ -292,26 +308,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 "Time Bound",
                                 textAlign: TextAlign.center,
                                 maxLines: 1,
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 24,
-                                ),
+                                style: GoogleFonts.getFont('Gugi',
+                                    color: Colors.black,
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w500),
                               ),
                               Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
                                   //Todo: Add toggle On depending on Shared Preferences
                                   child: isTimeBound == false
                                       ? GestureDetector(
-                                          child:
-                                              Icon(FontAwesomeIcons.toggleOff),
+                                          child: Icon(
+                                            FontAwesomeIcons.toggleOff,
+                                            size: 30.0,
+                                          ),
                                           onTap: () {
                                             setState(() {
                                               isTimeBound = true;
                                             });
                                           })
                                       : GestureDetector(
-                                          child:
-                                              Icon(FontAwesomeIcons.toggleOn),
+                                          child: Icon(
+                                            FontAwesomeIcons.toggleOn,
+                                            size: 30.0,
+                                          ),
                                           onTap: () {
                                             setState(() {
                                               isTimeBound = false;
@@ -335,10 +355,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                   Text(
                                     "About",
                                     textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 24,
-                                    ),
+                                    style: GoogleFonts.getFont('Gugi',
+                                        color: Colors.black,
+                                        fontSize: 24,
+                                        fontWeight: FontWeight.w500),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.only(right: 8.0),
@@ -370,7 +390,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(bottom: 16.0),
-                          child: Text('Version:1.0.0.01'),
+                          child: Text('Version:1.00.003'),
                         ),
                       ],
                     ),
