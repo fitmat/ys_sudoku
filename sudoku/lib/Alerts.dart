@@ -37,9 +37,16 @@ class _AlertGameOverState extends State<AlertGameOver> {
 
   @override
   Widget build(BuildContext context) {
+    int timeRequiredToComplete =
+        Provider.of<GamePreferences>(context).completedTimer;
+    Duration clockTimer = Duration(seconds: timeRequiredToComplete);
+    String newClockTimer =
+        '${clockTimer.inMinutes.remainder(60).toString()}:${(clockTimer.inSeconds.remainder(60) % 60).toString().padLeft(2, '0')}';
     controller.play();
     return AlertDialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(color: Colors.black, width: 1.0)),
       backgroundColor: Color(0xffFFC8B7),
       title: Center(
         child: Text(
@@ -57,7 +64,13 @@ class _AlertGameOverState extends State<AlertGameOver> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Column(children: [
-                  Text('Time : '),
+                  Text(
+                    '$newClockTimer',
+                    style: TextStyle(
+                        fontFamily: "Inter",
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  ),
                   Icon(FontAwesomeIcons.stopwatch)
                 ]),
                 Column(children: [
@@ -82,7 +95,7 @@ class _AlertGameOverState extends State<AlertGameOver> {
               decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   color: Colors.white,
-                  border: Border.all(color: Color(0xffF96B3E), width: 5.0)),
+                  border: Border.all(color: Styles.primaryColor, width: 5.0)),
               child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -168,16 +181,27 @@ class AlertDifficulty extends State<AlertDifficultyState> {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
+      backgroundColor: HomePageState.currentTheme == "light"
+          ? Styles.lightThemebackgroundColor
+          : Styles.darkThemebackgroundColor,
       shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: BorderSide(color: Color(0xffF96B3E), width: 3.0)),
+        borderRadius: BorderRadius.circular(10),
+        side: BorderSide(color: Styles.primaryColor, width: 3.0),
+      ),
       title: Center(
-          child: Text(
-        'Set Difficulty ',
-        textAlign: TextAlign.center,
-        style: GoogleFonts.getFont('Gugi',
-            color: Colors.black, fontSize: 32, fontWeight: FontWeight.w500),
-      )),
+          child: Text('Set Difficulty ',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: HomePageState.currentTheme == "light"
+                      ? Styles.lightThemeprimaryColor
+                      : Styles.darkThemeprimaryColor,
+                  fontFamily: 'Gugi',
+                  fontSize: 32,
+                  fontWeight: FontWeight.w500))
+          //  GoogleFonts.getFont('Gugi',
+          //     color: Colors.black, fontSize: 32, fontWeight: FontWeight.w500),
+          // )
+          ),
       children: <Widget>[
         for (String level in difficulties)
           SimpleDialogOption(
@@ -193,15 +217,28 @@ class AlertDifficulty extends State<AlertDifficultyState> {
             },
             child: Column(
               children: [
-                Divider(color: Colors.black),
+                Divider(
+                  color: HomePageState.currentTheme == "light"
+                      ? Styles.lightThemeprimaryColor
+                      : Styles.darkThemeprimaryColor,
+                ),
                 Text(level[0].toUpperCase() + level.substring(1),
                     textAlign: TextAlign.center,
-                    style: GoogleFonts.getFont('Gugi',
+                    style: TextStyle(
                         color: level == this.currentDifficultyLevel
                             ? Styles.primaryColor
-                            : Colors.black,
+                            : HomePageState.currentTheme == "light"
+                                ? Styles.lightThemeprimaryColor
+                                : Styles.darkThemeprimaryColor,
+                        fontFamily: 'Gugi',
                         fontSize: 20,
-                        fontWeight: FontWeight.w500)),
+                        fontWeight: FontWeight.w500))
+                // GoogleFonts.getFont('Gugi',
+                //     color: level == this.currentDifficultyLevel
+                //         ? Styles.primaryColor
+                //         : Colors.black,
+                //     fontSize: 20,
+                //     fontWeight: FontWeight.w500)),
                 // TextStyle(
                 //     fontSize: 15,
                 //     color: level == this.currentDifficultyLevel
@@ -222,14 +259,24 @@ class AlertExit extends StatelessWidget {
     return AlertDialog(
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          side: BorderSide(color: Color(0xffF96B3E), width: 3.0)),
+          side: BorderSide(color: Styles.primaryColor, width: 3.0)),
       title: Text(
         'End Game',
-        style: TextStyle(color: Styles.foregroundColor),
+        style: TextStyle(
+          color: HomePageState.currentTheme == "light"
+              ? Styles.lightThemebackgroundColor
+              : Styles.darkThemebackgroundColor,
+        ),
       ),
-      content: Text(
-        'Are you sure you want to end the game ?',
-        style: TextStyle(color: Styles.foregroundColor),
+      content: Container(
+        child: Text(
+          'Are you sure you want to end the game ?',
+          style: TextStyle(
+              color: HomePageState.currentTheme == "light"
+                  ? Styles.lightThemebackgroundColor
+                  : Styles.darkThemebackgroundColor,
+              fontFamily: 'Inter'),
+        ),
       ),
       actions: [
         TextButton(
@@ -251,6 +298,38 @@ class AlertExit extends StatelessWidget {
           child: Text('Yes'),
         ),
       ],
+    );
+  }
+}
+
+class TimeOver extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    Future.delayed(Duration(seconds: 3), () {
+      Navigator.of(context).pushReplacementNamed('/home_screen');
+    });
+    return AlertDialog(
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(color: Styles.primaryColor, width: 3.0)),
+      title: Text(
+        "Time's Up",
+        style: TextStyle(
+          color: HomePageState.currentTheme == "light"
+              ? Styles.lightThemebackgroundColor
+              : Styles.darkThemebackgroundColor,
+        ),
+      ),
+      content: Container(
+        child: Text(
+          'Better luck next time',
+          style: TextStyle(
+              color: HomePageState.currentTheme == "light"
+                  ? Styles.lightThemebackgroundColor
+                  : Styles.darkThemebackgroundColor,
+              fontFamily: 'Inter'),
+        ),
+      ),
     );
   }
 }
@@ -385,15 +464,25 @@ class AlertAccentColors extends State<AlertAccentColorsState> {
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
+      backgroundColor: HomePageState.currentTheme == "light"
+          ? Styles.lightThemebackgroundColor
+          : Styles.darkThemebackgroundColor,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          side: BorderSide(color: Color(0xffF96B3E), width: 3.0)),
+          side: BorderSide(color: Styles.primaryColor, width: 3.0)),
       title: Center(
-          child: Text(
-        'Color Choice',
-        style: GoogleFonts.getFont('Gugi',
-            color: Colors.black, fontSize: 32, fontWeight: FontWeight.w500),
-      )),
+          child: Text('Color Choice',
+              style: TextStyle(
+                  color: HomePageState.currentTheme == "light"
+                      ? Styles.lightThemeprimaryColor
+                      : Styles.darkThemeprimaryColor,
+                  fontFamily: 'Gugi',
+                  fontSize: 32,
+                  fontWeight: FontWeight.w500))
+          //  GoogleFonts.getFont('Gugi',
+          //     color: Colors.black, fontSize: 32, fontWeight: FontWeight.w500),
+          // )
+          ),
       contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       children: <Widget>[
         for (String color in accentColors)
@@ -411,19 +500,31 @@ class AlertAccentColors extends State<AlertAccentColorsState> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Divider(color: Colors.black),
-                  Center(
-                    child: Text(
-                      color,
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.getFont('Gugi',
-                          color: color == this.currentAccentColor
-                              ? Provider.of<GamePreferences>(context).selColor
-                              : Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500),
-                    ),
+                  Divider(
+                    color: HomePageState.currentTheme == "light"
+                        ? Styles.lightThemeprimaryColor
+                        : Styles.darkThemeprimaryColor,
                   ),
+                  Center(
+                      child: Text(color,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: color == this.currentAccentColor
+                                  ? Styles.primaryColor
+                                  : HomePageState.currentTheme == "light"
+                                      ? Styles.lightThemeprimaryColor
+                                      : Styles.darkThemeprimaryColor,
+                              fontFamily: 'Gugi',
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500))
+                      // GoogleFonts.getFont('Gugi',
+                      //     color: color == this.currentAccentColor
+                      //         ? Provider.of<GamePreferences>(context).selColor
+                      //         : Colors.black,
+                      //     fontSize: 16,
+                      //     fontWeight: FontWeight.w500),
+                      // ),
+                      ),
                 ],
               ),
             ),
@@ -437,20 +538,34 @@ class AlertAbout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: HomePageState.currentTheme == "light"
+          ? Styles.lightThemebackgroundColor
+          : Styles.darkThemebackgroundColor,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          side: BorderSide(color: Color(0xffF96B3E), width: 3.0)),
+          side: BorderSide(color: Styles.primaryColor, width: 3.0)),
       title: Center(
         child: Column(
           children: [
-            Text(
-              'About',
-              style: GoogleFonts.getFont('Gugi',
-                  color: Colors.black,
-                  fontSize: 32,
-                  fontWeight: FontWeight.w500),
+            Text('About',
+                style: TextStyle(
+                    color: HomePageState.currentTheme == "light"
+                        ? Styles.lightThemeprimaryColor
+                        : Styles.darkThemeprimaryColor,
+                    fontFamily: 'Gugi',
+                    fontSize: 32,
+                    fontWeight: FontWeight.w500)),
+
+            //   GoogleFonts.getFont('Gugi',
+            //       color: Colors.black,
+            //       fontSize: 32,
+            //       fontWeight: FontWeight.w500),
+            // ),
+            Divider(
+              color: HomePageState.currentTheme == "light"
+                  ? Styles.lightThemeprimaryColor
+                  : Styles.darkThemeprimaryColor,
             ),
-            Divider(color: Colors.black),
           ],
         ),
       ),
@@ -459,17 +574,31 @@ class AlertAbout extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            'Sudoku',
-            style: GoogleFonts.getFont('Gugi',
-                color: Colors.black, fontSize: 24, fontWeight: FontWeight.w500),
-          ),
+          Text('Sudoku',
+              style: TextStyle(
+                  color: HomePageState.currentTheme == "light"
+                      ? Styles.lightThemeprimaryColor
+                      : Styles.darkThemeprimaryColor,
+                  fontFamily: 'Gugi',
+                  fontSize: 24,
+                  fontWeight: FontWeight.w500)),
+
+          // GoogleFonts.getFont('Gugi',
+          //     color: Colors.black, fontSize: 24, fontWeight: FontWeight.w500),
+          // ),
           SizedBox(height: 5),
-          Text('Version: 1.00.003 ',
-              style: GoogleFonts.getFont('Gugi',
-                  color: Colors.black,
+          Text('Version: 0.00.004 ',
+              style: TextStyle(
+                  color: HomePageState.currentTheme == "light"
+                      ? Styles.lightThemeprimaryColor
+                      : Styles.darkThemeprimaryColor,
+                  fontFamily: 'Gugi',
                   fontSize: 20,
                   fontWeight: FontWeight.w500)),
+          // GoogleFonts.getFont('Gugi',
+          //     color: Colors.black,
+          //     fontSize: 20,
+          //     fontWeight: FontWeight.w500)),
         ],
       ),
     );
@@ -518,18 +647,25 @@ class _AlertStartGameState extends State<AlertStartGame> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+        backgroundColor: HomePageState.currentTheme == "light"
+            ? Styles.lightThemebackgroundColor
+            : Styles.darkThemebackgroundColor,
         shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-            side: BorderSide(color: Color(0xffF96B3E), width: 5.0)),
+            borderRadius: BorderRadius.circular(12),
+            side: BorderSide(color: Styles.primaryColor, width: 5.0)),
         title: Center(
-          child: Text(
-            'Sudoku',
-            style: GoogleFonts.getFont('Gugi',
-                color: Color(0xff004A62),
-                fontSize: 32,
-                fontWeight: FontWeight.w500),
-          ),
-        ),
+            child: Text('Sudoku',
+                style: TextStyle(
+                    color: Styles.primaryColor,
+                    fontFamily: 'Gugi',
+                    fontSize: 32,
+                    fontWeight: FontWeight.w500))
+            //  GoogleFonts.getFont('Gugi',
+            //     color: Color(0xff004A62),
+            //     fontSize: 32,
+            //     fontWeight: FontWeight.w500),
+            // ),
+            ),
         content: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -538,7 +674,9 @@ class _AlertStartGameState extends State<AlertStartGame> {
               Text(
                 'Game Details',
                 style: TextStyle(
-                    color: Color.fromRGBO(0, 0, 0, 1),
+                    color: HomePageState.currentTheme == "light"
+                        ? Styles.lightThemeprimaryColor
+                        : Styles.darkThemeprimaryColor,
                     fontFamily: 'Inter',
                     fontSize: 16,
                     letterSpacing:
@@ -547,8 +685,9 @@ class _AlertStartGameState extends State<AlertStartGame> {
                     height: 1),
               ),
               Divider(
-                color: Colors.black.withOpacity(0.7),
-              ),
+                  color: HomePageState.currentTheme == "light"
+                      ? Styles.lightThemeprimaryColor.withOpacity(0.7)
+                      : Styles.darkThemeprimaryColor.withOpacity(0.7)),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Container(
@@ -572,8 +711,12 @@ class _AlertStartGameState extends State<AlertStartGame> {
                                       'Difficulty',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                          color: Color.fromRGBO(0, 0, 0, 1)
-                                              .withOpacity(0.5),
+                                          color: HomePageState.currentTheme ==
+                                                  "light"
+                                              ? Styles.lightThemeprimaryColor
+                                                  .withOpacity(0.5)
+                                              : Styles.darkThemeprimaryColor
+                                                  .withOpacity(0.5),
                                           fontFamily: 'Gugi',
                                           fontSize: 14,
                                           letterSpacing:
@@ -587,7 +730,10 @@ class _AlertStartGameState extends State<AlertStartGame> {
                                     child: Text(
                                       '${Provider.of<GamePreferences>(context).difficultyLevel}',
                                       style: TextStyle(
-                                          color: Color.fromRGBO(0, 0, 0, 1),
+                                          color: HomePageState.currentTheme ==
+                                                  "light"
+                                              ? Styles.lightThemeprimaryColor
+                                              : Styles.darkThemeprimaryColor,
                                           fontFamily: 'Inter',
                                           fontSize: 24,
                                           letterSpacing:
@@ -612,8 +758,12 @@ class _AlertStartGameState extends State<AlertStartGame> {
                                       'Hints',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                          color: Color.fromRGBO(0, 0, 0, 1)
-                                              .withOpacity(0.5),
+                                          color: HomePageState.currentTheme ==
+                                                  "light"
+                                              ? Styles.lightThemeprimaryColor
+                                                  .withOpacity(0.5)
+                                              : Styles.darkThemeprimaryColor
+                                                  .withOpacity(0.5),
                                           fontFamily: 'Inter',
                                           fontSize: 14,
                                           letterSpacing:
@@ -628,7 +778,10 @@ class _AlertStartGameState extends State<AlertStartGame> {
                                       '1',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                          color: Color.fromRGBO(0, 0, 0, 1),
+                                          color: HomePageState.currentTheme ==
+                                                  "light"
+                                              ? Styles.lightThemeprimaryColor
+                                              : Styles.darkThemeprimaryColor,
                                           fontFamily: 'Inter',
                                           fontSize: 24,
                                           letterSpacing:
@@ -653,8 +806,12 @@ class _AlertStartGameState extends State<AlertStartGame> {
                                       'Mistakes \n allowed',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                          color: Color.fromRGBO(0, 0, 0, 1)
-                                              .withOpacity(0.5),
+                                          color: HomePageState.currentTheme ==
+                                                  "light"
+                                              ? Styles.lightThemeprimaryColor
+                                                  .withOpacity(0.5)
+                                              : Styles.darkThemeprimaryColor
+                                                  .withOpacity(0.5),
                                           fontFamily: 'Inter',
                                           fontSize: 14,
                                           letterSpacing:
@@ -669,7 +826,10 @@ class _AlertStartGameState extends State<AlertStartGame> {
                                       '3',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                          color: Color.fromRGBO(0, 0, 0, 1),
+                                          color: HomePageState.currentTheme ==
+                                                  "light"
+                                              ? Styles.lightThemeprimaryColor
+                                              : Styles.darkThemeprimaryColor,
                                           fontFamily: 'Gugi',
                                           fontSize: 24,
                                           letterSpacing:
@@ -692,8 +852,12 @@ class _AlertStartGameState extends State<AlertStartGame> {
                                       'Time',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                          color: Color.fromRGBO(0, 0, 0, 1)
-                                              .withOpacity(0.5),
+                                          color: HomePageState.currentTheme ==
+                                                  "light"
+                                              ? Styles.lightThemeprimaryColor
+                                                  .withOpacity(0.5)
+                                              : Styles.darkThemeprimaryColor
+                                                  .withOpacity(0.5),
                                           fontFamily: 'Gugi',
                                           fontSize: 14,
                                           letterSpacing:
@@ -708,7 +872,10 @@ class _AlertStartGameState extends State<AlertStartGame> {
                                       '12:00',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                          color: Color.fromRGBO(0, 0, 0, 1),
+                                          color: HomePageState.currentTheme ==
+                                                  "light"
+                                              ? Styles.lightThemeprimaryColor
+                                              : Styles.darkThemeprimaryColor,
                                           fontFamily: 'Inter',
                                           fontSize: 24,
                                           letterSpacing:
@@ -723,7 +890,9 @@ class _AlertStartGameState extends State<AlertStartGame> {
                           child: Transform.rotate(
                             angle: -0.47160482670297993 * (math.pi / 180),
                             child: Divider(
-                                color: Color.fromRGBO(0, 0, 0, 1),
+                                color: HomePageState.currentTheme == "light"
+                                    ? Styles.lightThemeprimaryColor
+                                    : Styles.darkThemeprimaryColor,
                                 thickness: 1),
                           )),
                       Positioned(
@@ -734,7 +903,9 @@ class _AlertStartGameState extends State<AlertStartGame> {
                             //   angle: -90 * (math.pi / 180),
                             // child:
                             Divider(
-                                color: Color.fromRGBO(0, 0, 0, 1),
+                                color: HomePageState.currentTheme == "light"
+                                    ? Styles.lightThemeprimaryColor
+                                    : Styles.darkThemeprimaryColor,
                                 thickness: 1),
                         // )
                       ),
@@ -743,7 +914,13 @@ class _AlertStartGameState extends State<AlertStartGame> {
                         left: 80.px,
                         child: Row(
                           children: [
-                            Text('Starting in'),
+                            Text(
+                              'Starting in',
+                              style: TextStyle(
+                                  color: HomePageState.currentTheme == "light"
+                                      ? Styles.lightThemeprimaryColor
+                                      : Styles.darkThemeprimaryColor),
+                            ),
                             SizedBox(width: 6.px),
                             _buildValidityDisplayTimer(context),
                           ],
@@ -774,16 +951,16 @@ class _AlertStartGameState extends State<AlertStartGame> {
                 height: MediaQuery.of(context).size.width * 0.10,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color(0xffd9d9d9),
+                  color: Styles.primaryColor.withOpacity(0.7),
                 ),
               ),
               Center(
                 child: Text(
                   "$newClockTimer",
-                  style: Theme.of(context)
-                      .textTheme
-                      .subtitle2
-                      .copyWith(color: Colors.black),
+                  style: Theme.of(context).textTheme.subtitle2.copyWith(
+                      color: HomePageState.currentTheme == "light"
+                          ? Styles.lightThemeprimaryColor
+                          : Styles.darkThemeprimaryColor),
                 ),
               ),
             ],

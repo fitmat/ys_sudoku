@@ -32,23 +32,37 @@ class _SettingsScreenState extends State<SettingsScreen> {
       },
       child: SafeArea(
           child: Scaffold(
-              backgroundColor: Color(0xfffff9f1),
+              backgroundColor: HomePageState.currentTheme == "light"
+                  ? Color(0xfffff9f1)
+                  : Color(0xff292929),
               appBar: PreferredSize(
                 preferredSize: Size.fromHeight(50.0),
                 child: AppBar(
                   // automaticallyImplyLeading: false,
                   centerTitle: true,
-                  title: Text(
-                    'Settings',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.getFont('Gugi',
-                        color: Color(0xff004A62),
-                        fontSize: 32,
-                        fontWeight: FontWeight.w500),
-                  ),
-                  backgroundColor: Color(0xfffff9f1),
+                  title: Text('Settings',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          color: HomePageState.currentTheme == "light"
+                              ? Color(0xff004A62)
+                              : Color(0xffFFFFFF),
+                          fontFamily: 'Gugi',
+                          fontSize: 32,
+                          fontWeight: FontWeight.w500)
+
+                      //  GoogleFonts.getFont('Gugi',
+                      //     color: Color(0xff004A62),
+                      //     fontSize: 32,
+                      //     fontWeight: FontWeight.w500),
+                      ),
+                  backgroundColor: HomePageState.currentTheme == "light"
+                      ? Color(0xfffff9f1)
+                      : Color(0xff292929),
                   elevation: 0.0,
-                  iconTheme: IconThemeData(color: Colors.black),
+                  iconTheme: IconThemeData(
+                      color: HomePageState.currentTheme == "light"
+                          ? Colors.black
+                          : Colors.white),
                 ),
               ),
               body: Column(
@@ -61,7 +75,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       children: [
                         Divider(
                           height: 1,
-                          color: Colors.black.withOpacity(0.7),
+                          color: HomePageState.currentTheme == "light"
+                              ? Styles.lightThemeprimaryColor.withOpacity(0.7)
+                              : Styles.darkThemeprimaryColor.withOpacity(0.7),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(12.0),
@@ -71,14 +87,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    "Difficulty",
-                                    textAlign: TextAlign.center,
-                                    style: GoogleFonts.getFont('Gugi',
-                                        color: Colors.black,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w500),
-                                  ),
+                                  Text("Difficulty",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: HomePageState.currentTheme ==
+                                                  "light"
+                                              ? Styles.lightThemeprimaryColor
+                                              : Styles.darkThemeprimaryColor,
+                                          fontFamily: 'Gugi',
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w500)
+
+                                      //  GoogleFonts.getFont('Gugi',
+                                      //     color: Colors.black,
+                                      //     fontSize: 24,
+                                      //     fontWeight: FontWeight.w500),
+                                      ),
                                   Flexible(
                                     child: Container(
                                       // width: 75,
@@ -102,15 +126,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                           children: [
                                             Center(
                                               child: Text(
-                                                '${Provider.of<GamePreferences>(context).difficultyLevel}',
-                                                textAlign: TextAlign.center,
-                                                style: GoogleFonts.getFont(
-                                                    'Gugi',
-                                                    color: Colors.black,
-                                                    fontSize: 24,
-                                                    fontWeight:
-                                                        FontWeight.w500),
-                                              ),
+                                                  '${Provider.of<GamePreferences>(context).difficultyLevel}',
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontFamily: 'Gugi',
+                                                      fontSize: 24,
+                                                      fontWeight:
+                                                          FontWeight.w500)
+
+                                                  // GoogleFonts.getFont(
+                                                  //     'Gugi',
+                                                  //     color: Colors.black,
+                                                  //     fontSize: 24,
+                                                  //     fontWeight:
+                                                  //         FontWeight.w500),
+                                                  ),
                                             ),
                                           ],
                                         ),
@@ -146,7 +177,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         Divider(
                           height: 1,
-                          color: Colors.black.withOpacity(0.7),
+                          color: HomePageState.currentTheme == "light"
+                              ? Styles.lightThemeprimaryColor.withOpacity(0.7)
+                              : Styles.darkThemeprimaryColor.withOpacity(0.7),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(12.0),
@@ -156,14 +189,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    "Color",
-                                    textAlign: TextAlign.center,
-                                    style: GoogleFonts.getFont('Gugi',
-                                        color: Colors.black,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w500),
-                                  ),
+                                  Text("Color",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: HomePageState.currentTheme ==
+                                                  "light"
+                                              ? Styles.lightThemeprimaryColor
+                                              : Styles.darkThemeprimaryColor,
+                                          fontFamily: 'Gugi',
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w500)
+
+                                      //  GoogleFonts.getFont('Gugi',
+                                      //     color: Colors.black,
+                                      //     fontSize: 24,
+                                      //     fontWeight: FontWeight.w500),
+                                      ),
                                   Container(
                                     width: 75,
                                     height: 38,
@@ -213,7 +254,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         Divider(
                           height: 1,
-                          color: Colors.black.withOpacity(0.7),
+                          color: HomePageState.currentTheme == "light"
+                              ? Styles.lightThemeprimaryColor.withOpacity(0.7)
+                              : Styles.darkThemeprimaryColor.withOpacity(0.7),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(12.0),
@@ -221,14 +264,22 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                "Theme",
-                                textAlign: TextAlign.center,
-                                style: GoogleFonts.getFont('Gugi',
-                                    color: Colors.black,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w500),
-                              ),
+                              Text("Theme",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color:
+                                          HomePageState.currentTheme == "light"
+                                              ? Styles.lightThemeprimaryColor
+                                              : Styles.darkThemeprimaryColor,
+                                      fontFamily: 'Gugi',
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w500)
+
+                                  // GoogleFonts.getFont('Gugi',
+                                  //     color: Colors.black,
+                                  //     fontSize: 24,
+                                  //     fontWeight: FontWeight.w500),
+                                  ),
                               Row(
                                 children: [
                                   Container(
@@ -241,54 +292,83 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
                                       children: [
-                                        Container(
-                                          width: 75,
-                                          height: 38,
-                                          color: Colors.white,
-                                          padding: const EdgeInsets.only(
-                                            top: 5,
-                                            bottom: 5,
-                                          ),
-                                          child: Text(
-                                            "Light",
-                                            textAlign: TextAlign.center,
-                                            style: GoogleFonts.getFont('Gugi',
-                                                color: Colors.black,
-                                                fontSize: 24,
-                                                fontWeight: FontWeight.w500),
-                                          ),
-                                        ),
+                                        GestureDetector(
+                                            child: Container(
+                                              width: 75,
+                                              height: 38,
+                                              color: Colors.white,
+                                              padding: const EdgeInsets.only(
+                                                top: 5,
+                                                bottom: 5,
+                                              ),
+                                              child: Text("Light",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontFamily: 'Gugi',
+                                                      fontSize: 24,
+                                                      fontWeight:
+                                                          FontWeight.w500)
+
+                                                  // GoogleFonts.getFont(
+                                                  //     'Gugi',
+                                                  //     color: Colors.black,
+                                                  //     fontSize: 24,
+                                                  //     fontWeight:
+                                                  //         FontWeight.w500),
+                                                  ),
+                                            ),
+                                            onTap: () {
+                                              Provider.of<GamePreferences>(
+                                                      context,
+                                                      listen: false)
+                                                  .changeTheme("light");
+                                            }),
                                       ],
                                     ),
                                   ),
-                                  Container(
-                                    width: 75,
-                                    height: 38,
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Container(
-                                          width: 75,
-                                          height: 38,
-                                          color: Color(0xff080202),
-                                          child: Center(
-                                            child: Text("Dark",
-                                                textAlign: TextAlign.center,
-                                                style: GoogleFonts.getFont(
-                                                    'Gugi',
-                                                    color: Colors.white,
-                                                    fontSize: 24,
-                                                    fontWeight:
-                                                        FontWeight.w500)),
-                                          ),
+                                  GestureDetector(
+                                      child: Container(
+                                        width: 75,
+                                        height: 38,
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Container(
+                                              width: 75,
+                                              height: 38,
+                                              color: Color(0xff080202),
+                                              child: Center(
+                                                child: Text("Dark",
+                                                    textAlign: TextAlign.center,
+                                                    style: TextStyle(
+                                                        color: Colors.white,
+                                                        fontFamily: 'Gugi',
+                                                        fontSize: 24,
+                                                        fontWeight:
+                                                            FontWeight.w500)
+
+                                                    //  GoogleFonts.getFont(
+                                                    //     'Gugi',
+                                                    //     color: Colors.white,
+                                                    //     fontSize: 24,
+                                                    //     fontWeight:
+                                                    //         FontWeight.w500)
+                                                    ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  ),
+                                      ),
+                                      onTap: () {
+                                        Provider.of<GamePreferences>(context,
+                                                listen: false)
+                                            .changeTheme("dark");
+                                      }),
                                 ],
                               ),
                             ],
@@ -296,7 +376,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         Divider(
                           height: 1,
-                          color: Colors.black.withOpacity(0.7),
+                          color: HomePageState.currentTheme == "light"
+                              ? Styles.lightThemeprimaryColor.withOpacity(0.7)
+                              : Styles.darkThemeprimaryColor.withOpacity(0.7),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(12.0),
@@ -304,37 +386,64 @@ class _SettingsScreenState extends State<SettingsScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              Text(
-                                "Time Bound",
-                                textAlign: TextAlign.center,
-                                maxLines: 1,
-                                style: GoogleFonts.getFont('Gugi',
-                                    color: Colors.black,
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w500),
-                              ),
+                              Text("Time Bound",
+                                  textAlign: TextAlign.center,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                      color:
+                                          HomePageState.currentTheme == "light"
+                                              ? Styles.lightThemeprimaryColor
+                                              : Styles.darkThemeprimaryColor,
+                                      fontFamily: 'Gugi',
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w500)
+
+                                  // GoogleFonts.getFont('Gugi',
+                                  //     color: Colors.black,
+                                  //     fontSize: 24,
+                                  //     fontWeight: FontWeight.w500),
+                                  ),
                               Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
                                   //Todo: Add toggle On depending on Shared Preferences
                                   child: isTimeBound == false
                                       ? GestureDetector(
                                           child: Icon(
-                                            FontAwesomeIcons.toggleOff,
-                                            size: 30.0,
-                                          ),
+                                              FontAwesomeIcons.toggleOff,
+                                              size: 30.0,
+                                              color: HomePageState
+                                                          .currentTheme ==
+                                                      "light"
+                                                  ? Styles
+                                                      .lightThemeprimaryColor
+                                                  : Styles
+                                                      .darkThemeprimaryColor),
                                           onTap: () {
                                             setState(() {
                                               isTimeBound = true;
+                                              Provider.of<GamePreferences>(
+                                                      context,
+                                                      listen: false)
+                                                  .changeisTimeBound(true);
                                             });
                                           })
                                       : GestureDetector(
-                                          child: Icon(
-                                            FontAwesomeIcons.toggleOn,
-                                            size: 30.0,
-                                          ),
+                                          child: Icon(FontAwesomeIcons.toggleOn,
+                                              size: 30.0,
+                                              color: HomePageState
+                                                          .currentTheme ==
+                                                      "light"
+                                                  ? Styles
+                                                      .lightThemeprimaryColor
+                                                  : Styles
+                                                      .darkThemeprimaryColor),
                                           onTap: () {
                                             setState(() {
                                               isTimeBound = false;
+                                              Provider.of<GamePreferences>(
+                                                      context,
+                                                      listen: false)
+                                                  .changeisTimeBound(false);
                                             });
                                           }))
                             ],
@@ -342,7 +451,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                         ),
                         Divider(
                           height: 1,
-                          color: Colors.black.withOpacity(0.7),
+                          color: HomePageState.currentTheme == "light"
+                              ? Styles.lightThemeprimaryColor.withOpacity(0.7)
+                              : Styles.darkThemeprimaryColor.withOpacity(0.7),
                         ),
                         Padding(
                           padding: const EdgeInsets.all(12.0),
@@ -352,17 +463,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text(
-                                    "About",
-                                    textAlign: TextAlign.center,
-                                    style: GoogleFonts.getFont('Gugi',
-                                        color: Colors.black,
-                                        fontSize: 24,
-                                        fontWeight: FontWeight.w500),
-                                  ),
+                                  Text("About",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: HomePageState.currentTheme ==
+                                                  "light"
+                                              ? Styles.lightThemeprimaryColor
+                                              : Styles.darkThemeprimaryColor,
+                                          fontFamily: 'Gugi',
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w500)
+
+                                      // GoogleFonts.getFont('Gugi',
+                                      //     color: Colors.black,
+                                      //     fontSize: 24,
+                                      //     fontWeight: FontWeight.w500),
+                                      ),
                                   Padding(
                                     padding: const EdgeInsets.only(right: 8.0),
-                                    child: Icon(FontAwesomeIcons.infoCircle),
+                                    child: Icon(FontAwesomeIcons.infoCircle,
+                                        color: HomePageState.currentTheme ==
+                                                "light"
+                                            ? Styles.lightThemeprimaryColor
+                                            : Styles.darkThemeprimaryColor),
                                   )
                                 ],
                               ),
@@ -377,9 +500,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               }),
                         ),
                         Divider(
-                          height: 1,
-                          color: Colors.black.withOpacity(0.7),
-                        ),
+                            height: 1,
+                            color: HomePageState.currentTheme == "light"
+                                ? Styles.lightThemeprimaryColor.withOpacity(0.7)
+                                : Styles.darkThemeprimaryColor
+                                    .withOpacity(0.7)),
                       ],
                     ),
                   ),
@@ -390,7 +515,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(bottom: 16.0),
-                          child: Text('Version:1.00.003'),
+                          child: Text('Version:0.00.004',
+                              style: TextStyle(
+                                color: HomePageState.currentTheme == "light"
+                                    ? Styles.lightThemeprimaryColor
+                                    : Styles.darkThemeprimaryColor,
+                              )),
                         ),
                       ],
                     ),

@@ -17,10 +17,16 @@ class RulesPage extends StatelessWidget {
           centerTitle: true,
           title: Text('Rules',
               textAlign: TextAlign.center,
-              style: GoogleFonts.getFont('Gugi',
-                  color: Color(0xff004A62),
+              style: TextStyle(
+                  color: Colors.black,
+                  fontFamily: 'Gugi',
                   fontSize: 24,
-                  fontWeight: FontWeight.w500)),
+                  fontWeight: FontWeight.w500)
+              // GoogleFonts.getFont('Gugi',
+              //     color: Color(0xff004A62),
+              //     fontSize: 24,
+              //     fontWeight: FontWeight.w500)
+              ),
           backgroundColor: Color(0xfffff9f1),
           elevation: 0.0,
           iconTheme: IconThemeData(color: Colors.black),

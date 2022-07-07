@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:sudoku/Styles.dart';
 import 'package:sudoku/main.dart';
 
 import '../Alerts.dart';
@@ -20,7 +21,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
-            backgroundColor: Color(0xfffff9f1),
+            backgroundColor: HomePageState.currentTheme == "light"
+                ? Color(0xfffff9f1)
+                : Color(0xff292929),
             bottomNavigationBar: buildBottomNavigationBar(),
             body: Column(children: [
               Padding(
@@ -28,14 +31,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   child: Align(
                     alignment: Alignment.topCenter,
-                    child: Text(
-                      'Sudoku',
-                      textAlign: TextAlign.center,
-                      style: GoogleFonts.getFont('Gugi',
-                          color: Color(0xff004A62),
-                          fontSize: 40,
-                          fontWeight: FontWeight.w500),
-                    ),
+                    child: Text('Sudoku',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                            color: Styles.primaryColor,
+                            // Color(0xff004A62),
+                            fontFamily: 'Gugi',
+                            fontSize: 40,
+                            fontWeight: FontWeight.w500)
+                        // GoogleFonts.getFont('Gugi',
+                        //     color: Color(0xff004A62),
+                        //     fontSize: 40,
+                        //     fontWeight: FontWeight.w500),
+                        ),
                   ),
                 ),
               ),
@@ -99,7 +107,8 @@ class _HomeScreenState extends State<HomeScreen> {
         showUnselectedLabels: false,
         // currentIndex: _selectedPage,
         unselectedItemColor: Colors.white.withOpacity(0.9),
-        backgroundColor: Color(0xff004A62),
+        backgroundColor: Styles.primaryColor,
+        // Color(0xff004A62),
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.black,
         // onTap: _onTap,

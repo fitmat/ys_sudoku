@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:sudoku/pages/GamePreferences.dart';
 
 class Styles {
   // #FFFFFF
@@ -183,6 +185,10 @@ class Styles {
     900: Color(0xff148f53)
   });
 
+  static Color darkThemebackgroundColor = Color(0xff292929);
+  static Color lightThemebackgroundColor = Color(0xffFFF9F1);
+  static Color darkThemeprimaryColor = Color(0xffffffff);
+  static Color lightThemeprimaryColor = Color(0xff000000);
   static MaterialColor primaryBackgroundColor = darkGrey;
   static MaterialColor secondaryBackgroundColor = grey;
   static MaterialColor foregroundColor = white;
