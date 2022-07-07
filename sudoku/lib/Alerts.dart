@@ -47,7 +47,7 @@ class _AlertGameOverState extends State<AlertGameOver> {
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
           side: BorderSide(color: Colors.black, width: 1.0)),
-      backgroundColor: Color(0xffFFC8B7),
+      backgroundColor: Styles.primaryColor,
       title: Center(
         child: Text(
           'Game Over',
@@ -257,6 +257,9 @@ class AlertExit extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: HomePageState.currentTheme == "light"
+          ? Styles.lightThemebackgroundColor
+          : Styles.darkThemebackgroundColor,
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
           side: BorderSide(color: Styles.primaryColor, width: 3.0)),
@@ -264,8 +267,8 @@ class AlertExit extends StatelessWidget {
         'End Game',
         style: TextStyle(
           color: HomePageState.currentTheme == "light"
-              ? Styles.lightThemebackgroundColor
-              : Styles.darkThemebackgroundColor,
+              ? Styles.lightThemeprimaryColor
+              : Styles.darkThemeprimaryColor,
         ),
       ),
       content: Container(
@@ -273,8 +276,8 @@ class AlertExit extends StatelessWidget {
           'Are you sure you want to end the game ?',
           style: TextStyle(
               color: HomePageState.currentTheme == "light"
-                  ? Styles.lightThemebackgroundColor
-                  : Styles.darkThemebackgroundColor,
+                  ? Styles.lightThemeprimaryColor
+                  : Styles.darkThemeprimaryColor,
               fontFamily: 'Inter'),
         ),
       ),

@@ -321,7 +321,6 @@ class HomePageState extends State<HomePage> {
     }
     SudokuGenerator generator = new SudokuGenerator(emptySquares: emptySquares);
     return [generator.newSudoku, generator.newSudokuSolved];
-    
   }
 
   void setGame(int mode, [String difficulty = 'Easy']) {
@@ -770,7 +769,19 @@ class HomePageState extends State<HomePage> {
                       ),
                       actions: [
                         PopupMenuButton<int>(
-                          icon: Icon(Icons.menu_outlined, size: 30.0),
+                          color: HomePageState.currentTheme == "light"
+                              ? Styles.lightThemebackgroundColor
+                              : Styles.darkThemebackgroundColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          icon: Icon(
+                            Icons.menu_outlined,
+                            size: 30.0,
+                            color: HomePageState.currentTheme == "light"
+                                ? Styles.lightThemeprimaryColor
+                                : Styles.darkThemeprimaryColor,
+                          ),
                           itemBuilder: (context) => <PopupMenuItem<int>>[
                             PopupMenuItem(
                               value: 0,
@@ -779,7 +790,13 @@ class HomePageState extends State<HomePage> {
                                   GestureDetector(
                                       child: Text('Restart Game',
                                           style: TextStyle(
-                                              color: Colors.black,
+                                              color: HomePageState
+                                                          .currentTheme ==
+                                                      "light"
+                                                  ? Styles
+                                                      .lightThemeprimaryColor
+                                                  : Styles
+                                                      .darkThemeprimaryColor,
                                               fontFamily: 'Gugi',
                                               fontSize: 16,
                                               fontWeight: FontWeight.w500)
@@ -793,12 +810,17 @@ class HomePageState extends State<HomePage> {
                                         restartGame();
                                       }),
                                   Divider(
-                                    color: Colors.black,
+                                    color: HomePageState.currentTheme == "light"
+                                        ? Styles.lightThemeprimaryColor
+                                        : Styles.darkThemeprimaryColor,
                                   ),
                                   GestureDetector(
                                     child: Text('Show Solution',
                                         style: TextStyle(
-                                            color: Colors.black,
+                                            color: HomePageState.currentTheme ==
+                                                    "light"
+                                                ? Styles.lightThemeprimaryColor
+                                                : Styles.darkThemeprimaryColor,
                                             fontFamily: 'Gugi',
                                             fontSize: 16,
                                             fontWeight: FontWeight.w500)
@@ -813,14 +835,22 @@ class HomePageState extends State<HomePage> {
                                     },
                                   ),
                                   Divider(
-                                    color: Colors.black,
+                                    color: HomePageState.currentTheme == "light"
+                                        ? Styles.lightThemeprimaryColor
+                                        : Styles.darkThemeprimaryColor,
                                   ),
                                   GestureDetector(
                                     child: Align(
                                         alignment: Alignment.center,
                                         child: Text('End Game',
                                             style: TextStyle(
-                                                color: Colors.black,
+                                                color: HomePageState
+                                                            .currentTheme ==
+                                                        "light"
+                                                    ? Styles
+                                                        .lightThemeprimaryColor
+                                                    : Styles
+                                                        .darkThemeprimaryColor,
                                                 fontFamily: 'Gugi',
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.normal))
