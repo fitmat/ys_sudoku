@@ -8,7 +8,7 @@ class GamePreferences extends ChangeNotifier {
   String theme = "Dark";
   String color = "Orange";
   bool isTimeBound = false;
-  Color selColor = Styles.orange;
+  Color selColor = Styles.primaryColor ?? Styles.orange;
   int completedTimer;
 
   void changeDifficulty(String difficulty) {

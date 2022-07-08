@@ -3,8 +3,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:sudoku/Styles.dart';
 import 'package:sudoku/main.dart';
+import 'package:sudoku/pages/GamePreferences.dart';
 
 import '../Alerts.dart';
 
@@ -17,6 +19,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    HomePageState.getPrefs().whenComplete(() {
+      if (HomePageState.currentAccentColor == null) {
+        HomePageState.currentAccentColor = 'Orange';
+        HomePageState.setPrefs('currentAccentColor');
+      }
+      HomePageState.changeAccentColor(HomePageState.currentAccentColor, true);
+      Provider.of<GamePreferences>(context, listen: false)
+          .changeColor(HomePageState.currentAccentColor);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -34,7 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Text('Sudoku',
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                            color: Styles.primaryColor,
+                            color:
+                                Provider.of<GamePreferences>(context).selColor,
                             // Color(0xff004A62),
                             fontFamily: 'Gugi',
                             fontSize: 40,
