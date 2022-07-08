@@ -125,7 +125,7 @@ class HomePageState extends State<HomePage> {
     } on UnimplementedError {}
     getPrefs().whenComplete(() {
       if (currentDifficultyLevel == null) {
-        currentDifficultyLevel = 'Easy';
+        currentDifficultyLevel = 'Beginner';
         setPrefs('currentDifficultyLevel');
       }
       if (currentTheme == null) {
@@ -287,7 +287,7 @@ class HomePageState extends State<HomePage> {
   }
 
   static int emptyBoxes;
-  static List<List<List<int>>> getNewGame([String difficulty = 'Easy']) {
+  static List<List<List<int>>> getNewGame([String difficulty = 'Beginner']) {
     int emptySquares;
     switch (difficulty) {
       case 'test':
@@ -325,10 +325,9 @@ class HomePageState extends State<HomePage> {
     return [generator.newSudoku, generator.newSudokuSolved];
   }
 
-  void setGame(int mode, [String difficulty = 'Easy']) {
+  void setGame(int mode, [String difficulty = 'Beginner']) {
     if (mode == 1) {
       game = new List.generate(9, (i) => [0, 0, 0, 0, 0, 0, 0, 0, 0]);
-      print("GAME IS : $game");
       gameCopy = SudokuUtilities.copySudoku(game);
       gameSolved = SudokuUtilities.copySudoku(game);
     } else {
@@ -352,8 +351,17 @@ class HomePageState extends State<HomePage> {
   void showHint() {
     hintCount >= 1
         ? setState(() {
-            final snackBar =
-                SnackBar(content: Text('OOPS! You have used all your hints.'));
+            final snackBar = SnackBar(
+              content: Text(
+                'OOPS! You have used all your hints.',
+                style: TextStyle(color: Colors.white),
+              ),
+              behavior: SnackBarBehavior.floating,
+              margin: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).size.height - 80,
+                  right: 20,
+                  left: 20),
+            );
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
           })
         : setState(() {
@@ -401,6 +409,18 @@ class HomePageState extends State<HomePage> {
             mistakeCount++;
             if (mistakeCount == 3) {
               setState(() {
+                final snackBar = SnackBar(
+                  content: Text(
+                    'OOPS! You have made 3 mistakes.',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  behavior: SnackBarBehavior.floating,
+                  margin: EdgeInsets.only(
+                      bottom: MediaQuery.of(context).size.height - 80,
+                      right: 20,
+                      left: 20),
+                );
+                ScaffoldMessenger.of(context).showSnackBar(snackBar);
                 restartGame();
                 mistakeCount = 0;
                 filledEntries = 0;
@@ -1384,6 +1404,9 @@ class HomePageState extends State<HomePage> {
     if (_counter == 720) {
       Provider.of<GamePreferences>(context).isTimeBound == true
           ? WidgetsBinding.instance.addPostFrameCallback((_) {
+              Provider.of<GamePreferences>(context, listen: false)
+                  .setTimer(requiredTime);
+              // AlertGameOverArguments(isTimerOver: true);
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(

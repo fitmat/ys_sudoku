@@ -16,9 +16,18 @@ import 'main.dart';
 
 import 'dart:math' as math;
 
+class AlertGameOverArguments {
+  final bool isTimerOver;
+
+  AlertGameOverArguments({this.isTimerOver});
+}
+
 class AlertGameOver extends StatefulWidget {
   static bool newGame = false;
   static bool restartGame = false;
+  // final bool isTimerOver;
+  // const AlertGameOver({this.isTimerOver});
+
   @override
   State<AlertGameOver> createState() => _AlertGameOverState();
 }
@@ -37,6 +46,9 @@ class _AlertGameOverState extends State<AlertGameOver> {
 
   @override
   Widget build(BuildContext context) {
+    // final args =
+    //     ModalRoute.of(context).settings.arguments as AlertGameOverArguments;
+    // print("Args is: ${args.isTimerOver}");
     int timeRequiredToComplete =
         Provider.of<GamePreferences>(context).completedTimer;
     Duration clockTimer = Duration(seconds: timeRequiredToComplete);
@@ -74,8 +86,9 @@ class _AlertGameOverState extends State<AlertGameOver> {
                   Icon(FontAwesomeIcons.stopwatch)
                 ]),
                 Column(children: [
-                  Text('${HomePageState.emptyBoxes}'),
-                  Icon(FontAwesomeIcons.award)
+                  Text('${HomePageState.emptyBoxes}',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('Completed', style: TextStyle(fontSize: 24)),
                 ]),
               ],
             ),
@@ -308,32 +321,112 @@ class AlertExit extends StatelessWidget {
 class TimeOver extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Future.delayed(Duration(seconds: 3), () {
-      Navigator.of(context).pushReplacementNamed('/home_screen');
-    });
+    int timeRequiredToComplete =
+        Provider.of<GamePreferences>(context).completedTimer;
+    Duration clockTimer = Duration(seconds: timeRequiredToComplete);
+    String newClockTimer =
+        '${clockTimer.inMinutes.remainder(60).toString()}:${(clockTimer.inSeconds.remainder(60) % 60).toString().padLeft(2, '0')}';
+
     return AlertDialog(
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: BorderSide(color: Styles.primaryColor, width: 3.0)),
-      title: Text(
-        "Time's Up",
-        style: TextStyle(
-          color: HomePageState.currentTheme == "light"
-              ? Styles.lightThemeprimaryColor
-              : Styles.darkThemeprimaryColor,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: BorderSide(color: Colors.black, width: 1.0)),
+        backgroundColor: Styles.primaryColor,
+        title: Center(
+          child: Text(
+            'Game Over',
+            style: TextStyle(
+                color: Colors.black, fontFamily: 'Gugi', fontSize: 30),
+          ),
         ),
-      ),
-      content: Container(
-        child: Text(
-          'Better luck next time',
-          style: TextStyle(
-              color: HomePageState.currentTheme == "light"
-                  ? Styles.lightThemeprimaryColor
-                  : Styles.darkThemeprimaryColor,
-              fontFamily: 'Inter'),
-        ),
-      ),
-    );
+        content: Container(
+          height: MediaQuery.of(context).size.height * 0.3,
+          width: MediaQuery.of(context).size.width * 0.5,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(children: [
+                    Text(
+                      '$newClockTimer',
+                      style: TextStyle(
+                          fontFamily: "Inter",
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20),
+                    ),
+                    Icon(FontAwesomeIcons.stopwatch)
+                  ]),
+                  Column(children: [
+                    Text(
+                        '${HomePageState.filledEntries}/${HomePageState.emptyBoxes}',
+                        style: TextStyle(fontWeight: FontWeight.bold)),
+                    Text('Completed', style: TextStyle(fontSize: 24)),
+                  ]),
+                ],
+              ),
+              SizedBox(width: 10),
+              Text('Time Up!',
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold)),
+              SizedBox(height: 10),
+              Container(
+                height: MediaQuery.of(context).size.width * 0.2,
+                width: MediaQuery.of(context).size.width * 0.5,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: Colors.white,
+                    border: Border.all(color: Styles.primaryColor, width: 5.0)),
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                          child: Icon(FontAwesomeIcons.home, size: 40),
+                          onTap: () {
+                            Navigator.of(context).pushNamed('/home_screen');
+                          }),
+                      SizedBox(width: 15),
+                      GestureDetector(
+                        child: Icon(Icons.restart_alt, size: 40),
+                        onTap: () {
+                          Navigator.of(context).pushNamed('/home_page');
+                        },
+                      )
+                    ]),
+              )
+            ],
+          ),
+        ));
+
+    // Future.delayed(Duration(seconds: 3), () {
+    //   Navigator.of(context).pushReplacementNamed('/home_screen');
+    // });
+    // return AlertDialog(
+    //   shape: RoundedRectangleBorder(
+    //       borderRadius: BorderRadius.circular(10),
+    //       side: BorderSide(color: Styles.primaryColor, width: 3.0)),
+    //   title: Text(
+    //     "Time's Up",
+    //     style: TextStyle(
+    //       color: HomePageState.currentTheme == "light"
+    //           ? Styles.lightThemeprimaryColor
+    //           : Styles.darkThemeprimaryColor,
+    //     ),
+    //   ),
+    //   content: Container(
+    //     child: Text(
+    //       'Better luck next time',
+    //       style: TextStyle(
+    //           color: HomePageState.currentTheme == "light"
+    //               ? Styles.lightThemeprimaryColor
+    //               : Styles.darkThemeprimaryColor,
+    //           fontFamily: 'Inter'),
+    //     ),
+    //   ),
+    // );
   }
 }
 
@@ -590,7 +683,7 @@ class AlertAbout extends StatelessWidget {
           //     color: Colors.black, fontSize: 24, fontWeight: FontWeight.w500),
           // ),
           SizedBox(height: 5),
-          Text('Version: 00.00.005 ',
+          Text('Version: 00.00.006 ',
               style: TextStyle(
                   color: HomePageState.currentTheme == "light"
                       ? Styles.lightThemeprimaryColor
