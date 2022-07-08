@@ -5,10 +5,10 @@ import 'package:sudoku/main.dart';
 
 class GamePreferences extends ChangeNotifier {
   String difficultyLevel = HomePageState.currentDifficultyLevel ?? "Easy";
-  String theme = "Light";
-  String color = "Cyan";
+  String theme = "Dark";
+  String color = "Orange";
   bool isTimeBound = false;
-  Color selColor = Styles.ionicCyan[500];
+  Color selColor = Styles.orange;
   int completedTimer;
 
   void changeDifficulty(String difficulty) {

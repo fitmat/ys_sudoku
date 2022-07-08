@@ -111,6 +111,8 @@ class HomePageState extends State<HomePage> {
   static int columnNo;
   int hintCount = 0;
   int requiredTime;
+  static int emptyEntries = 0;
+  static int filledEntries = 0;
 
   @override
   void initState() {
@@ -138,7 +140,7 @@ class HomePageState extends State<HomePage> {
         setPrefs('currentTheme');
       }
       if (currentAccentColor == null) {
-        currentAccentColor = 'Cyan';
+        currentAccentColor = 'Orange';
         setPrefs('currentAccentColor');
       }
       newGame(currentDifficultyLevel);
@@ -326,6 +328,7 @@ class HomePageState extends State<HomePage> {
   void setGame(int mode, [String difficulty = 'Easy']) {
     if (mode == 1) {
       game = new List.generate(9, (i) => [0, 0, 0, 0, 0, 0, 0, 0, 0]);
+      print("GAME IS : $game");
       gameCopy = SudokuUtilities.copySudoku(game);
       gameSolved = SudokuUtilities.copySudoku(game);
     } else {
@@ -338,6 +341,7 @@ class HomePageState extends State<HomePage> {
 
   void showSolution() {
     setState(() {
+      filledEntries = emptyBoxes;
       game = SudokuUtilities.copySudoku(gameSolved);
       isButtonDisabled =
           !isButtonDisabled ? !isButtonDisabled : isButtonDisabled;
@@ -359,6 +363,7 @@ class HomePageState extends State<HomePage> {
             setState(() {
               game[rowNo][columnNo] = hint;
               hintCount++;
+              filledEntries++;
             });
           });
   }
@@ -374,6 +379,7 @@ class HomePageState extends State<HomePage> {
 
   void restartGame() {
     setState(() {
+      filledEntries = 0;
       game = SudokuUtilities.copySudoku(gameCopy);
       isButtonDisabled =
           isButtonDisabled ? !isButtonDisabled : isButtonDisabled;
@@ -381,7 +387,14 @@ class HomePageState extends State<HomePage> {
     });
   }
 
+  void checkNumberOfFilledEntries() {
+    final gameList = game.expand((element) => element).toList();
+    emptyEntries = gameList.where((element) => element == 0).length;
+    filledEntries = emptyBoxes - emptyEntries;
+  }
+
   void ValidateInput() {
+    checkNumberOfFilledEntries();
     SudokuUtilities.isValidConfiguration(game) == false
         ? setState(() {
             isValidInput == false;
@@ -390,6 +403,7 @@ class HomePageState extends State<HomePage> {
               setState(() {
                 restartGame();
                 mistakeCount = 0;
+                filledEntries = 0;
               });
             }
           })
@@ -461,8 +475,10 @@ class HomePageState extends State<HomePage> {
       emptyColor = Styles.secondaryColor;
     }
     List<SizedBox> buttonList = new List<SizedBox>.filled(9, null);
+
     for (var i = 0; i <= 8; i++) {
       var k = timesCalled;
+
       buttonList[i] = SizedBox(
         width: buttonSize(),
         height: buttonSize(),
@@ -474,15 +490,6 @@ class HomePageState extends State<HomePage> {
                   var val = selectedgameButton;
                   rowNo = val[0];
                   columnNo = val[1];
-                  // showAnimatedDialog<void>(
-                  //     barrierDismissible: true,
-                  //     duration: Duration(milliseconds: 300),
-                  //     context: context,
-                  //     builder: (_) => InputNumbers()).whenComplete(() {
-                  //   callback([k, i], InputNumbers.number);
-                  //   InputNumbers.number = null;
-                  //   ValidateInput();
-                  // });
                 },
           onLongPress: isButtonDisabled || gameCopy[k][i] != 0
               ? null
@@ -909,10 +916,11 @@ class HomePageState extends State<HomePage> {
                                   // fontWeight: FontWeight.w500
                                 )),
                           ]),
-                          Provider.of<GamePreferences>(context).isTimeBound ==
-                                  true
-                              ? _buildValidityDisplayTimer(context)
-                              : Container(),
+                          _buildValidityDisplayTimer(context),
+                          // Provider.of<GamePreferences>(context).isTimeBound ==
+                          //         true
+                          //     ? _buildValidityDisplayTimer(context)
+                          //     : Container(),
                         ],
                       ),
                     ),
@@ -958,7 +966,7 @@ class HomePageState extends State<HomePage> {
                           Row(
                             children: [
                               Text(
-                                '0/',
+                                '$filledEntries /',
                                 style: GoogleFonts.getFont(
                                   'Inter',
                                   color: HomePageState.currentTheme == "light"
@@ -1217,43 +1225,43 @@ class HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      Column(
-                        children: [
-                          Icon(Icons.undo,
-                              size: 30.0,
-                              color: HomePageState.currentTheme == "light"
-                                  ? Styles.lightThemeprimaryColor
-                                  : Styles.darkThemeprimaryColor),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 4.0),
-                            child: SizedBox(
-                              width: 20.0.w,
-                              height: 5.0.h,
-                              child: ElevatedButton(
-                                child: Text('Undo',
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        fontFamily: 'Inter',
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w500)),
-                                style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Styles.primaryColor),
-                                  shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(9.0),
-                                  )),
-                                ),
-                                onPressed: () {},
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.1,
-                      ),
+                      // Column(
+                      //   children: [
+                      //     Icon(Icons.undo,
+                      //         size: 30.0,
+                      //         color: HomePageState.currentTheme == "light"
+                      //             ? Styles.lightThemeprimaryColor
+                      //             : Styles.darkThemeprimaryColor),
+                      //     Padding(
+                      //       padding: const EdgeInsets.only(top: 4.0),
+                      //       child: SizedBox(
+                      //         width: 20.0.w,
+                      //         height: 5.0.h,
+                      //         child: ElevatedButton(
+                      //           child: Text('Undo',
+                      //               style: TextStyle(
+                      //                   fontSize: 17,
+                      //                   fontFamily: 'Inter',
+                      //                   color: Colors.white,
+                      //                   fontWeight: FontWeight.w500)),
+                      //           style: ButtonStyle(
+                      //             backgroundColor: MaterialStateProperty.all(
+                      //                 Styles.primaryColor),
+                      //             shape: MaterialStateProperty.all<
+                      //                     RoundedRectangleBorder>(
+                      //                 RoundedRectangleBorder(
+                      //               borderRadius: BorderRadius.circular(9.0),
+                      //             )),
+                      //           ),
+                      //           onPressed: () {},
+                      //         ),
+                      //       ),
+                      //     )
+                      //   ],
+                      // ),
+                      // SizedBox(
+                      //   width: MediaQuery.of(context).size.width * 0.1,
+                      // ),
                       GestureDetector(
                           child: Column(
                             children: [
@@ -1337,6 +1345,7 @@ class HomePageState extends State<HomePage> {
                                     ),
                                     onPressed: () {
                                       callback(selectedgameButton, 0);
+                                      checkNumberOfFilledEntries();
                                     },
                                   ),
                                 ),
@@ -1373,14 +1382,16 @@ class HomePageState extends State<HomePage> {
     String newClockTimer =
         '${clockTimer.inMinutes.remainder(60).toString()}:${(clockTimer.inSeconds.remainder(60) % 60).toString().padLeft(2, '0')}';
     if (_counter == 720) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => TimeOver(),
-          ),
-        );
-      });
+      Provider.of<GamePreferences>(context).isTimeBound == true
+          ? WidgetsBinding.instance.addPostFrameCallback((_) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TimeOver(),
+                ),
+              );
+            })
+          : null;
     }
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,

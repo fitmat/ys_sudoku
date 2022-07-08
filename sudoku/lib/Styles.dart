@@ -192,7 +192,7 @@ class Styles {
   static MaterialColor primaryBackgroundColor = darkGrey;
   static MaterialColor secondaryBackgroundColor = grey;
   static MaterialColor foregroundColor = white;
-  static MaterialColor primaryColor = ionicBlue;
+  static MaterialColor primaryColor = orange;
   static MaterialColor secondaryColor = lightRed;
 
   static final Map<String, MaterialColor> accentColors = {

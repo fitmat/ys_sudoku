@@ -319,8 +319,8 @@ class TimeOver extends StatelessWidget {
         "Time's Up",
         style: TextStyle(
           color: HomePageState.currentTheme == "light"
-              ? Styles.lightThemebackgroundColor
-              : Styles.darkThemebackgroundColor,
+              ? Styles.lightThemeprimaryColor
+              : Styles.darkThemeprimaryColor,
         ),
       ),
       content: Container(
@@ -328,8 +328,8 @@ class TimeOver extends StatelessWidget {
           'Better luck next time',
           style: TextStyle(
               color: HomePageState.currentTheme == "light"
-                  ? Styles.lightThemebackgroundColor
-                  : Styles.darkThemebackgroundColor,
+                  ? Styles.lightThemeprimaryColor
+                  : Styles.darkThemeprimaryColor,
               fontFamily: 'Inter'),
         ),
       ),
@@ -590,7 +590,7 @@ class AlertAbout extends StatelessWidget {
           //     color: Colors.black, fontSize: 24, fontWeight: FontWeight.w500),
           // ),
           SizedBox(height: 5),
-          Text('Version: 0.00.004 ',
+          Text('Version: 00.00.005 ',
               style: TextStyle(
                   color: HomePageState.currentTheme == "light"
                       ? Styles.lightThemeprimaryColor
@@ -687,10 +687,6 @@ class _AlertStartGameState extends State<AlertStartGame> {
                     fontWeight: FontWeight.normal,
                     height: 1),
               ),
-              Divider(
-                  color: HomePageState.currentTheme == "light"
-                      ? Styles.lightThemeprimaryColor.withOpacity(0.7)
-                      : Styles.darkThemeprimaryColor.withOpacity(0.7)),
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: Container(
@@ -708,8 +704,31 @@ class _AlertStartGameState extends State<AlertStartGame> {
                               // height: 46.78476333618164.h,
                               child: Stack(children: <Widget>[
                                 Positioned(
+                                  top: 60.px,
+                                  left: 60.px,
+                                  child: Opacity(
+                                    opacity: 0.30,
+                                    child: Transform.rotate(
+                                      angle: 1.57,
+                                      child: Container(
+                                        width: 110.px,
+                                        height: 10.px,
+                                        child: Divider(
+                                          color: HomePageState.currentTheme ==
+                                                  "light"
+                                              ? Styles.lightThemeprimaryColor
+                                                  .withOpacity(0.7)
+                                              : Styles.darkThemeprimaryColor
+                                                  .withOpacity(0.7),
+                                          height: 1.4.px,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
                                     top: 29.px,
-                                    left: 20.758502960205078.px,
+                                    left: 10.758502960205078.px,
                                     child: Text(
                                       'Difficulty',
                                       textAlign: TextAlign.center,
@@ -729,20 +748,22 @@ class _AlertStartGameState extends State<AlertStartGame> {
                                     )),
                                 Positioned(
                                     top: -0.000011207595889572985.px,
-                                    left: 24.758502960205078.px,
-                                    child: Text(
-                                      '${Provider.of<GamePreferences>(context).difficultyLevel}',
-                                      style: TextStyle(
-                                          color: HomePageState.currentTheme ==
-                                                  "light"
-                                              ? Styles.lightThemeprimaryColor
-                                              : Styles.darkThemeprimaryColor,
-                                          fontFamily: 'Inter',
-                                          fontSize: 24,
-                                          letterSpacing:
-                                              0 /*percentages not used in flutter. defaulting to zero*/,
-                                          fontWeight: FontWeight.w500,
-                                          height: 1),
+                                    left: 10.758502960205078.px,
+                                    child: Center(
+                                      child: Text(
+                                        '${Provider.of<GamePreferences>(context).difficultyLevel}',
+                                        style: TextStyle(
+                                            color: HomePageState.currentTheme ==
+                                                    "light"
+                                                ? Styles.lightThemeprimaryColor
+                                                : Styles.darkThemeprimaryColor,
+                                            fontFamily: 'Inter',
+                                            fontSize: 24,
+                                            letterSpacing:
+                                                0 /*percentages not used in flutter. defaulting to zero*/,
+                                            fontWeight: FontWeight.w500,
+                                            height: 1),
+                                      ),
                                     )),
                               ]))),
                       Positioned(
@@ -755,8 +776,28 @@ class _AlertStartGameState extends State<AlertStartGame> {
                               // height: 42.95964431762695.h,
                               child: Stack(children: <Widget>[
                                 Positioned(
-                                    top: 28.4080753326416,
-                                    left: 20.758502960205078.px,
+                                  top: 0.px,
+                                  left: 10.px,
+                                  child: Opacity(
+                                    opacity: 0.30,
+                                    child: Container(
+                                      width: 197.22.px,
+                                      height: 1.px,
+                                      child: Divider(
+                                        color: HomePageState.currentTheme ==
+                                                "light"
+                                            ? Styles.lightThemeprimaryColor
+                                                .withOpacity(0.7)
+                                            : Styles.darkThemeprimaryColor
+                                                .withOpacity(0.7),
+                                        height: 1.4.px,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                    top: 40.4080753326416,
+                                    left: 12.758502960205078.px,
                                     child: Text(
                                       'Hints',
                                       textAlign: TextAlign.center,
@@ -775,8 +816,8 @@ class _AlertStartGameState extends State<AlertStartGame> {
                                           height: 1),
                                     )),
                                 Positioned(
-                                    top: 0.0000017772096043700003.px,
-                                    left: 26.758502960205078.px,
+                                    top: 15.0000017772096043700003.px,
+                                    left: 20.758502960205078.px,
                                     child: Text(
                                       '1',
                                       textAlign: TextAlign.center,
@@ -803,7 +844,7 @@ class _AlertStartGameState extends State<AlertStartGame> {
                               // height: 54.1345329284668.h,
                               child: Stack(children: <Widget>[
                                 Positioned(
-                                    top: 28.4080753326416.px,
+                                    top: 40.4080753326416.px,
                                     left: 24.0986328125.px,
                                     child: Text(
                                       'Mistakes \n allowed',
@@ -823,7 +864,7 @@ class _AlertStartGameState extends State<AlertStartGame> {
                                           height: 1),
                                     )),
                                 Positioned(
-                                    top: 0.0000017772096043700003.px,
+                                    top: 15.0000017772096043700003.px,
                                     left: 42.465986251831055.px,
                                     child: Text(
                                       '3',
@@ -887,31 +928,6 @@ class _AlertStartGameState extends State<AlertStartGame> {
                                           height: 1),
                                     )),
                               ]))),
-                      Positioned(
-                          top: 175.px,
-                          // left: MediaQuery.of(context).size.height * 0.2,
-                          child: Transform.rotate(
-                            angle: -0.47160482670297993 * (math.pi / 180),
-                            child: Divider(
-                                color: HomePageState.currentTheme == "light"
-                                    ? Styles.lightThemeprimaryColor
-                                    : Styles.darkThemeprimaryColor,
-                                thickness: 1),
-                          )),
-                      Positioned(
-                        top: 0.px,
-                        left: 10.px,
-                        child:
-                            // Transform.rotate(
-                            //   angle: -90 * (math.pi / 180),
-                            // child:
-                            Divider(
-                                color: HomePageState.currentTheme == "light"
-                                    ? Styles.lightThemeprimaryColor
-                                    : Styles.darkThemeprimaryColor,
-                                thickness: 1),
-                        // )
-                      ),
                       Positioned(
                         top: 170.px,
                         left: 80.px,
