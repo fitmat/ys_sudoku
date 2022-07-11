@@ -245,7 +245,6 @@ class HomePageState extends State<HomePage> {
   }
 
   static void changeAccentColor(String color, [bool firstRun = false]) {
-    // setState(() {
     if (Styles.accentColors.keys.contains(color)) {
       Styles.primaryColor = Styles.accentColors[color];
     } else {
@@ -260,7 +259,6 @@ class HomePageState extends State<HomePage> {
     if (!firstRun) {
       setPrefs('currentAccentColor');
     }
-    // });
   }
 
   void checkResult() {
@@ -279,40 +277,34 @@ class HomePageState extends State<HomePage> {
 
   static int emptyBoxes;
   static List<List<List<int>>> getNewGame([String difficulty = 'Beginner']) {
-    int emptySquares;
     switch (difficulty) {
       case 'test':
         {
-          emptySquares = 2;
           emptyBoxes = 2;
         }
         break;
       case 'Beginner':
         {
-          emptySquares = 27;
           emptyBoxes = 27;
         }
         break;
       case 'Easy':
         {
-          emptySquares = 36;
           emptyBoxes = 36;
         }
         break;
       case 'Medium':
         {
-          emptySquares = 45;
           emptyBoxes = 45;
         }
         break;
       case 'Hard':
         {
-          emptySquares = 54;
           emptyBoxes = 54;
         }
         break;
     }
-    SudokuGenerator generator = new SudokuGenerator(emptySquares: emptySquares);
+    SudokuGenerator generator = new SudokuGenerator(emptySquares: emptyBoxes);
     return [generator.newSudoku, generator.newSudokuSolved];
   }
 
