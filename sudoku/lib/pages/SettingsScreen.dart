@@ -515,7 +515,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(bottom: 16.0),
-                          child: Text('Version:00.00.006',
+                          child: Text('Version:00.00.007',
                               style: TextStyle(
                                 color: HomePageState.currentTheme == "light"
                                     ? Styles.lightThemeprimaryColor
