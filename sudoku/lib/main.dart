@@ -16,6 +16,7 @@ import 'package:sudoku/pages/GamePreferences.dart';
 import 'package:sudoku/pages/HomeScreen.dart';
 import 'package:sudoku/pages/RulesPage.dart';
 import 'package:sudoku/pages/SettingsScreen.dart';
+import 'package:sudoku/pages/utils.dart';
 import 'package:sudoku_solver_generator/sudoku_solver_generator.dart';
 import 'Styles.dart';
 import 'Alerts.dart';
@@ -70,6 +71,12 @@ class MyApp extends StatelessWidget {
                 duration: Duration(milliseconds: 375),
                 settings: settings,
               );
+            case AlertGameOver.routeName:
+              return PageTransition(
+                child: AlertGameOver(),
+                duration: Duration(milliseconds: 375),
+                settings: settings,
+              );
           }
         },
       );
@@ -112,7 +119,7 @@ class HomePageState extends State<HomePage> {
   int hintCount = 0;
   int requiredTime;
   static int emptyEntries = 0;
-  static int filledEntries = 0;
+  int filledEntries = 0;
 
   @override
   void initState() {
@@ -264,22 +271,7 @@ class HomePageState extends State<HomePage> {
         gameOver = true;
         Provider.of<GamePreferences>(context, listen: false)
             .setTimer(requiredTime);
-        Timer(Duration(milliseconds: 500), () {
-          showAnimatedDialog<void>(
-              animationType: DialogTransitionType.fadeScale,
-              barrierDismissible: true,
-              duration: Duration(milliseconds: 350),
-              context: context,
-              builder: (_) => AlertGameOver()).whenComplete(() {
-            if (AlertGameOver.newGame) {
-              newGame();
-              AlertGameOver.newGame = false;
-            } else if (AlertGameOver.restartGame) {
-              restartGame();
-              AlertGameOver.restartGame = false;
-            }
-          });
-        });
+        Utils.goToGameOverAlert(context, false, filledEntries);
       }
     } on InvalidSudokuConfigurationException {
       return;
@@ -1406,13 +1398,7 @@ class HomePageState extends State<HomePage> {
           ? WidgetsBinding.instance.addPostFrameCallback((_) {
               Provider.of<GamePreferences>(context, listen: false)
                   .setTimer(requiredTime);
-              // AlertGameOverArguments(isTimerOver: true);
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => TimeOver(),
-                ),
-              );
+              Utils.goToGameOverAlert(context, true, filledEntries);
             })
           : null;
     }
