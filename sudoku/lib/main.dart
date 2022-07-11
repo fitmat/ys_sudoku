@@ -107,18 +107,17 @@ class HomePageState extends State<HomePage> {
   static String platform;
   static bool isDesktop;
   List<int> selectedgameButton;
-  static bool isValidInput;
-  static int mistakeCount = 0;
-  static int number;
-  static int numberSelected;
+  bool isValidInput;
+  int mistakeCount = 0;
+  int number;
+  int numberSelected;
   int _counter = 0;
-  // 720;
   Timer _timer;
-  static int rowNo;
-  static int columnNo;
+  int rowNo;
+  int columnNo;
   int hintCount = 0;
   int requiredTime;
-  static int emptyEntries = 0;
+  int emptyEntries = 0;
   int filledEntries = 0;
 
   @override
