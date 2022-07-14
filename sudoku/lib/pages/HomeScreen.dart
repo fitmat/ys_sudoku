@@ -167,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () {
                 showAnimatedDialog<void>(
                     animationType: DialogTransitionType.fadeScale,
-                    barrierDismissible: true,
+                    barrierDismissible: false,
                     duration: Duration(milliseconds: 350),
                     context: context,
                     builder: (_) => AlertStartGame());

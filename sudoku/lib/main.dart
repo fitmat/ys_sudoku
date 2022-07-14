@@ -127,7 +127,7 @@ class HomePageState extends State<HomePage>
     _animationController.repeat(reverse: true);
     super.initState();
     mistakeCount = 0;
-    super.initState();
+
     try {
       doWhenWindowReady(() {
         appWindow.minSize = Size(800, 800);
@@ -176,6 +176,25 @@ class HomePageState extends State<HomePage>
 
   void _startTimerForOTP() {
     _counter = 0;
+    if (_timer != null) {
+      _timer.cancel();
+    }
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_counter >= 0) {
+        setState(() {
+          _counter++;
+          requiredTime = _counter;
+        });
+      } else {
+        setState(() {
+          _counter = 0;
+          _timer.cancel();
+        });
+      }
+    });
+  }
+
+  void _continueTimer() {
     if (_timer != null) {
       _timer.cancel();
     }
@@ -719,7 +738,7 @@ class HomePageState extends State<HomePage>
                 barrierDismissible: true,
                 duration: Duration(milliseconds: 350),
                 context: context,
-                builder: (_) => AlertExit());
+                builder: (_) => _exitDialog());
             // Navigator.of(context).pushNamed('/home_screen');
           }
           return true;
@@ -861,13 +880,17 @@ class HomePageState extends State<HomePage>
                                                     FontWeight.normal))),
                                     onTap: () {
                                       Navigator.pop(context);
+                                      // _timer.cancel();
+                                      // setState(() {
+                                      //   _exitDialog();
+                                      // });
                                       showAnimatedDialog<void>(
                                           animationType:
                                               DialogTransitionType.fadeScale,
                                           barrierDismissible: true,
                                           duration: Duration(milliseconds: 350),
                                           context: context,
-                                          builder: (_) => AlertExit());
+                                          builder: (_) => _exitDialog());
                                     },
                                   ),
                                 ],
@@ -1328,7 +1351,7 @@ class HomePageState extends State<HomePage>
     Duration clockTimer = Duration(seconds: _counter);
     String newClockTimer =
         '${clockTimer.inMinutes.remainder(60).toString()}:${(clockTimer.inSeconds.remainder(60) % 60).toString().padLeft(2, '0')}';
-    if (_counter == 720) {
+    if (_counter == 20) {
       Provider.of<GamePreferences>(context).isTimeBound == true
           ? WidgetsBinding.instance.addPostFrameCallback((_) {
               Provider.of<GamePreferences>(context, listen: false)
@@ -1359,5 +1382,78 @@ class HomePageState extends State<HomePage>
             fontWeight: FontWeight.w500),
       );
     }
+  }
+
+  Widget _exitDialog() {
+    return AlertDialog(
+      backgroundColor: HomePageState.currentTheme == "light"
+          ? Styles.lightThemebackgroundColor
+          : Styles.darkThemebackgroundColor,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(color: Styles.primaryColor, width: 3.0)),
+      title: Text(
+        'End Game',
+        style: TextStyle(
+          color: HomePageState.currentTheme == "light"
+              ? Styles.lightThemeprimaryColor
+              : Styles.darkThemeprimaryColor,
+        ),
+      ),
+      content: Container(
+        height: MediaQuery.of(context).size.height * 0.08,
+        child: Center(
+          child: Column(
+            children: [
+              Text(
+                'Are you sure you want to end the game ?',
+                style: TextStyle(
+                    color: HomePageState.currentTheme == "light"
+                        ? Styles.lightThemeprimaryColor
+                        : Styles.darkThemeprimaryColor,
+                    fontFamily: 'Inter'),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: Text(
+                  "Game progress would be lost. Do you really want to exit the game ?",
+                  style: TextStyle(
+                      color: HomePageState.currentTheme == "light"
+                          ? Styles.lightThemeprimaryColor
+                          : Styles.darkThemeprimaryColor,
+                      fontFamily: 'Inter'),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(
+            HomePageState.currentTheme == "light"
+                ? Styles.lightThemeprimaryColor
+                : Styles.darkThemeprimaryColor,
+          )),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('No'),
+        ),
+        TextButton(
+          style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.red)),
+          onPressed: () {
+            setState(() {
+              _timer.cancel();
+              _counter = 0;
+            });
+            Navigator.of(context).pushNamed('/home_screen');
+          },
+          child: Text('Yes'),
+        ),
+      ],
+    );
   }
 }

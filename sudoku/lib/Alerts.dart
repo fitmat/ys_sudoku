@@ -225,6 +225,7 @@ class AlertDifficulty extends State<AlertDifficultyState> {
 }
 
 class AlertExit extends StatelessWidget {
+  static bool isNoClicked;
   static const String routeName = '/alert_exit';
   @override
   Widget build(BuildContext context) {
@@ -280,6 +281,7 @@ class AlertExit extends StatelessWidget {
                 : Styles.darkThemeprimaryColor,
           )),
           onPressed: () {
+            isNoClicked = true;
             Navigator.pop(context);
           },
           child: Text('No'),
