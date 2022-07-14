@@ -48,13 +48,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               : Color(0xffFFFFFF),
                           fontFamily: 'Gugi',
                           fontSize: 32,
-                          fontWeight: FontWeight.w500)
-
-                      //  GoogleFonts.getFont('Gugi',
-                      //     color: Color(0xff004A62),
-                      //     fontSize: 32,
-                      //     fontWeight: FontWeight.w500),
-                      ),
+                          fontWeight: FontWeight.w500)),
                   backgroundColor: HomePageState.currentTheme == "light"
                       ? Color(0xfffff9f1)
                       : Color(0xff292929),
@@ -96,17 +90,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                               : Styles.darkThemeprimaryColor,
                                           fontFamily: 'Gugi',
                                           fontSize: 24,
-                                          fontWeight: FontWeight.w500)
-
-                                      //  GoogleFonts.getFont('Gugi',
-                                      //     color: Colors.black,
-                                      //     fontSize: 24,
-                                      //     fontWeight: FontWeight.w500),
-                                      ),
+                                          fontWeight: FontWeight.w500)),
                                   Flexible(
                                     child: Container(
-                                      // width: 75,
-                                      // height: 38,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(12),
                                         color: Color(0xffd9d9d9),
@@ -133,15 +119,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                                       fontFamily: 'Gugi',
                                                       fontSize: 24,
                                                       fontWeight:
-                                                          FontWeight.w500)
-
-                                                  // GoogleFonts.getFont(
-                                                  //     'Gugi',
-                                                  //     color: Colors.black,
-                                                  //     fontSize: 24,
-                                                  //     fontWeight:
-                                                  //         FontWeight.w500),
-                                                  ),
+                                                          FontWeight.w500)),
                                             ),
                                           ],
                                         ),
@@ -198,13 +176,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                               : Styles.darkThemeprimaryColor,
                                           fontFamily: 'Gugi',
                                           fontSize: 24,
-                                          fontWeight: FontWeight.w500)
-
-                                      //  GoogleFonts.getFont('Gugi',
-                                      //     color: Colors.black,
-                                      //     fontSize: 24,
-                                      //     fontWeight: FontWeight.w500),
-                                      ),
+                                          fontWeight: FontWeight.w500)),
                                   Container(
                                     width: 75,
                                     height: 38,
@@ -273,13 +245,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                               : Styles.darkThemeprimaryColor,
                                       fontFamily: 'Gugi',
                                       fontSize: 24,
-                                      fontWeight: FontWeight.w500)
-
-                                  // GoogleFonts.getFont('Gugi',
-                                  //     color: Colors.black,
-                                  //     fontSize: 24,
-                                  //     fontWeight: FontWeight.w500),
-                                  ),
+                                      fontWeight: FontWeight.w500)),
                               Row(
                                 children: [
                                   Container(
@@ -308,15 +274,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                                       fontFamily: 'Gugi',
                                                       fontSize: 24,
                                                       fontWeight:
-                                                          FontWeight.w500)
-
-                                                  // GoogleFonts.getFont(
-                                                  //     'Gugi',
-                                                  //     color: Colors.black,
-                                                  //     fontSize: 24,
-                                                  //     fontWeight:
-                                                  //         FontWeight.w500),
-                                                  ),
+                                                          FontWeight.w500)),
                                             ),
                                             onTap: () {
                                               Provider.of<GamePreferences>(
@@ -350,15 +308,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                                         fontFamily: 'Gugi',
                                                         fontSize: 24,
                                                         fontWeight:
-                                                            FontWeight.w500)
-
-                                                    //  GoogleFonts.getFont(
-                                                    //     'Gugi',
-                                                    //     color: Colors.white,
-                                                    //     fontSize: 24,
-                                                    //     fontWeight:
-                                                    //         FontWeight.w500)
-                                                    ),
+                                                            FontWeight.w500)),
                                               ),
                                             ),
                                           ],
@@ -396,13 +346,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                               : Styles.darkThemeprimaryColor,
                                       fontFamily: 'Gugi',
                                       fontSize: 24,
-                                      fontWeight: FontWeight.w500)
-
-                                  // GoogleFonts.getFont('Gugi',
-                                  //     color: Colors.black,
-                                  //     fontSize: 24,
-                                  //     fontWeight: FontWeight.w500),
-                                  ),
+                                      fontWeight: FontWeight.w500)),
                               Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
                                   //Todo: Add toggle On depending on Shared Preferences
@@ -472,13 +416,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                               : Styles.darkThemeprimaryColor,
                                           fontFamily: 'Gugi',
                                           fontSize: 24,
-                                          fontWeight: FontWeight.w500)
-
-                                      // GoogleFonts.getFont('Gugi',
-                                      //     color: Colors.black,
-                                      //     fontSize: 24,
-                                      //     fontWeight: FontWeight.w500),
-                                      ),
+                                          fontWeight: FontWeight.w500)),
                                   Padding(
                                     padding: const EdgeInsets.only(right: 8.0),
                                     child: Icon(FontAwesomeIcons.infoCircle,

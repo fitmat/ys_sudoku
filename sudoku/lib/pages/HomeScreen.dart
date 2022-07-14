@@ -52,15 +52,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         style: TextStyle(
                             color:
                                 Provider.of<GamePreferences>(context).selColor,
-                            // Color(0xff004A62),
                             fontFamily: 'Gugi',
                             fontSize: 40,
-                            fontWeight: FontWeight.w500)
-                        // GoogleFonts.getFont('Gugi',
-                        //     color: Color(0xff004A62),
-                        //     fontSize: 40,
-                        //     fontWeight: FontWeight.w500),
-                        ),
+                            fontWeight: FontWeight.w500)),
                   ),
                 ),
               ),

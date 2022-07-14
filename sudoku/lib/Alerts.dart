@@ -1,20 +1,12 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:circular_countdown/circular_countdown.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:sudoku/pages/GamePreferences.dart';
-import 'package:sudoku/pages/HomeScreen.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'Styles.dart';
 import 'main.dart';
-
-import 'dart:math' as math;
 
 class AlertGameOver extends StatefulWidget {
   static const String routeName = '/alert_game_over';
@@ -140,29 +132,6 @@ class _AlertGameOverState extends State<AlertGameOver> {
           ],
         ),
       ),
-      // actions: [
-      //   Icon(FontAwesomeIcons.home),
-      //   TextButton(
-      //     style: ButtonStyle(
-      //         foregroundColor:
-      //             MaterialStateProperty.all<Color>(Styles.primaryColor)),
-      //     onPressed: () {
-      //       Navigator.pop(context);
-      //       restartGame = true;
-      //     },
-      //     child: Text('Restart Game'),
-      //   ),
-      //   TextButton(
-      //     style: ButtonStyle(
-      //         foregroundColor:
-      //             MaterialStateProperty.all<Color>(Styles.primaryColor)),
-      //     onPressed: () {
-      //       Navigator.pop(context);
-      //       newGame = true;
-      //     },
-      //     child: Text('New Game'),
-      //   ),
-      // ],
     );
   }
 }
@@ -220,11 +189,7 @@ class AlertDifficulty extends State<AlertDifficultyState> {
                       : Styles.darkThemeprimaryColor,
                   fontFamily: 'Gugi',
                   fontSize: 32,
-                  fontWeight: FontWeight.w500))
-          //  GoogleFonts.getFont('Gugi',
-          //     color: Colors.black, fontSize: 32, fontWeight: FontWeight.w500),
-          // )
-          ),
+                  fontWeight: FontWeight.w500))),
       children: <Widget>[
         for (String level in difficulties)
           SimpleDialogOption(
@@ -256,18 +221,6 @@ class AlertDifficulty extends State<AlertDifficultyState> {
                         fontFamily: 'Gugi',
                         fontSize: 20,
                         fontWeight: FontWeight.w500))
-                // GoogleFonts.getFont('Gugi',
-                //     color: level == this.currentDifficultyLevel
-                //         ? Styles.primaryColor
-                //         : Colors.black,
-                //     fontSize: 20,
-                //     fontWeight: FontWeight.w500)),
-                // TextStyle(
-                //     fontSize: 15,
-                //     color: level == this.currentDifficultyLevel
-                //         ? Styles.primaryColor
-                //         : Colors.black)
-                // ),
               ],
             ),
           ),
@@ -472,11 +425,7 @@ class AlertAccentColors extends State<AlertAccentColorsState> {
                       : Styles.darkThemeprimaryColor,
                   fontFamily: 'Gugi',
                   fontSize: 32,
-                  fontWeight: FontWeight.w500))
-          //  GoogleFonts.getFont('Gugi',
-          //     color: Colors.black, fontSize: 32, fontWeight: FontWeight.w500),
-          // )
-          ),
+                  fontWeight: FontWeight.w500))),
       contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       children: <Widget>[
         for (String color in accentColors)
@@ -510,15 +459,7 @@ class AlertAccentColors extends State<AlertAccentColorsState> {
                                       : Styles.darkThemeprimaryColor,
                               fontFamily: 'Gugi',
                               fontSize: 16,
-                              fontWeight: FontWeight.w500))
-                      // GoogleFonts.getFont('Gugi',
-                      //     color: color == this.currentAccentColor
-                      //         ? Provider.of<GamePreferences>(context).selColor
-                      //         : Colors.black,
-                      //     fontSize: 16,
-                      //     fontWeight: FontWeight.w500),
-                      // ),
-                      ),
+                              fontWeight: FontWeight.w500))),
                 ],
               ),
             ),
@@ -549,12 +490,6 @@ class AlertAbout extends StatelessWidget {
                     fontFamily: 'Gugi',
                     fontSize: 32,
                     fontWeight: FontWeight.w500)),
-
-            //   GoogleFonts.getFont('Gugi',
-            //       color: Colors.black,
-            //       fontSize: 32,
-            //       fontWeight: FontWeight.w500),
-            // ),
             Divider(
               color: HomePageState.currentTheme == "light"
                   ? Styles.lightThemeprimaryColor
@@ -576,10 +511,6 @@ class AlertAbout extends StatelessWidget {
                   fontFamily: 'Gugi',
                   fontSize: 24,
                   fontWeight: FontWeight.w500)),
-
-          // GoogleFonts.getFont('Gugi',
-          //     color: Colors.black, fontSize: 24, fontWeight: FontWeight.w500),
-          // ),
           SizedBox(height: 5),
           Text('Version: 00.00.007 ',
               style: TextStyle(
@@ -589,10 +520,6 @@ class AlertAbout extends StatelessWidget {
                   fontFamily: 'Gugi',
                   fontSize: 20,
                   fontWeight: FontWeight.w500)),
-          // GoogleFonts.getFont('Gugi',
-          //     color: Colors.black,
-          //     fontSize: 20,
-          //     fontWeight: FontWeight.w500)),
         ],
       ),
     );
@@ -653,13 +580,7 @@ class _AlertStartGameState extends State<AlertStartGame> {
                     color: Styles.primaryColor,
                     fontFamily: 'Gugi',
                     fontSize: 32,
-                    fontWeight: FontWeight.w500))
-            //  GoogleFonts.getFont('Gugi',
-            //     color: Color(0xff004A62),
-            //     fontSize: 32,
-            //     fontWeight: FontWeight.w500),
-            // ),
-            ),
+                    fontWeight: FontWeight.w500))),
         content: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -691,8 +612,6 @@ class _AlertStartGameState extends State<AlertStartGame> {
                           child: Container(
                               width: MediaQuery.of(context).size.width * 0.6,
                               height: MediaQuery.of(context).size.width * 0.3,
-                              // width: 142.5748291015625.w,
-                              // height: 46.78476333618164.h,
                               child: Stack(children: <Widget>[
                                 Positioned(
                                   top: 60.px,
@@ -763,8 +682,6 @@ class _AlertStartGameState extends State<AlertStartGame> {
                           child: Container(
                               width: MediaQuery.of(context).size.width * 0.6,
                               height: MediaQuery.of(context).size.width * 0.2,
-                              // width: 122.08503723144531.w,
-                              // height: 42.95964431762695.h,
                               child: Stack(children: <Widget>[
                                 Positioned(
                                   top: 0.px,
@@ -831,8 +748,6 @@ class _AlertStartGameState extends State<AlertStartGame> {
                           child: Container(
                               width: MediaQuery.of(context).size.width * 0.7,
                               height: MediaQuery.of(context).size.width * 0.2,
-                              // width: 142.5748291015625.w,
-                              // height: 54.1345329284668.h,
                               child: Stack(children: <Widget>[
                                 Positioned(
                                     top: 40.4080753326416.px,

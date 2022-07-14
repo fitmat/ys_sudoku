@@ -18,8 +18,6 @@ class MaterialColorGenerator {
         1,
       );
     });
-    // print(color.value);
-    // print(swatch);
     print("MaterialColor(${color.value},$swatch);");
     return MaterialColor(color.value, swatch);
   }

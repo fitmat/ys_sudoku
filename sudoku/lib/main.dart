@@ -1,7 +1,6 @@
 // ignore_for_file: missing_required_param, missing_return
 
 import 'dart:async';
-import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,7 +19,6 @@ import 'package:sudoku/pages/utils.dart';
 import 'package:sudoku_solver_generator/sudoku_solver_generator.dart';
 import 'Styles.dart';
 import 'Alerts.dart';
-import 'SplashScreenPage.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 void main() {
@@ -197,11 +195,9 @@ class HomePageState extends State<HomePage> {
 
   static Future<void> getPrefs() async {
     final prefs = await SharedPreferences.getInstance();
-    // setState(() {
     currentDifficultyLevel = prefs.getString('currentDifficultyLevel');
     currentTheme = prefs.getString('currentTheme');
     currentAccentColor = prefs.getString('currentAccentColor');
-    // });
   }
 
   static setPrefs(String property) async {
@@ -424,12 +420,9 @@ class HomePageState extends State<HomePage> {
         color = Styles.grey[300];
       } else {
         color = Colors.grey[300];
-        // color =
-        //     Provider.of<GamePreferences>(context).selColor.withOpacity(0.25);
       }
     } else {
       color = Styles.primaryBackgroundColor;
-      // color = Provider.of<GamePreferences>(context).selColor.withOpacity(0.15);
     }
 
     return color;
@@ -705,12 +698,6 @@ class HomePageState extends State<HomePage> {
             return false;
           } else {
             Navigator.of(context).pushNamed('/home_screen');
-            // showAnimatedDialog<void>(
-            //     animationType: DialogTransitionType.fadeScale,
-            //     barrierDismissible: true,
-            //     duration: Duration(milliseconds: 350),
-            //     context: context,
-            //     builder: (_) => AlertExit());
           }
           return true;
         },
@@ -758,16 +745,9 @@ class HomePageState extends State<HomePage> {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               color: Styles.primaryColor,
-                              // Color(0xff004A62),
                               fontFamily: 'Gugi',
                               fontSize: 40,
-                              fontWeight: FontWeight.w500)
-
-                          // GoogleFonts.getFont('Gugi',
-                          //     color: Color(0xff004A62),
-                          //     fontSize: 40,
-                          //     fontWeight: FontWeight.w500),
-                          ),
+                              fontWeight: FontWeight.w500)),
                       backgroundColor: HomePageState.currentTheme == "light"
                           ? Styles.lightThemebackgroundColor
                           : Styles.darkThemebackgroundColor,
@@ -809,12 +789,7 @@ class HomePageState extends State<HomePage> {
                                                       .darkThemeprimaryColor,
                                               fontFamily: 'Gugi',
                                               fontSize: 16,
-                                              fontWeight: FontWeight.w500)
-                                          //    GoogleFonts.getFont('Gugi',
-                                          //       color: Colors.black,
-                                          //       fontSize: 16,
-                                          //       fontWeight: FontWeight.normal),
-                                          ),
+                                              fontWeight: FontWeight.w500)),
                                       onTap: () {
                                         Navigator.pop(context);
                                         restartGame();
@@ -833,12 +808,7 @@ class HomePageState extends State<HomePage> {
                                                 : Styles.darkThemeprimaryColor,
                                             fontFamily: 'Gugi',
                                             fontSize: 16,
-                                            fontWeight: FontWeight.w500)
-                                        // GoogleFonts.getFont('Gugi',
-                                        //     color: Colors.black,
-                                        //     fontSize: 16,
-                                        //     fontWeight: FontWeight.normal),
-                                        ),
+                                            fontWeight: FontWeight.w500)),
                                     onTap: () {
                                       Navigator.pop(context);
                                       showSolution();
@@ -863,14 +833,8 @@ class HomePageState extends State<HomePage> {
                                                         .darkThemeprimaryColor,
                                                 fontFamily: 'Gugi',
                                                 fontSize: 16,
-                                                fontWeight: FontWeight.normal))
-
-                                        // GoogleFonts.getFont('Gugi',
-                                        //     color: Colors.black,
-                                        //     fontSize: 16,
-                                        //     fontWeight: FontWeight.normal),
-
-                                        ),
+                                                fontWeight:
+                                                    FontWeight.normal))),
                                     onTap: () {
                                       Navigator.pop(context);
                                       showAnimatedDialog<void>(
@@ -901,29 +865,39 @@ class HomePageState extends State<HomePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Row(children: [
-                            Text('Mode:',
-                                style: GoogleFonts.getFont('Inter',
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(left: 8.0, right: 8.0),
+                            child: Row(children: [
+                              Text('Mode:',
+                                  style: GoogleFonts.getFont('Inter',
+                                      color:
+                                          HomePageState.currentTheme == "light"
+                                              ? Styles.lightThemeprimaryColor
+                                              : Styles.darkThemeprimaryColor,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500)),
+                              Text(' $currentDifficultyLevel',
+                                  style: GoogleFonts.getFont(
+                                    'Inter',
                                     color: HomePageState.currentTheme == "light"
                                         ? Styles.lightThemeprimaryColor
                                         : Styles.darkThemeprimaryColor,
                                     fontSize: 16,
-                                    fontWeight: FontWeight.w500)),
-                            Text(' $currentDifficultyLevel',
-                                style: GoogleFonts.getFont(
-                                  'Inter',
-                                  color: HomePageState.currentTheme == "light"
-                                      ? Styles.lightThemeprimaryColor
-                                      : Styles.darkThemeprimaryColor,
-                                  fontSize: 16,
-                                  // fontWeight: FontWeight.w500
-                                )),
-                          ]),
-                          _buildValidityDisplayTimer(context),
-                          // Provider.of<GamePreferences>(context).isTimeBound ==
-                          //         true
-                          //     ? _buildValidityDisplayTimer(context)
-                          //     : Container(),
+                                  )),
+                            ]),
+                          ),
+                          Row(
+                            children: [
+                              Icon(
+                                Icons.timer,
+                                color: HomePageState.currentTheme == "light"
+                                    ? Styles.lightThemeprimaryColor
+                                    : Styles.darkThemeprimaryColor,
+                              ),
+                              _buildValidityDisplayTimer(context),
+                            ],
+                          ),
                         ],
                       ),
                     ),
@@ -949,7 +923,6 @@ class HomePageState extends State<HomePage> {
                                         ? Styles.lightThemeprimaryColor
                                         : Styles.darkThemeprimaryColor,
                                     fontSize: 16,
-                                    // fontWeight: FontWeight.w500
                                   )),
                               Text('3',
                                   style: TextStyle(
@@ -960,10 +933,6 @@ class HomePageState extends State<HomePage> {
                                       fontFamily: 'Inter',
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500)),
-                              // GoogleFonts.getFont('Inter',
-                              //     color: Colors.black,
-                              //     fontSize: 16,
-                              //     fontWeight: FontWeight.w500)),
                             ],
                           ),
                           Row(
@@ -1228,43 +1197,6 @@ class HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      // Column(
-                      //   children: [
-                      //     Icon(Icons.undo,
-                      //         size: 30.0,
-                      //         color: HomePageState.currentTheme == "light"
-                      //             ? Styles.lightThemeprimaryColor
-                      //             : Styles.darkThemeprimaryColor),
-                      //     Padding(
-                      //       padding: const EdgeInsets.only(top: 4.0),
-                      //       child: SizedBox(
-                      //         width: 20.0.w,
-                      //         height: 5.0.h,
-                      //         child: ElevatedButton(
-                      //           child: Text('Undo',
-                      //               style: TextStyle(
-                      //                   fontSize: 17,
-                      //                   fontFamily: 'Inter',
-                      //                   color: Colors.white,
-                      //                   fontWeight: FontWeight.w500)),
-                      //           style: ButtonStyle(
-                      //             backgroundColor: MaterialStateProperty.all(
-                      //                 Styles.primaryColor),
-                      //             shape: MaterialStateProperty.all<
-                      //                     RoundedRectangleBorder>(
-                      //                 RoundedRectangleBorder(
-                      //               borderRadius: BorderRadius.circular(9.0),
-                      //             )),
-                      //           ),
-                      //           onPressed: () {},
-                      //         ),
-                      //       ),
-                      //     )
-                      //   ],
-                      // ),
-                      // SizedBox(
-                      //   width: MediaQuery.of(context).size.width * 0.1,
-                      // ),
                       GestureDetector(
                           child: Column(
                             children: [
@@ -1361,17 +1293,10 @@ class HomePageState extends State<HomePage> {
                     ],
                   ),
                 ),
-                // SizedBox(height: 10.0)
               ],
             );
           }),
         ));
-    // floatingActionButton: FloatingActionButton(
-    //   foregroundColor: Styles.primaryBackgroundColor,
-    //   backgroundColor: Styles.primaryColor,
-    //   onPressed: () => showOptionModalSheet(context),
-    //   child: Icon(Icons.menu_rounded),
-    // )));
   }
 
   Future<int> getNumber() async {
@@ -1393,39 +1318,12 @@ class HomePageState extends State<HomePage> {
             })
           : null;
     }
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Icon(
-          Icons.timer,
-          color: HomePageState.currentTheme == "light"
-              ? Styles.lightThemeprimaryColor
-              : Styles.darkThemeprimaryColor,
-        ),
-        Text(
-          " $newClockTimer",
-          style: GoogleFonts.getFont('Inter',
-              color: Provider.of<GamePreferences>(context).selColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w500),
-        ),
-      ],
+    return Text(
+      " $newClockTimer",
+      style: GoogleFonts.getFont('Inter',
+          color: Provider.of<GamePreferences>(context).selColor,
+          fontSize: 16,
+          fontWeight: FontWeight.w500),
     );
   }
 }
-
-// class SudokuModel extends ChangeNotifier {
-//   String difficultyLevel;
-
-//   GamePreferences _preferences = GamePreferences();
-
-//   SudokuModel() {
-//     setDifficultyLevel();
-//   }
-
-//   setDifficultyLevel() async {
-//     difficultyLevel = await _preferences.getDifficultyLevel();
-//     notifyListeners();
-//   }
-// }

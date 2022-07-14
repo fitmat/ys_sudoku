@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.varuns2002.sudoku">
+          package="com.dj.sudoku">
 
     <application
             android:label="Sudoku"
