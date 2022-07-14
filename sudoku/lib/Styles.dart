@@ -46,7 +46,7 @@ class Styles {
   });
 
   // 3DC2FF
-  static MaterialColor ionicCyan = MaterialColor(4282237695, {
+  static MaterialColor ionicCyan = MaterialColor(4278255615, {
     50: Color(0xff94ddff),
     100: Color(0xff8bdaff),
     200: Color(0xff77d4ff),
@@ -60,7 +60,7 @@ class Styles {
   });
 
   // #3880FF
-  static MaterialColor ionicBlue = MaterialColor(4281893119, {
+  static MaterialColor ionicBlue = MaterialColor(4278190335, {
     50: Color(0xff92b9ff),
     100: Color(0xff88b3ff),
     200: Color(0xff74a6ff),
@@ -74,7 +74,7 @@ class Styles {
   });
 
   // #5260FF
-  static MaterialColor ionicIndigo = MaterialColor(4283588863, {
+  static MaterialColor ionicIndigo = MaterialColor(4283105410, {
     50: Color(0xffa0a8ff),
     100: Color(0xff97a0ff),
     200: Color(0xff8690ff),
@@ -88,7 +88,7 @@ class Styles {
   });
 
   // 7C4DFF
-  static MaterialColor violet = MaterialColor(4286336511, {
+  static MaterialColor violet = MaterialColor(4287561983, {
     50: Color(0xffb79dff),
     100: Color(0xffb094ff),
     200: Color(0xffa382ff),
@@ -102,7 +102,7 @@ class Styles {
   });
 
   // E040FB
-  static MaterialColor purple = MaterialColor(4292886779, {
+  static MaterialColor purple = MaterialColor(4288684272, {
     50: Color(0xffee96fd),
     100: Color(0xffec8cfd),
     200: Color(0xffe979fc),
@@ -116,7 +116,7 @@ class Styles {
   });
 
   // F00075
-  static MaterialColor pink = MaterialColor(4293918837, {
+  static MaterialColor pink = MaterialColor(4294928820, {
     50: Color(0xfff773b3),
     100: Color(0xfff666ac),
     200: Color(0xfff54d9e),
@@ -184,6 +184,18 @@ class Styles {
     800: Color(0xff17a761),
     900: Color(0xff148f53)
   });
+  static const MaterialColor yellow = MaterialColor(4294967040, {
+    50: Color(0xFFFFFDE7),
+    100: Color(0xFFFFF9C4),
+    200: Color(0xFFFFF59D),
+    300: Color(0xFFFFF176),
+    400: Color(0xFFFFEE58),
+    500: Color(0xFFFFEB3B),
+    600: Color(0xFFFDD835),
+    700: Color(0xFFFBC02D),
+    800: Color(0xFFF9A825),
+    900: Color(0xFFF57F17),
+  });
 
   static Color darkThemebackgroundColor = Color(0xff292929);
   static Color lightThemebackgroundColor = Color(0xffFFF9F1);
@@ -205,5 +217,6 @@ class Styles {
     'Red': oneplusRed,
     'Orange': orange,
     'Green': aospExtendedGreen,
+    'yellow': yellow,
   };
 }

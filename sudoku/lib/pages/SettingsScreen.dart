@@ -135,9 +135,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                         barrierDismissible: true,
                                         duration: Duration(milliseconds: 350),
                                         context: context,
-                                        builder: (_) =>
-                                            // AlertGameOver());
-                                            AlertDifficultyState(HomePageState
+                                        builder: (_) => AlertDifficultyState(
+                                            HomePageState
                                                 .currentDifficultyLevel))
                                     .whenComplete(() {
                                   if (AlertDifficultyState.difficulty != null) {
@@ -190,12 +189,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                       top: 3,
                                       bottom: 13,
                                     ),
-                                    // child: Text(
-                                    //     '${HomePageState.currentAccentColor}',
-                                    //     // '${Provider.of<GamePreferences>(context).selColor}',
-                                    //     style: TextStyle(
-                                    //         color: Colors.white,
-                                    //         fontSize: 18))
                                   ),
                                 ],
                               ),
@@ -453,7 +446,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(bottom: 16.0),
-                          child: Text('Version:00.00.007',
+                          child: Text('Version:00.00.008',
                               style: TextStyle(
                                 color: HomePageState.currentTheme == "light"
                                     ? Styles.lightThemeprimaryColor

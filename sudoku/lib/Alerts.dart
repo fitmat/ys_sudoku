@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:sudoku/pages/GamePreferences.dart';
+import 'package:sudoku/pages/SettingsScreen.dart';
 import 'Styles.dart';
 import 'main.dart';
 
@@ -77,7 +78,7 @@ class _AlertGameOverState extends State<AlertGameOver> {
                   args[0] == false
                       ? Text('${HomePageState.emptyBoxes}',
                           style: TextStyle(fontWeight: FontWeight.bold))
-                      : Text('${args[1]}/${HomePageState.emptyBoxes}',
+                      : Text('${args[2]}/${HomePageState.emptyBoxes}',
                           style: TextStyle(fontWeight: FontWeight.bold)),
                   Text('Completed', style: TextStyle(fontSize: 24)),
                 ]),
@@ -92,17 +93,11 @@ class _AlertGameOverState extends State<AlertGameOver> {
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.01.h,
             ),
-            args[0] == false
-                ? Text('Bingo !',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold))
-                : Text('Time Up!',
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold)),
+            Text('${args[1]}',
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold)),
             SizedBox(height: 10),
             Container(
               height: MediaQuery.of(context).size.width * 0.2,
@@ -230,6 +225,7 @@ class AlertDifficulty extends State<AlertDifficultyState> {
 }
 
 class AlertExit extends StatelessWidget {
+  static const String routeName = '/alert_exit';
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -248,20 +244,41 @@ class AlertExit extends StatelessWidget {
         ),
       ),
       content: Container(
-        child: Text(
-          'Are you sure you want to end the game ?',
-          style: TextStyle(
-              color: HomePageState.currentTheme == "light"
-                  ? Styles.lightThemeprimaryColor
-                  : Styles.darkThemeprimaryColor,
-              fontFamily: 'Inter'),
+        height: MediaQuery.of(context).size.height * 0.08,
+        child: Center(
+          child: Column(
+            children: [
+              Text(
+                'Are you sure you want to end the game ?',
+                style: TextStyle(
+                    color: HomePageState.currentTheme == "light"
+                        ? Styles.lightThemeprimaryColor
+                        : Styles.darkThemeprimaryColor,
+                    fontFamily: 'Inter'),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: Text(
+                  "Game progress would be lost. Do you really want to exit the game ?",
+                  style: TextStyle(
+                      color: HomePageState.currentTheme == "light"
+                          ? Styles.lightThemeprimaryColor
+                          : Styles.darkThemeprimaryColor,
+                      fontFamily: 'Inter'),
+                ),
+              )
+            ],
+          ),
         ),
       ),
       actions: [
         TextButton(
           style: ButtonStyle(
-              foregroundColor:
-                  MaterialStateProperty.all<Color>(Styles.primaryColor)),
+              foregroundColor: MaterialStateProperty.all<Color>(
+            HomePageState.currentTheme == "light"
+                ? Styles.lightThemeprimaryColor
+                : Styles.darkThemeprimaryColor,
+          )),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -269,8 +286,7 @@ class AlertExit extends StatelessWidget {
         ),
         TextButton(
           style: ButtonStyle(
-              foregroundColor:
-                  MaterialStateProperty.all<Color>(Styles.primaryColor)),
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.red)),
           onPressed: () {
             Navigator.of(context).pushNamed('/home_screen');
           },
@@ -426,7 +442,7 @@ class AlertAccentColors extends State<AlertAccentColorsState> {
                   fontFamily: 'Gugi',
                   fontSize: 32,
                   fontWeight: FontWeight.w500))),
-      contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
+      // contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       children: <Widget>[
         for (String color in accentColors)
           SimpleDialogOption(
@@ -442,14 +458,14 @@ class AlertAccentColors extends State<AlertAccentColorsState> {
             },
             child: SingleChildScrollView(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Divider(
-                    color: HomePageState.currentTheme == "light"
-                        ? Styles.lightThemeprimaryColor
-                        : Styles.darkThemeprimaryColor,
-                  ),
-                  Center(
-                      child: Text(color,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(color,
                           textAlign: TextAlign.center,
                           style: TextStyle(
                               color: color == this.currentAccentColor
@@ -459,7 +475,25 @@ class AlertAccentColors extends State<AlertAccentColorsState> {
                                       : Styles.darkThemeprimaryColor,
                               fontFamily: 'Gugi',
                               fontSize: 16,
-                              fontWeight: FontWeight.w500))),
+                              fontWeight: FontWeight.w500)),
+                      Container(
+                        width: 46,
+                        height: 28,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: Styles.accentColors[color],
+                        ),
+                      ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Divider(
+                      color: HomePageState.currentTheme == "light"
+                          ? Styles.lightThemeprimaryColor
+                          : Styles.darkThemeprimaryColor,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -512,7 +546,7 @@ class AlertAbout extends StatelessWidget {
                   fontSize: 24,
                   fontWeight: FontWeight.w500)),
           SizedBox(height: 5),
-          Text('Version: 00.00.007 ',
+          Text('Version: 00.00.008 ',
               style: TextStyle(
                   color: HomePageState.currentTheme == "light"
                       ? Styles.lightThemeprimaryColor
@@ -599,98 +633,28 @@ class _AlertStartGameState extends State<AlertStartGame> {
                     fontWeight: FontWeight.normal,
                     height: 1),
               ),
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Container(
-                  width: MediaQuery.of(context).size.width * 0.65,
-                  height: MediaQuery.of(context).size.width * 0.58,
-                  child: Stack(
-                    children: <Widget>[
-                      Positioned(
-                          top: MediaQuery.of(context).size.width * 0.03,
-                          left: MediaQuery.of(context).size.width * 0.009,
-                          child: Container(
-                              width: MediaQuery.of(context).size.width * 0.6,
-                              height: MediaQuery.of(context).size.width * 0.3,
-                              child: Stack(children: <Widget>[
-                                Positioned(
-                                  top: 60.px,
-                                  left: 60.px,
-                                  child: Opacity(
-                                    opacity: 0.30,
-                                    child: Transform.rotate(
-                                      angle: 1.57,
-                                      child: Container(
-                                        width: 110.px,
-                                        height: 10.px,
-                                        child: Divider(
-                                          color: HomePageState.currentTheme ==
-                                                  "light"
-                                              ? Styles.lightThemeprimaryColor
-                                                  .withOpacity(0.7)
-                                              : Styles.darkThemeprimaryColor
-                                                  .withOpacity(0.7),
-                                          height: 1.4.px,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                Positioned(
-                                    top: 29.px,
-                                    left: 10.758502960205078.px,
-                                    child: Text(
-                                      'Difficulty',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: HomePageState.currentTheme ==
-                                                  "light"
-                                              ? Styles.lightThemeprimaryColor
-                                                  .withOpacity(0.5)
-                                              : Styles.darkThemeprimaryColor
-                                                  .withOpacity(0.5),
-                                          fontFamily: 'Gugi',
-                                          fontSize: 14,
-                                          letterSpacing:
-                                              0 /*percentages not used in flutter. defaulting to zero*/,
-                                          fontWeight: FontWeight.normal,
-                                          height: 1),
-                                    )),
-                                Positioned(
-                                    top: -0.000011207595889572985.px,
-                                    left: 10.758502960205078.px,
-                                    child: Center(
-                                      child: Text(
-                                        '${Provider.of<GamePreferences>(context).difficultyLevel}',
-                                        style: TextStyle(
-                                            color: HomePageState.currentTheme ==
-                                                    "light"
-                                                ? Styles.lightThemeprimaryColor
-                                                : Styles.darkThemeprimaryColor,
-                                            fontFamily: 'Inter',
-                                            fontSize: 24,
-                                            letterSpacing:
-                                                0 /*percentages not used in flutter. defaulting to zero*/,
-                                            fontWeight: FontWeight.w500,
-                                            height: 1),
-                                      ),
-                                    )),
-                              ]))),
-                      Positioned(
-                          top: MediaQuery.of(context).size.width * 0.2,
-                          left: MediaQuery.of(context).size.width * 0.05,
-                          child: Container(
-                              width: MediaQuery.of(context).size.width * 0.6,
-                              height: MediaQuery.of(context).size.width * 0.2,
-                              child: Stack(children: <Widget>[
-                                Positioned(
-                                  top: 0.px,
-                                  left: 10.px,
-                                  child: Opacity(
-                                    opacity: 0.30,
+              Container(
+                width: MediaQuery.of(context).size.width * 0.65,
+                height: MediaQuery.of(context).size.width * 0.58,
+                child: Stack(
+                  children: <Widget>[
+                    Positioned(
+                        top: MediaQuery.of(context).size.width * 0.03,
+                        left: MediaQuery.of(context).size.width * 0.009,
+                        child: Container(
+                            width: MediaQuery.of(context).size.width * 0.6,
+                            height: MediaQuery.of(context).size.width * 0.3,
+                            child: Stack(children: <Widget>[
+                              Positioned(
+                                top: 60.px,
+                                left: 60.px,
+                                child: Opacity(
+                                  opacity: 0.30,
+                                  child: Transform.rotate(
+                                    angle: 1.57,
                                     child: Container(
-                                      width: 197.22.px,
-                                      height: 1.px,
+                                      width: 110.px,
+                                      height: 10.px,
                                       child: Divider(
                                         color: HomePageState.currentTheme ==
                                                 "light"
@@ -703,124 +667,33 @@ class _AlertStartGameState extends State<AlertStartGame> {
                                     ),
                                   ),
                                 ),
-                                Positioned(
-                                    top: 40.4080753326416,
-                                    left: 12.758502960205078.px,
+                              ),
+                              Positioned(
+                                  top: 29.px,
+                                  left: 10.758502960205078.px,
+                                  child: Text(
+                                    'Difficulty',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: HomePageState.currentTheme ==
+                                                "light"
+                                            ? Styles.lightThemeprimaryColor
+                                                .withOpacity(0.5)
+                                            : Styles.darkThemeprimaryColor
+                                                .withOpacity(0.5),
+                                        fontFamily: 'Gugi',
+                                        fontSize: 14,
+                                        letterSpacing:
+                                            0 /*percentages not used in flutter. defaulting to zero*/,
+                                        fontWeight: FontWeight.normal,
+                                        height: 1),
+                                  )),
+                              Positioned(
+                                  top: -0.000011207595889572985.px,
+                                  left: 10.758502960205078.px,
+                                  child: Center(
                                     child: Text(
-                                      'Hints',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: HomePageState.currentTheme ==
-                                                  "light"
-                                              ? Styles.lightThemeprimaryColor
-                                                  .withOpacity(0.5)
-                                              : Styles.darkThemeprimaryColor
-                                                  .withOpacity(0.5),
-                                          fontFamily: 'Inter',
-                                          fontSize: 14,
-                                          letterSpacing:
-                                              0 /*percentages not used in flutter. defaulting to zero*/,
-                                          fontWeight: FontWeight.normal,
-                                          height: 1),
-                                    )),
-                                Positioned(
-                                    top: 15.0000017772096043700003.px,
-                                    left: 20.758502960205078.px,
-                                    child: Text(
-                                      '1',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: HomePageState.currentTheme ==
-                                                  "light"
-                                              ? Styles.lightThemeprimaryColor
-                                              : Styles.darkThemeprimaryColor,
-                                          fontFamily: 'Inter',
-                                          fontSize: 24,
-                                          letterSpacing:
-                                              0 /*percentages not used in flutter. defaulting to zero*/,
-                                          fontWeight: FontWeight.w500,
-                                          height: 1),
-                                    )),
-                              ]))),
-                      Positioned(
-                          top: MediaQuery.of(context).size.width * 0.2,
-                          left: MediaQuery.of(context).size.width * 0.35,
-                          child: Container(
-                              width: MediaQuery.of(context).size.width * 0.7,
-                              height: MediaQuery.of(context).size.width * 0.2,
-                              child: Stack(children: <Widget>[
-                                Positioned(
-                                    top: 40.4080753326416.px,
-                                    left: 24.0986328125.px,
-                                    child: Text(
-                                      'Mistakes \n allowed',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: HomePageState.currentTheme ==
-                                                  "light"
-                                              ? Styles.lightThemeprimaryColor
-                                                  .withOpacity(0.5)
-                                              : Styles.darkThemeprimaryColor
-                                                  .withOpacity(0.5),
-                                          fontFamily: 'Inter',
-                                          fontSize: 14,
-                                          letterSpacing:
-                                              0 /*percentages not used in flutter. defaulting to zero*/,
-                                          fontWeight: FontWeight.normal,
-                                          height: 1),
-                                    )),
-                                Positioned(
-                                    top: 15.0000017772096043700003.px,
-                                    left: 42.465986251831055.px,
-                                    child: Text(
-                                      '3',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: HomePageState.currentTheme ==
-                                                  "light"
-                                              ? Styles.lightThemeprimaryColor
-                                              : Styles.darkThemeprimaryColor,
-                                          fontFamily: 'Gugi',
-                                          fontSize: 24,
-                                          letterSpacing:
-                                              0 /*percentages not used in flutter. defaulting to zero*/,
-                                          fontWeight: FontWeight.w500,
-                                          height: 1),
-                                    )),
-                              ]))),
-                      Positioned(
-                          top: MediaQuery.of(context).size.width * 0.03,
-                          left: MediaQuery.of(context).size.width * 0.37,
-                          child: Container(
-                              width: MediaQuery.of(context).size.width * 0.7,
-                              height: MediaQuery.of(context).size.width * 0.3,
-                              child: Stack(children: <Widget>[
-                                Positioned(
-                                    top: 29.px,
-                                    left: 25.0986328125.px,
-                                    child: Text(
-                                      'Time',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: HomePageState.currentTheme ==
-                                                  "light"
-                                              ? Styles.lightThemeprimaryColor
-                                                  .withOpacity(0.5)
-                                              : Styles.darkThemeprimaryColor
-                                                  .withOpacity(0.5),
-                                          fontFamily: 'Gugi',
-                                          fontSize: 14,
-                                          letterSpacing:
-                                              0 /*percentages not used in flutter. defaulting to zero*/,
-                                          fontWeight: FontWeight.normal,
-                                          height: 1),
-                                    )),
-                                Positioned(
-                                    top: 0.px,
-                                    left: 9.0986328125.px,
-                                    child: Text(
-                                      '12:00',
-                                      textAlign: TextAlign.center,
+                                      '${Provider.of<GamePreferences>(context).difficultyLevel}',
                                       style: TextStyle(
                                           color: HomePageState.currentTheme ==
                                                   "light"
@@ -832,27 +705,191 @@ class _AlertStartGameState extends State<AlertStartGame> {
                                               0 /*percentages not used in flutter. defaulting to zero*/,
                                           fontWeight: FontWeight.w500,
                                           height: 1),
-                                    )),
-                              ]))),
-                      Positioned(
-                        top: 170.px,
-                        left: 80.px,
-                        child: Row(
-                          children: [
-                            Text(
-                              'Starting in',
-                              style: TextStyle(
-                                  color: HomePageState.currentTheme == "light"
-                                      ? Styles.lightThemeprimaryColor
-                                      : Styles.darkThemeprimaryColor),
-                            ),
-                            SizedBox(width: 6.px),
-                            _buildValidityDisplayTimer(context),
-                          ],
-                        ),
-                      )
-                    ],
-                  ),
+                                    ),
+                                  )),
+                            ]))),
+                    Positioned(
+                        top: MediaQuery.of(context).size.width * 0.2,
+                        left: MediaQuery.of(context).size.width * 0.05,
+                        child: Container(
+                            width: MediaQuery.of(context).size.width * 0.6,
+                            height: MediaQuery.of(context).size.width * 0.2,
+                            child: Stack(children: <Widget>[
+                              Positioned(
+                                top: 0.px,
+                                left: 10.px,
+                                child: Opacity(
+                                  opacity: 0.30,
+                                  child: Container(
+                                    width: 197.22.px,
+                                    height: 1.px,
+                                    child: Divider(
+                                      color:
+                                          HomePageState.currentTheme == "light"
+                                              ? Styles.lightThemeprimaryColor
+                                                  .withOpacity(0.7)
+                                              : Styles.darkThemeprimaryColor
+                                                  .withOpacity(0.7),
+                                      height: 1.4.px,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
+                                  top: 40.4080753326416,
+                                  left: 12.758502960205078.px,
+                                  child: Text(
+                                    'Hints',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: HomePageState.currentTheme ==
+                                                "light"
+                                            ? Styles.lightThemeprimaryColor
+                                                .withOpacity(0.5)
+                                            : Styles.darkThemeprimaryColor
+                                                .withOpacity(0.5),
+                                        fontFamily: 'Inter',
+                                        fontSize: 14,
+                                        letterSpacing:
+                                            0 /*percentages not used in flutter. defaulting to zero*/,
+                                        fontWeight: FontWeight.normal,
+                                        height: 1),
+                                  )),
+                              Positioned(
+                                  top: 15.0000017772096043700003.px,
+                                  left: 20.758502960205078.px,
+                                  child: Text(
+                                    '1',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: HomePageState.currentTheme ==
+                                                "light"
+                                            ? Styles.lightThemeprimaryColor
+                                            : Styles.darkThemeprimaryColor,
+                                        fontFamily: 'Inter',
+                                        fontSize: 24,
+                                        letterSpacing:
+                                            0 /*percentages not used in flutter. defaulting to zero*/,
+                                        fontWeight: FontWeight.w500,
+                                        height: 1),
+                                  )),
+                            ]))),
+                    Positioned(
+                        top: MediaQuery.of(context).size.width * 0.2,
+                        left: MediaQuery.of(context).size.width * 0.35,
+                        child: Container(
+                            width: MediaQuery.of(context).size.width * 0.7,
+                            height: MediaQuery.of(context).size.width * 0.2,
+                            child: Stack(children: <Widget>[
+                              Positioned(
+                                  top: 40.4080753326416.px,
+                                  left: 24.0986328125.px,
+                                  child: Text(
+                                    'Mistakes \n allowed',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: HomePageState.currentTheme ==
+                                                "light"
+                                            ? Styles.lightThemeprimaryColor
+                                                .withOpacity(0.5)
+                                            : Styles.darkThemeprimaryColor
+                                                .withOpacity(0.5),
+                                        fontFamily: 'Inter',
+                                        fontSize: 14,
+                                        letterSpacing:
+                                            0 /*percentages not used in flutter. defaulting to zero*/,
+                                        fontWeight: FontWeight.normal,
+                                        height: 1),
+                                  )),
+                              Positioned(
+                                  top: 15.0000017772096043700003.px,
+                                  left: 42.465986251831055.px,
+                                  child: Text(
+                                    '3',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: HomePageState.currentTheme ==
+                                                "light"
+                                            ? Styles.lightThemeprimaryColor
+                                            : Styles.darkThemeprimaryColor,
+                                        fontFamily: 'Gugi',
+                                        fontSize: 24,
+                                        letterSpacing:
+                                            0 /*percentages not used in flutter. defaulting to zero*/,
+                                        fontWeight: FontWeight.w500,
+                                        height: 1),
+                                  )),
+                            ]))),
+                    Positioned(
+                        top: MediaQuery.of(context).size.width * 0.03,
+                        left: MediaQuery.of(context).size.width * 0.37,
+                        child: Container(
+                            width: MediaQuery.of(context).size.width * 0.7,
+                            height: MediaQuery.of(context).size.width * 0.3,
+                            child: Stack(children: <Widget>[
+                              Positioned(
+                                  top: 29.px,
+                                  left: 25.0986328125.px,
+                                  child: Text(
+                                    'Time',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: HomePageState.currentTheme ==
+                                                "light"
+                                            ? Styles.lightThemeprimaryColor
+                                                .withOpacity(0.5)
+                                            : Styles.darkThemeprimaryColor
+                                                .withOpacity(0.5),
+                                        fontFamily: 'Gugi',
+                                        fontSize: 14,
+                                        letterSpacing:
+                                            0 /*percentages not used in flutter. defaulting to zero*/,
+                                        fontWeight: FontWeight.normal,
+                                        height: 1),
+                                  )),
+                              Positioned(
+                                  top: 0.px,
+                                  left: 9.0986328125.px,
+                                  child: Text(
+                                    Provider.of<GamePreferences>(context)
+                                                .isTimeBound ==
+                                            true
+                                        ? '12:00'
+                                        : "No Limit",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: HomePageState.currentTheme ==
+                                                "light"
+                                            ? Styles.lightThemeprimaryColor
+                                            : Styles.darkThemeprimaryColor,
+                                        fontFamily: 'Inter',
+                                        fontSize: 24,
+                                        letterSpacing:
+                                            0 /*percentages not used in flutter. defaulting to zero*/,
+                                        fontWeight: FontWeight.w500,
+                                        height: 1),
+                                  )),
+                            ]))),
+                    Positioned(
+                      top: 175.px,
+                      left: 90.px,
+                      child: Row(
+                        children: [
+                          Text(
+                            'Starting in',
+                            style: TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: 16,
+                                color: HomePageState.currentTheme == "light"
+                                    ? Styles.lightThemeprimaryColor
+                                    : Styles.darkThemeprimaryColor),
+                          ),
+                          SizedBox(width: 6.px),
+                          _buildValidityDisplayTimer(context),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
               )
             ]));
@@ -872,8 +909,8 @@ class _AlertStartGameState extends State<AlertStartGame> {
           child: Stack(
             children: [
               Container(
-                width: MediaQuery.of(context).size.width * 0.10,
-                height: MediaQuery.of(context).size.width * 0.10,
+                width: MediaQuery.of(context).size.width * 0.12,
+                height: MediaQuery.of(context).size.width * 0.12,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Styles.primaryColor.withOpacity(0.7),

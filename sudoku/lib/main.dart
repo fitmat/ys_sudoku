@@ -88,7 +88,9 @@ class HomePage extends StatefulWidget {
   HomePageState createState() => HomePageState();
 }
 
-class HomePageState extends State<HomePage> {
+class HomePageState extends State<HomePage>
+    with SingleTickerProviderStateMixin {
+  AnimationController _animationController;
   bool firstRun = true;
   bool gameOver = false;
   int timesCalled = 0;
@@ -120,6 +122,10 @@ class HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    _animationController =
+        new AnimationController(vsync: this, duration: Duration(seconds: 1));
+    _animationController.repeat(reverse: true);
+    super.initState();
     mistakeCount = 0;
     super.initState();
     try {
@@ -190,6 +196,8 @@ class HomePageState extends State<HomePage> {
 
   void dispose() {
     _timer.cancel();
+    _counter = 0;
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -264,7 +272,7 @@ class HomePageState extends State<HomePage> {
         gameOver = true;
         Provider.of<GamePreferences>(context, listen: false)
             .setTimer(requiredTime);
-        Utils.goToGameOverAlert(context, false, filledEntries);
+        Utils.goToGameOverAlert(context, false, "Bingo", filledEntries);
       }
     } on InvalidSudokuConfigurationException {
       return;
@@ -324,6 +332,7 @@ class HomePageState extends State<HomePage> {
       isButtonDisabled =
           !isButtonDisabled ? !isButtonDisabled : isButtonDisabled;
       gameOver = true;
+      _timer.cancel();
     });
   }
 
@@ -366,6 +375,7 @@ class HomePageState extends State<HomePage> {
 
   void restartGame() {
     setState(() {
+      if (_timer.isActive == false) _startTimerForOTP();
       filledEntries = 0;
       game = SudokuUtilities.copySudoku(gameCopy);
       isButtonDisabled =
@@ -386,25 +396,32 @@ class HomePageState extends State<HomePage> {
         ? setState(() {
             isValidInput == false;
             mistakeCount++;
+            HapticFeedback.heavyImpact();
+
             if (mistakeCount == 3) {
-              setState(() {
-                final snackBar = SnackBar(
-                  content: Text(
-                    'OOPS! You have made 3 mistakes.',
-                    style: TextStyle(color: Colors.white),
-                  ),
-                  behavior: SnackBarBehavior.floating,
-                  margin: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).size.height - 80,
-                      right: 20,
-                      left: 20),
-                );
-                ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                restartGame();
-                mistakeCount = 0;
-                filledEntries = 0;
+              _timer.cancel();
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Provider.of<GamePreferences>(context, listen: false)
+                    .setTimer(requiredTime);
+                Utils.goToGameOverAlert(
+                    context, true, "Limit Exhausted", filledEntries);
+                _counter = 0;
               });
             }
+            setState(() {
+              final snackBar = SnackBar(
+                content: Text(
+                  'OOPS! You have made mistake.',
+                  style: TextStyle(color: Colors.white),
+                ),
+                behavior: SnackBarBehavior.floating,
+                margin: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).size.height - 80,
+                    right: 20,
+                    left: 20),
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            });
           })
         : setState(() {
             isValidInput == true;
@@ -697,7 +714,13 @@ class HomePageState extends State<HomePage> {
           if (kIsWeb) {
             return false;
           } else {
-            Navigator.of(context).pushNamed('/home_screen');
+            showAnimatedDialog<void>(
+                animationType: DialogTransitionType.fadeScale,
+                barrierDismissible: true,
+                duration: Duration(milliseconds: 350),
+                context: context,
+                builder: (_) => AlertExit());
+            // Navigator.of(context).pushNamed('/home_screen');
           }
           return true;
         },
@@ -759,6 +782,7 @@ class HomePageState extends State<HomePage> {
                       ),
                       actions: [
                         PopupMenuButton<int>(
+                          position: PopupMenuPosition.over,
                           color: HomePageState.currentTheme == "light"
                               ? Styles.lightThemebackgroundColor
                               : Styles.darkThemebackgroundColor,
@@ -865,28 +889,23 @@ class HomePageState extends State<HomePage> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.only(left: 8.0, right: 8.0),
-                            child: Row(children: [
-                              Text('Mode:',
-                                  style: GoogleFonts.getFont('Inter',
-                                      color:
-                                          HomePageState.currentTheme == "light"
-                                              ? Styles.lightThemeprimaryColor
-                                              : Styles.darkThemeprimaryColor,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500)),
-                              Text(' $currentDifficultyLevel',
-                                  style: GoogleFonts.getFont(
-                                    'Inter',
+                          Row(children: [
+                            Text('Mode:',
+                                style: GoogleFonts.getFont('Inter',
                                     color: HomePageState.currentTheme == "light"
                                         ? Styles.lightThemeprimaryColor
                                         : Styles.darkThemeprimaryColor,
                                     fontSize: 16,
-                                  )),
-                            ]),
-                          ),
+                                    fontWeight: FontWeight.w500)),
+                            Text(' $currentDifficultyLevel',
+                                style: GoogleFonts.getFont(
+                                  'Inter',
+                                  color: HomePageState.currentTheme == "light"
+                                      ? Styles.lightThemeprimaryColor
+                                      : Styles.darkThemeprimaryColor,
+                                  fontSize: 16,
+                                )),
+                          ]),
                           Row(
                             children: [
                               Icon(
@@ -1314,16 +1333,31 @@ class HomePageState extends State<HomePage> {
           ? WidgetsBinding.instance.addPostFrameCallback((_) {
               Provider.of<GamePreferences>(context, listen: false)
                   .setTimer(requiredTime);
-              Utils.goToGameOverAlert(context, true, filledEntries);
+              Utils.goToGameOverAlert(context, true, "Time Up", filledEntries);
+              _counter = 0;
+              _timer.cancel();
             })
           : null;
     }
-    return Text(
-      " $newClockTimer",
-      style: GoogleFonts.getFont('Inter',
-          color: Provider.of<GamePreferences>(context).selColor,
-          fontSize: 16,
-          fontWeight: FontWeight.w500),
-    );
+    if (_counter > 660 &&
+        Provider.of<GamePreferences>(context).isTimeBound == true) {
+      return FadeTransition(
+          opacity: _animationController,
+          child: Text(
+            " $newClockTimer",
+            style: GoogleFonts.getFont('Inter',
+                color: Styles.primaryColor,
+                fontSize: 16,
+                fontWeight: FontWeight.w500),
+          ));
+    } else {
+      return Text(
+        " $newClockTimer",
+        style: GoogleFonts.getFont('Inter',
+            color: Provider.of<GamePreferences>(context).selColor,
+            fontSize: 16,
+            fontWeight: FontWeight.w500),
+      );
+    }
   }
 }
