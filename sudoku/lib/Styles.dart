@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:sudoku/pages/GamePreferences.dart';
 
 class Styles {
   // #FFFFFF
@@ -217,6 +215,6 @@ class Styles {
     'Red': oneplusRed,
     'Orange': orange,
     'Green': aospExtendedGreen,
-    'yellow': yellow,
+    // 'yellow': yellow,
   };
 }

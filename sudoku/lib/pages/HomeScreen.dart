@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:sudoku/Styles.dart';
 import 'package:sudoku/main.dart';
@@ -126,13 +124,10 @@ class _HomeScreenState extends State<HomeScreen> {
         selectedFontSize: 0,
         showSelectedLabels: false,
         showUnselectedLabels: false,
-        // currentIndex: _selectedPage,
         unselectedItemColor: Colors.white.withOpacity(0.9),
         backgroundColor: Styles.primaryColor,
-        // Color(0xff004A62),
         type: BottomNavigationBarType.fixed,
         selectedItemColor: Colors.black,
-        // onTap: _onTap,
         items: [
           BottomNavigationBarItem(
             icon: GestureDetector(

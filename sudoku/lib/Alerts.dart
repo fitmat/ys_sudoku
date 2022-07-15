@@ -5,7 +5,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:sudoku/pages/GamePreferences.dart';
-import 'package:sudoku/pages/SettingsScreen.dart';
 import 'Styles.dart';
 import 'main.dart';
 
@@ -226,81 +225,6 @@ class AlertDifficulty extends State<AlertDifficultyState> {
   }
 }
 
-class AlertExit extends StatelessWidget {
-  static bool isNoClicked;
-  static const String routeName = '/alert_exit';
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: HomePageState.currentTheme == "light"
-          ? Styles.lightThemebackgroundColor
-          : Styles.darkThemebackgroundColor,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: BorderSide(color: Styles.primaryColor, width: 3.0)),
-      title: Text(
-        'End Game',
-        style: TextStyle(
-          color: HomePageState.currentTheme == "light"
-              ? Styles.lightThemeprimaryColor
-              : Styles.darkThemeprimaryColor,
-        ),
-      ),
-      content: Container(
-        height: MediaQuery.of(context).size.height * 0.08,
-        child: Center(
-          child: Column(
-            children: [
-              Text(
-                'Are you sure you want to end the game ?',
-                style: TextStyle(
-                    color: HomePageState.currentTheme == "light"
-                        ? Styles.lightThemeprimaryColor
-                        : Styles.darkThemeprimaryColor,
-                    fontFamily: 'Inter'),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(top: 4.0),
-                child: Text(
-                  "Game progress would be lost. Do you really want to exit the game ?",
-                  style: TextStyle(
-                      color: HomePageState.currentTheme == "light"
-                          ? Styles.lightThemeprimaryColor
-                          : Styles.darkThemeprimaryColor,
-                      fontFamily: 'Inter'),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-      actions: [
-        TextButton(
-          style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(
-            HomePageState.currentTheme == "light"
-                ? Styles.lightThemeprimaryColor
-                : Styles.darkThemeprimaryColor,
-          )),
-          onPressed: () {
-            isNoClicked = true;
-            Navigator.pop(context);
-          },
-          child: Text('No'),
-        ),
-        TextButton(
-          style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.red)),
-          onPressed: () {
-            Navigator.of(context).pushReplacementNamed('/home_screen');
-          },
-          child: Text('Yes'),
-        ),
-      ],
-    );
-  }
-}
-
 class AlertNumbersState extends StatefulWidget {
   @override
   AlertNumbers createState() => AlertNumbers();
@@ -378,17 +302,7 @@ class AlertNumbers extends State<AlertNumbersState> {
 
   @override
   Widget build(BuildContext context) {
-    return
-        // Column(
-        // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        // backgroundColor: Styles.secondaryBackgroundColor,
-        // title: Center(
-        //     child: Text(
-        //   'Choose a Number',
-        //   style: TextStyle(color: Styles.foregroundColor),
-        // )),
-        // content:
-        Padding(
+    return Padding(
       padding: const EdgeInsets.only(bottom: 25.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.end,
@@ -446,7 +360,6 @@ class AlertAccentColors extends State<AlertAccentColorsState> {
                   fontFamily: 'Gugi',
                   fontSize: 32,
                   fontWeight: FontWeight.w500))),
-      // contentPadding: EdgeInsets.fromLTRB(10, 10, 10, 10),
       children: <Widget>[
         for (String color in accentColors)
           SimpleDialogOption(

@@ -195,25 +195,6 @@ class HomePageState extends State<HomePage>
     });
   }
 
-  void _continueTimer() {
-    if (_timer != null) {
-      _timer.cancel();
-    }
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      if (_counter >= 0) {
-        setState(() {
-          _counter++;
-          requiredTime = _counter;
-        });
-      } else {
-        setState(() {
-          _counter = 0;
-          _timer.cancel();
-        });
-      }
-    });
-  }
-
   void dispose() {
     _timer.cancel();
     _counter = 0;
@@ -610,140 +591,6 @@ class HomePageState extends State<HomePage>
     });
   }
 
-  // showOptionModalSheet(BuildContext context) {
-  //   BuildContext outerContext = context;
-  //   showModalBottomSheet(
-  //       context: context,
-  //       backgroundColor: Styles.secondaryBackgroundColor,
-  //       shape: RoundedRectangleBorder(
-  //         borderRadius: BorderRadius.vertical(
-  //           top: Radius.circular(10),
-  //         ),
-  //       ),
-  //       builder: (context) {
-  //         final TextStyle customStyle =
-  //             TextStyle(inherit: false, color: Styles.foregroundColor);
-  //         return Wrap(
-  //           children: [
-  //             ListTile(
-  //               leading: Icon(Icons.refresh, color: Styles.foregroundColor),
-  //               title: Text('Restart Game', style: customStyle),
-  //               onTap: () {
-  //                 Navigator.pop(context);
-  //                 Timer(Duration(milliseconds: 200), () =>
-  //                  restartGame()
-  //                  );
-  //               },
-  //             ),
-  //             ListTile(
-  //               leading: Icon(Icons.add_rounded, color: Styles.foregroundColor),
-  //               title: Text('New Game', style: customStyle),
-  //               onTap: () {
-  //                 Navigator.pop(context);
-  //                 Timer(Duration(milliseconds: 200),
-  //                     () => newGame(currentDifficultyLevel));
-  //               },
-  //             ),
-  //             ListTile(
-  //               leading: Icon(Icons.lightbulb_outline_rounded,
-  //                   color: Styles.foregroundColor),
-  //               title: Text('Show Solution', style: customStyle),
-  //               onTap: () {
-  //                 Navigator.pop(context);
-  //                 Timer(Duration(milliseconds: 200), () => showSolution());
-  //               },
-  //             ),
-  //             ListTile(
-  //               leading: Icon(
-  //                 Icons.build_outlined,
-  //                 color: HomePageState.currentTheme == "light"
-  //                     ? Styles.lightThemeprimaryColor
-  //                     : Styles.darkThemeprimaryColor,
-  //               ),
-  //               title: Text('Set Difficulty', style: customStyle),
-  //               onTap: () {
-  //                 Navigator.pop(context);
-  //                 Timer(
-  //                     Duration(milliseconds: 300),
-  //                     () => showAnimatedDialog<void>(
-  //                             animationType: DialogTransitionType.fadeScale,
-  //                             barrierDismissible: true,
-  //                             duration: Duration(milliseconds: 350),
-  //                             context: outerContext,
-  //                             builder: (_) => AlertDifficultyState(
-  //                                 currentDifficultyLevel)).whenComplete(() {
-  //                           if (AlertDifficultyState.difficulty != null) {
-  //                             Timer(Duration(milliseconds: 300), () {
-  //                               newGame(AlertDifficultyState.difficulty);
-  //                               currentDifficultyLevel =
-  //                                   AlertDifficultyState.difficulty;
-  //                               AlertDifficultyState.difficulty = null;
-  //                               setPrefs('currentDifficultyLevel');
-  //                             });
-  //                           }
-  //                         }));
-  //               },
-  //             ),
-  //             ListTile(
-  //               leading: Icon(Icons.invert_colors_on_rounded,
-  //                   color: Styles.foregroundColor),
-  //               title: Text('Switch Theme', style: customStyle),
-  //               onTap: () {
-  //                 Navigator.pop(context);
-  //                 Timer(Duration(milliseconds: 200), () {
-  //                   changeTheme('switch');
-  //                 });
-  //               },
-  //             ),
-  //             ListTile(
-  //               leading: Icon(Icons.color_lens_outlined,
-  //                   color: Styles.foregroundColor),
-  //               title: Text('Change Accent Color', style: customStyle),
-  //               onTap: () {
-  //                 Navigator.pop(context);
-  //                 Timer(
-  //                     Duration(milliseconds: 200),
-  //                     () => showAnimatedDialog<void>(
-  //                             animationType: DialogTransitionType.fadeScale,
-  //                             barrierDismissible: true,
-  //                             duration: Duration(milliseconds: 350),
-  //                             context: outerContext,
-  //                             builder: (_) => AlertAccentColorsState(
-  //                                 currentAccentColor)).whenComplete(() {
-  //                           if (AlertAccentColorsState.accentColor != null) {
-  //                             Timer(Duration(milliseconds: 300), () {
-  //                               currentAccentColor =
-  //                                   AlertAccentColorsState.accentColor;
-  //                               changeAccentColor(
-  //                                   currentAccentColor.toString());
-  //                               AlertAccentColorsState.accentColor = null;
-  //                               setPrefs('currentAccentColor');
-  //                             });
-  //                           }
-  //                         }));
-  //               },
-  //             ),
-  //             ListTile(
-  //               leading: Icon(Icons.info_outline_rounded,
-  //                   color: Styles.foregroundColor),
-  //               title: Text('About', style: customStyle),
-  //               onTap: () {
-  //                 Navigator.pop(context);
-  //                 Timer(
-  //                     Duration(milliseconds: 200),
-  //                     () => showAnimatedDialog<void>(
-  //                         animationType: DialogTransitionType.fadeScale,
-  //                         barrierDismissible: true,
-  //                         duration: Duration(milliseconds: 350),
-  //                         context: outerContext,
-  //                         builder: (_) => AlertAbout()));
-  //               },
-  //             ),
-  //           ],
-  //         );
-  //       });
-  // }
-
   @override
   Widget build(BuildContext context) {
     return new WillPopScope(
@@ -796,7 +643,7 @@ class HomePageState extends State<HomePage>
                                   barrierDismissible: true,
                                   duration: Duration(milliseconds: 350),
                                   context: context,
-                                  builder: (_) => AlertExit());
+                                  builder: (_) => _exitDialog());
                             },
                           ),
                         ],

@@ -51,6 +51,7 @@ dependencies:
   responsive_sizer: ^3.0.8
   dots_indicator: ^2.1.0
   vibration: ^1.7.3
+  vs_scrollbar: ^0.2.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

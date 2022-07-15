@@ -1,11 +1,8 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_animated_dialog/flutter_animated_dialog.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sudoku/Alerts.dart';
 import 'package:sudoku/Styles.dart';
 import 'package:sudoku/main.dart';
@@ -20,7 +17,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  static String difficulty;
   static bool isTimeBound = false;
 
   @override
@@ -44,7 +40,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           color: HomePageState.currentTheme == "light"
-                              ? Color(0xff004A62)
+                              ? Color(0xff000000)
                               : Color(0xffFFFFFF),
                           fontFamily: 'Gugi',
                           fontSize: 32,
