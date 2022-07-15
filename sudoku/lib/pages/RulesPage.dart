@@ -14,6 +14,10 @@ class RulesPage extends StatefulWidget {
 }
 
 class _RulesPageState extends State<RulesPage> {
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,16 +51,17 @@ class _RulesPageState extends State<RulesPage> {
                     height: MediaQuery.of(context).size.height * 0.7,
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                          image:
-                              AssetImage("assets/images/sudoku_rules_img2.png"),
+                          image: AssetImage(
+                              "assets/images/sudoku_rules_image2.png"),
                           fit: BoxFit.fill),
                     )),
               ),
               Padding(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.all(8.0),
                 child: Text(
-                    'A Sudoku puzzle begins with grid in which some of the numbers are already in place depending on the game difficulty level.\nA completed puzzle is one where each number from 1 to 9 appears only once in each of the 9 rows, columns and blocks.Study the grid to find the numbers that might fit into each cell.\nSelect a cell then tap a number to fill in the cell.',
+                    "Sudoku puzzles begin with a grid with some numbers already placed depending on the game's difficulty.\n\n Complete puzzles have each number from 1 to 9 appearing in each row, column, and block.\n\nFind out what numbers might fit in each cell on the grid.\n\nFill in a cell by tapping a number.",
                     style: TextStyle(
+                      fontSize: 20,
                       color: HomePageState.currentTheme == "light"
                           ? Styles.lightThemeprimaryColor
                           : Styles.darkThemeprimaryColor,

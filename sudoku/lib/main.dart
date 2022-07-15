@@ -119,6 +119,7 @@ class HomePageState extends State<HomePage>
   int requiredTime;
   int emptyEntries = 0;
   int filledEntries = 0;
+  bool isShowSolutionPressed;
 
   @override
   void initState() {
@@ -127,7 +128,7 @@ class HomePageState extends State<HomePage>
     _animationController.repeat(reverse: true);
     super.initState();
     mistakeCount = 0;
-
+    isShowSolutionPressed = false;
     try {
       doWhenWindowReady(() {
         appWindow.minSize = Size(800, 800);
@@ -346,6 +347,7 @@ class HomePageState extends State<HomePage>
 
   void showSolution() {
     setState(() {
+      isShowSolutionPressed = true;
       filledEntries = emptyBoxes;
       game = SudokuUtilities.copySudoku(gameSolved);
       isButtonDisabled =
@@ -361,13 +363,20 @@ class HomePageState extends State<HomePage>
             final snackBar = SnackBar(
               content: Text(
                 'OOPS! You have used all your hints.',
-                style: TextStyle(color: Colors.white),
+                style: TextStyle(
+                  color: HomePageState.currentTheme == "light"
+                      ? Styles.lightThemebackgroundColor
+                      : Styles.darkThemebackgroundColor,
+                ),
               ),
               behavior: SnackBarBehavior.floating,
               margin: EdgeInsets.only(
                   bottom: MediaQuery.of(context).size.height - 80,
                   right: 20,
                   left: 20),
+              backgroundColor: HomePageState.currentTheme == "light"
+                  ? Styles.lightThemeprimaryColor
+                  : Styles.darkThemeprimaryColor,
             );
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
           })
@@ -431,13 +440,20 @@ class HomePageState extends State<HomePage>
               final snackBar = SnackBar(
                 content: Text(
                   'OOPS! You have made mistake.',
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(
+                    color: HomePageState.currentTheme == "light"
+                        ? Styles.lightThemebackgroundColor
+                        : Styles.darkThemebackgroundColor,
+                  ),
                 ),
                 behavior: SnackBarBehavior.floating,
                 margin: EdgeInsets.only(
                     bottom: MediaQuery.of(context).size.height - 80,
                     right: 20,
                     left: 20),
+                backgroundColor: HomePageState.currentTheme == "light"
+                    ? Styles.lightThemeprimaryColor
+                    : Styles.darkThemeprimaryColor,
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
             });
@@ -594,137 +610,139 @@ class HomePageState extends State<HomePage>
     });
   }
 
-  showOptionModalSheet(BuildContext context) {
-    BuildContext outerContext = context;
-    showModalBottomSheet(
-        context: context,
-        backgroundColor: Styles.secondaryBackgroundColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(10),
-          ),
-        ),
-        builder: (context) {
-          final TextStyle customStyle =
-              TextStyle(inherit: false, color: Styles.foregroundColor);
-          return Wrap(
-            children: [
-              ListTile(
-                leading: Icon(Icons.refresh, color: Styles.foregroundColor),
-                title: Text('Restart Game', style: customStyle),
-                onTap: () {
-                  Navigator.pop(context);
-                  Timer(Duration(milliseconds: 200), () => restartGame());
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.add_rounded, color: Styles.foregroundColor),
-                title: Text('New Game', style: customStyle),
-                onTap: () {
-                  Navigator.pop(context);
-                  Timer(Duration(milliseconds: 200),
-                      () => newGame(currentDifficultyLevel));
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.lightbulb_outline_rounded,
-                    color: Styles.foregroundColor),
-                title: Text('Show Solution', style: customStyle),
-                onTap: () {
-                  Navigator.pop(context);
-                  Timer(Duration(milliseconds: 200), () => showSolution());
-                },
-              ),
-              ListTile(
-                leading: Icon(
-                  Icons.build_outlined,
-                  color: HomePageState.currentTheme == "light"
-                      ? Styles.lightThemeprimaryColor
-                      : Styles.darkThemeprimaryColor,
-                ),
-                title: Text('Set Difficulty', style: customStyle),
-                onTap: () {
-                  Navigator.pop(context);
-                  Timer(
-                      Duration(milliseconds: 300),
-                      () => showAnimatedDialog<void>(
-                              animationType: DialogTransitionType.fadeScale,
-                              barrierDismissible: true,
-                              duration: Duration(milliseconds: 350),
-                              context: outerContext,
-                              builder: (_) => AlertDifficultyState(
-                                  currentDifficultyLevel)).whenComplete(() {
-                            if (AlertDifficultyState.difficulty != null) {
-                              Timer(Duration(milliseconds: 300), () {
-                                newGame(AlertDifficultyState.difficulty);
-                                currentDifficultyLevel =
-                                    AlertDifficultyState.difficulty;
-                                AlertDifficultyState.difficulty = null;
-                                setPrefs('currentDifficultyLevel');
-                              });
-                            }
-                          }));
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.invert_colors_on_rounded,
-                    color: Styles.foregroundColor),
-                title: Text('Switch Theme', style: customStyle),
-                onTap: () {
-                  Navigator.pop(context);
-                  Timer(Duration(milliseconds: 200), () {
-                    changeTheme('switch');
-                  });
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.color_lens_outlined,
-                    color: Styles.foregroundColor),
-                title: Text('Change Accent Color', style: customStyle),
-                onTap: () {
-                  Navigator.pop(context);
-                  Timer(
-                      Duration(milliseconds: 200),
-                      () => showAnimatedDialog<void>(
-                              animationType: DialogTransitionType.fadeScale,
-                              barrierDismissible: true,
-                              duration: Duration(milliseconds: 350),
-                              context: outerContext,
-                              builder: (_) => AlertAccentColorsState(
-                                  currentAccentColor)).whenComplete(() {
-                            if (AlertAccentColorsState.accentColor != null) {
-                              Timer(Duration(milliseconds: 300), () {
-                                currentAccentColor =
-                                    AlertAccentColorsState.accentColor;
-                                changeAccentColor(
-                                    currentAccentColor.toString());
-                                AlertAccentColorsState.accentColor = null;
-                                setPrefs('currentAccentColor');
-                              });
-                            }
-                          }));
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.info_outline_rounded,
-                    color: Styles.foregroundColor),
-                title: Text('About', style: customStyle),
-                onTap: () {
-                  Navigator.pop(context);
-                  Timer(
-                      Duration(milliseconds: 200),
-                      () => showAnimatedDialog<void>(
-                          animationType: DialogTransitionType.fadeScale,
-                          barrierDismissible: true,
-                          duration: Duration(milliseconds: 350),
-                          context: outerContext,
-                          builder: (_) => AlertAbout()));
-                },
-              ),
-            ],
-          );
-        });
-  }
+  // showOptionModalSheet(BuildContext context) {
+  //   BuildContext outerContext = context;
+  //   showModalBottomSheet(
+  //       context: context,
+  //       backgroundColor: Styles.secondaryBackgroundColor,
+  //       shape: RoundedRectangleBorder(
+  //         borderRadius: BorderRadius.vertical(
+  //           top: Radius.circular(10),
+  //         ),
+  //       ),
+  //       builder: (context) {
+  //         final TextStyle customStyle =
+  //             TextStyle(inherit: false, color: Styles.foregroundColor);
+  //         return Wrap(
+  //           children: [
+  //             ListTile(
+  //               leading: Icon(Icons.refresh, color: Styles.foregroundColor),
+  //               title: Text('Restart Game', style: customStyle),
+  //               onTap: () {
+  //                 Navigator.pop(context);
+  //                 Timer(Duration(milliseconds: 200), () =>
+  //                  restartGame()
+  //                  );
+  //               },
+  //             ),
+  //             ListTile(
+  //               leading: Icon(Icons.add_rounded, color: Styles.foregroundColor),
+  //               title: Text('New Game', style: customStyle),
+  //               onTap: () {
+  //                 Navigator.pop(context);
+  //                 Timer(Duration(milliseconds: 200),
+  //                     () => newGame(currentDifficultyLevel));
+  //               },
+  //             ),
+  //             ListTile(
+  //               leading: Icon(Icons.lightbulb_outline_rounded,
+  //                   color: Styles.foregroundColor),
+  //               title: Text('Show Solution', style: customStyle),
+  //               onTap: () {
+  //                 Navigator.pop(context);
+  //                 Timer(Duration(milliseconds: 200), () => showSolution());
+  //               },
+  //             ),
+  //             ListTile(
+  //               leading: Icon(
+  //                 Icons.build_outlined,
+  //                 color: HomePageState.currentTheme == "light"
+  //                     ? Styles.lightThemeprimaryColor
+  //                     : Styles.darkThemeprimaryColor,
+  //               ),
+  //               title: Text('Set Difficulty', style: customStyle),
+  //               onTap: () {
+  //                 Navigator.pop(context);
+  //                 Timer(
+  //                     Duration(milliseconds: 300),
+  //                     () => showAnimatedDialog<void>(
+  //                             animationType: DialogTransitionType.fadeScale,
+  //                             barrierDismissible: true,
+  //                             duration: Duration(milliseconds: 350),
+  //                             context: outerContext,
+  //                             builder: (_) => AlertDifficultyState(
+  //                                 currentDifficultyLevel)).whenComplete(() {
+  //                           if (AlertDifficultyState.difficulty != null) {
+  //                             Timer(Duration(milliseconds: 300), () {
+  //                               newGame(AlertDifficultyState.difficulty);
+  //                               currentDifficultyLevel =
+  //                                   AlertDifficultyState.difficulty;
+  //                               AlertDifficultyState.difficulty = null;
+  //                               setPrefs('currentDifficultyLevel');
+  //                             });
+  //                           }
+  //                         }));
+  //               },
+  //             ),
+  //             ListTile(
+  //               leading: Icon(Icons.invert_colors_on_rounded,
+  //                   color: Styles.foregroundColor),
+  //               title: Text('Switch Theme', style: customStyle),
+  //               onTap: () {
+  //                 Navigator.pop(context);
+  //                 Timer(Duration(milliseconds: 200), () {
+  //                   changeTheme('switch');
+  //                 });
+  //               },
+  //             ),
+  //             ListTile(
+  //               leading: Icon(Icons.color_lens_outlined,
+  //                   color: Styles.foregroundColor),
+  //               title: Text('Change Accent Color', style: customStyle),
+  //               onTap: () {
+  //                 Navigator.pop(context);
+  //                 Timer(
+  //                     Duration(milliseconds: 200),
+  //                     () => showAnimatedDialog<void>(
+  //                             animationType: DialogTransitionType.fadeScale,
+  //                             barrierDismissible: true,
+  //                             duration: Duration(milliseconds: 350),
+  //                             context: outerContext,
+  //                             builder: (_) => AlertAccentColorsState(
+  //                                 currentAccentColor)).whenComplete(() {
+  //                           if (AlertAccentColorsState.accentColor != null) {
+  //                             Timer(Duration(milliseconds: 300), () {
+  //                               currentAccentColor =
+  //                                   AlertAccentColorsState.accentColor;
+  //                               changeAccentColor(
+  //                                   currentAccentColor.toString());
+  //                               AlertAccentColorsState.accentColor = null;
+  //                               setPrefs('currentAccentColor');
+  //                             });
+  //                           }
+  //                         }));
+  //               },
+  //             ),
+  //             ListTile(
+  //               leading: Icon(Icons.info_outline_rounded,
+  //                   color: Styles.foregroundColor),
+  //               title: Text('About', style: customStyle),
+  //               onTap: () {
+  //                 Navigator.pop(context);
+  //                 Timer(
+  //                     Duration(milliseconds: 200),
+  //                     () => showAnimatedDialog<void>(
+  //                         animationType: DialogTransitionType.fadeScale,
+  //                         barrierDismissible: true,
+  //                         duration: Duration(milliseconds: 350),
+  //                         context: outerContext,
+  //                         builder: (_) => AlertAbout()));
+  //               },
+  //             ),
+  //           ],
+  //         );
+  //       });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -745,8 +763,12 @@ class HomePageState extends State<HomePage>
         },
         child: new Scaffold(
           backgroundColor: HomePageState.currentTheme == "light"
-              ? Styles.lightThemebackgroundColor
-              : Styles.darkThemebackgroundColor,
+              ? isShowSolutionPressed == false
+                  ? Styles.lightThemebackgroundColor
+                  : Styles.lightThemebackgroundColor.withOpacity(1.0)
+              : isShowSolutionPressed == false
+                  ? Styles.darkThemebackgroundColor
+                  : Styles.lightThemebackgroundColor.withOpacity(1.0),
           extendBody: false,
           extendBodyBehindAppBar: false,
           appBar: PreferredSize(
@@ -803,100 +825,136 @@ class HomePageState extends State<HomePage>
                         PopupMenuButton<int>(
                           position: PopupMenuPosition.over,
                           color: HomePageState.currentTheme == "light"
-                              ? Styles.lightThemebackgroundColor
-                              : Styles.darkThemebackgroundColor,
+                              ? Styles.darkThemebackgroundColor.withOpacity(0.9)
+                              : Styles.lightThemebackgroundColor
+                                  .withOpacity(0.9),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          icon: Icon(
-                            Icons.menu_outlined,
-                            size: 30.0,
-                            color: HomePageState.currentTheme == "light"
-                                ? Styles.lightThemeprimaryColor
-                                : Styles.darkThemeprimaryColor,
-                          ),
-                          itemBuilder: (context) => <PopupMenuItem<int>>[
-                            PopupMenuItem(
-                              value: 0,
-                              child: Column(
-                                children: [
-                                  GestureDetector(
-                                      child: Text('Restart Game',
-                                          style: TextStyle(
-                                              color: HomePageState
-                                                          .currentTheme ==
-                                                      "light"
-                                                  ? Styles
-                                                      .lightThemeprimaryColor
-                                                  : Styles
-                                                      .darkThemeprimaryColor,
-                                              fontFamily: 'Gugi',
-                                              fontSize: 16,
-                                              fontWeight: FontWeight.w500)),
-                                      onTap: () {
-                                        Navigator.pop(context);
-                                        restartGame();
-                                      }),
-                                  Divider(
-                                    color: HomePageState.currentTheme == "light"
-                                        ? Styles.lightThemeprimaryColor
-                                        : Styles.darkThemeprimaryColor,
-                                  ),
-                                  GestureDetector(
-                                    child: Text('Show Solution',
-                                        style: TextStyle(
+                          icon: isShowSolutionPressed == false
+                              ? Icon(
+                                  Icons.menu_outlined,
+                                  size: 30.0,
+                                  color: HomePageState.currentTheme == "light"
+                                      ? Styles.lightThemeprimaryColor
+                                      : Styles.darkThemeprimaryColor,
+                                )
+                              : SizedBox(),
+                          itemBuilder: isShowSolutionPressed == false
+                              ? (context) => <PopupMenuItem<int>>[
+                                    PopupMenuItem(
+                                      value: 0,
+                                      child: Column(
+                                        children: [
+                                          GestureDetector(
+                                              child: Text('Restart Game',
+                                                  style: TextStyle(
+                                                      color: HomePageState
+                                                                  .currentTheme ==
+                                                              "light"
+                                                          ? Styles
+                                                              .darkThemeprimaryColor
+                                                          : Styles
+                                                              .lightThemeprimaryColor,
+                                                      fontFamily: 'Gugi',
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.w500)),
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                                showAnimatedDialog<void>(
+                                                    animationType:
+                                                        DialogTransitionType
+                                                            .fadeScale,
+                                                    barrierDismissible: true,
+                                                    duration: Duration(
+                                                        milliseconds: 200),
+                                                    context: context,
+                                                    builder: (_) =>
+                                                        _restartGameDialog());
+
+                                                // restartGame();
+                                              }),
+                                          Divider(
                                             color: HomePageState.currentTheme ==
                                                     "light"
-                                                ? Styles.lightThemeprimaryColor
-                                                : Styles.darkThemeprimaryColor,
-                                            fontFamily: 'Gugi',
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500)),
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                      showSolution();
-                                    },
-                                  ),
-                                  Divider(
-                                    color: HomePageState.currentTheme == "light"
-                                        ? Styles.lightThemeprimaryColor
-                                        : Styles.darkThemeprimaryColor,
-                                  ),
-                                  GestureDetector(
-                                    child: Align(
-                                        alignment: Alignment.center,
-                                        child: Text('End Game',
-                                            style: TextStyle(
-                                                color: HomePageState
-                                                            .currentTheme ==
-                                                        "light"
-                                                    ? Styles
-                                                        .lightThemeprimaryColor
-                                                    : Styles
-                                                        .darkThemeprimaryColor,
-                                                fontFamily: 'Gugi',
-                                                fontSize: 16,
-                                                fontWeight:
-                                                    FontWeight.normal))),
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                      // _timer.cancel();
-                                      // setState(() {
-                                      //   _exitDialog();
-                                      // });
-                                      showAnimatedDialog<void>(
-                                          animationType:
-                                              DialogTransitionType.fadeScale,
-                                          barrierDismissible: true,
-                                          duration: Duration(milliseconds: 350),
-                                          context: context,
-                                          builder: (_) => _exitDialog());
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                                                ? Styles.darkThemeprimaryColor
+                                                : Styles.lightThemeprimaryColor,
+                                          ),
+                                          GestureDetector(
+                                            child: Text('Show Solution',
+                                                style: TextStyle(
+                                                    color: HomePageState
+                                                                .currentTheme ==
+                                                            "light"
+                                                        ? Styles
+                                                            .darkThemeprimaryColor
+                                                        : Styles
+                                                            .lightThemeprimaryColor,
+                                                    fontFamily: 'Gugi',
+                                                    fontSize: 16,
+                                                    fontWeight:
+                                                        FontWeight.w500)),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              showAnimatedDialog<void>(
+                                                  animationType:
+                                                      DialogTransitionType
+                                                          .fadeScale,
+                                                  barrierDismissible: true,
+                                                  duration: Duration(
+                                                      milliseconds: 200),
+                                                  context: context,
+                                                  builder: (_) =>
+                                                      _showSolution());
+                                            },
+                                          ),
+                                          Divider(
+                                            color: HomePageState.currentTheme ==
+                                                    "light"
+                                                ? Styles.darkThemeprimaryColor
+                                                : Styles.lightThemeprimaryColor,
+                                          ),
+                                          GestureDetector(
+                                            child: Align(
+                                                alignment: Alignment.center,
+                                                child: Text('End Game',
+                                                    style: TextStyle(
+                                                        color: HomePageState
+                                                                    .currentTheme ==
+                                                                "light"
+                                                            ? Styles
+                                                                .darkThemeprimaryColor
+                                                            : Styles
+                                                                .lightThemeprimaryColor,
+                                                        fontFamily: 'Gugi',
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight
+                                                            .normal))),
+                                            onTap: () {
+                                              Navigator.pop(context);
+                                              // _timer.cancel();
+                                              // setState(() {
+                                              //   _exitDialog();
+                                              // });
+                                              showAnimatedDialog<void>(
+                                                  animationType:
+                                                      DialogTransitionType
+                                                          .fadeScale,
+                                                  barrierDismissible: true,
+                                                  duration: Duration(
+                                                      milliseconds: 350),
+                                                  context: context,
+                                                  builder: (_) =>
+                                                      _exitDialog());
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ]
+                              : (context) => <PopupMenuItem<int>>[],
+                          offset: Offset(0, 50),
                         ),
                       ],
                     )),
@@ -1012,329 +1070,469 @@ class HomePageState extends State<HomePage>
                     children: createRows(),
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(4.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                              child: Container(
-                                  height: 8.h,
-                                  width: 13.w,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xffCECECE),
-                                      borderRadius:
-                                          BorderRadius.circular(12.0)),
-                                  child: Center(
-                                      child: Text('1',
-                                          style: TextStyle(
-                                              fontSize: 32,
-                                              fontFamily: 'Inter',
-                                              fontWeight: FontWeight.w500)))),
-                              onTap: () => setState(() {
-                                    number = 1;
-                                    callback(selectedgameButton, number);
-                                    ValidateInput();
-                                    number = null;
-                                  })),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.03),
-                          GestureDetector(
-                              child: Container(
-                                  height: 8.h,
-                                  width: 13.w,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xffCECECE),
-                                      borderRadius:
-                                          BorderRadius.circular(12.0)),
-                                  child: Center(
-                                      child: Text('2',
-                                          style: TextStyle(
-                                              fontSize: 32,
-                                              fontFamily: 'Inter',
-                                              fontWeight: FontWeight.w500)))),
-                              onTap: () => setState(() {
-                                    number = 2;
-                                    callback(selectedgameButton, number);
-                                    ValidateInput();
-                                    number = null;
-                                  })),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.03),
-                          GestureDetector(
-                              child: Container(
-                                  height: 8.h,
-                                  width: 13.w,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xffCECECE),
-                                      borderRadius:
-                                          BorderRadius.circular(12.0)),
-                                  child: Center(
-                                      child: Text('3',
-                                          style: TextStyle(
-                                              fontSize: 32,
-                                              fontFamily: 'Inter',
-                                              fontWeight: FontWeight.w500)))),
-                              onTap: () => setState(() {
-                                    number = 3;
-                                    callback(selectedgameButton, number);
-                                    ValidateInput();
-                                    number = null;
-                                  })),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.03),
-                          GestureDetector(
-                              child: Container(
-                                  height: 8.h,
-                                  width: 13.w,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xffCECECE),
-                                      borderRadius:
-                                          BorderRadius.circular(12.0)),
-                                  child: Center(
-                                      child: Text('4',
-                                          style: TextStyle(
-                                              fontSize: 32,
-                                              fontFamily: 'Inter',
-                                              fontWeight: FontWeight.w500)))),
-                              onTap: () => setState(() {
-                                    number = 4;
-                                    callback(selectedgameButton, number);
-                                    ValidateInput();
-                                    number = null;
-                                  })),
-                          SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.03),
-                          GestureDetector(
-                              child: Container(
-                                  height: 8.h,
-                                  width: 13.w,
-                                  decoration: BoxDecoration(
-                                      color: Color(0xffCECECE),
-                                      borderRadius:
-                                          BorderRadius.circular(12.0)),
-                                  child: Center(
-                                      child: Text('5',
-                                          style: TextStyle(
-                                              fontSize: 32,
-                                              fontFamily: 'Inter',
-                                              fontWeight: FontWeight.w500)))),
-                              onTap: () => setState(() {
-                                    number = 5;
-                                    callback(selectedgameButton, number);
-                                    ValidateInput();
-                                    number = null;
-                                  }))
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 4.0),
-                        child: Row(
+                isShowSolutionPressed == false
+                    ? Padding(
+                        padding: const EdgeInsets.all(4.0),
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.end,
                           children: [
-                            GestureDetector(
-                                child: Container(
-                                    // color: Color(0xffCECECE),
-                                    height: 8.h,
-                                    width: 13.w,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xffCECECE),
-                                        borderRadius:
-                                            BorderRadius.circular(12.0)),
-                                    child: Center(
-                                        child: Text('6',
-                                            style: TextStyle(
-                                                fontSize: 32,
-                                                fontFamily: 'Inter',
-                                                fontWeight: FontWeight.w500)))),
-                                onTap: () => setState(() {
-                                      number = 6;
-                                      callback(selectedgameButton, number);
-                                      ValidateInput();
-                                      number = null;
-                                    })),
-                            SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.03),
-                            GestureDetector(
-                                child: Container(
-                                    // color: Color(0xffCECECE),
-                                    height: 8.h,
-                                    width: 13.w,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xffCECECE),
-                                        borderRadius:
-                                            BorderRadius.circular(12.0)),
-                                    child: Center(
-                                        child: Text('7',
-                                            style: TextStyle(
-                                                fontSize: 32,
-                                                fontFamily: 'Inter',
-                                                fontWeight: FontWeight.w500)))),
-                                onTap: () => setState(() {
-                                      number = 7;
-                                      callback(selectedgameButton, number);
-                                      ValidateInput();
-                                      number = null;
-                                    })),
-                            SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.03),
-                            GestureDetector(
-                                child: Container(
-                                    height: 8.h,
-                                    width: 13.w,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xffCECECE),
-                                        borderRadius:
-                                            BorderRadius.circular(12.0)),
-                                    child: Center(
-                                        child: Text('8',
-                                            style: TextStyle(
-                                                fontSize: 32,
-                                                fontFamily: 'Inter',
-                                                fontWeight: FontWeight.w500)))),
-                                onTap: () => setState(() {
-                                      number = 8;
-                                      callback(selectedgameButton, number);
-                                      ValidateInput();
-                                      number = null;
-                                    })),
-                            SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.03),
-                            GestureDetector(
-                                child: Container(
-                                    height: 8.h,
-                                    width: 13.w,
-                                    decoration: BoxDecoration(
-                                        color: Color(0xffCECECE),
-                                        borderRadius:
-                                            BorderRadius.circular(12.0)),
-                                    child: Center(
-                                        child: Text('9',
-                                            style: TextStyle(
-                                                fontSize: 32,
-                                                fontFamily: 'Inter',
-                                                fontWeight: FontWeight.w500)))),
-                                onTap: () => setState(() {
-                                      number = 9;
-                                      callback(selectedgameButton, number);
-                                      ValidateInput();
-                                      number = null;
-                                    }))
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                    child: Container(
+                                        height: 8.h,
+                                        width: 13.w,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xffCECECE),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0)),
+                                        child: Center(
+                                            child: Text('1',
+                                                style: TextStyle(
+                                                    fontSize: 32,
+                                                    fontFamily: 'Inter',
+                                                    fontWeight:
+                                                        FontWeight.w500)))),
+                                    onTap: () => setState(() {
+                                          number = 1;
+                                          callback(selectedgameButton, number);
+                                          ValidateInput();
+                                          number = null;
+                                        })),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.03),
+                                GestureDetector(
+                                    child: Container(
+                                        height: 8.h,
+                                        width: 13.w,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xffCECECE),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0)),
+                                        child: Center(
+                                            child: Text('2',
+                                                style: TextStyle(
+                                                    fontSize: 32,
+                                                    fontFamily: 'Inter',
+                                                    fontWeight:
+                                                        FontWeight.w500)))),
+                                    onTap: () => setState(() {
+                                          number = 2;
+                                          callback(selectedgameButton, number);
+                                          ValidateInput();
+                                          number = null;
+                                        })),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.03),
+                                GestureDetector(
+                                    child: Container(
+                                        height: 8.h,
+                                        width: 13.w,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xffCECECE),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0)),
+                                        child: Center(
+                                            child: Text('3',
+                                                style: TextStyle(
+                                                    fontSize: 32,
+                                                    fontFamily: 'Inter',
+                                                    fontWeight:
+                                                        FontWeight.w500)))),
+                                    onTap: () => setState(() {
+                                          number = 3;
+                                          callback(selectedgameButton, number);
+                                          ValidateInput();
+                                          number = null;
+                                        })),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.03),
+                                GestureDetector(
+                                    child: Container(
+                                        height: 8.h,
+                                        width: 13.w,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xffCECECE),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0)),
+                                        child: Center(
+                                            child: Text('4',
+                                                style: TextStyle(
+                                                    fontSize: 32,
+                                                    fontFamily: 'Inter',
+                                                    fontWeight:
+                                                        FontWeight.w500)))),
+                                    onTap: () => setState(() {
+                                          number = 4;
+                                          callback(selectedgameButton, number);
+                                          ValidateInput();
+                                          number = null;
+                                        })),
+                                SizedBox(
+                                    width: MediaQuery.of(context).size.width *
+                                        0.03),
+                                GestureDetector(
+                                    child: Container(
+                                        height: 8.h,
+                                        width: 13.w,
+                                        decoration: BoxDecoration(
+                                            color: Color(0xffCECECE),
+                                            borderRadius:
+                                                BorderRadius.circular(12.0)),
+                                        child: Center(
+                                            child: Text('5',
+                                                style: TextStyle(
+                                                    fontSize: 32,
+                                                    fontFamily: 'Inter',
+                                                    fontWeight:
+                                                        FontWeight.w500)))),
+                                    onTap: () => setState(() {
+                                          number = 5;
+                                          callback(selectedgameButton, number);
+                                          ValidateInput();
+                                          number = null;
+                                        }))
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  GestureDetector(
+                                      child: Container(
+                                          // color: Color(0xffCECECE),
+                                          height: 8.h,
+                                          width: 13.w,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xffCECECE),
+                                              borderRadius:
+                                                  BorderRadius.circular(12.0)),
+                                          child: Center(
+                                              child: Text('6',
+                                                  style: TextStyle(
+                                                      fontSize: 32,
+                                                      fontFamily: 'Inter',
+                                                      fontWeight:
+                                                          FontWeight.w500)))),
+                                      onTap: () => setState(() {
+                                            number = 6;
+                                            callback(
+                                                selectedgameButton, number);
+                                            ValidateInput();
+                                            number = null;
+                                          })),
+                                  SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.03),
+                                  GestureDetector(
+                                      child: Container(
+                                          // color: Color(0xffCECECE),
+                                          height: 8.h,
+                                          width: 13.w,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xffCECECE),
+                                              borderRadius:
+                                                  BorderRadius.circular(12.0)),
+                                          child: Center(
+                                              child: Text('7',
+                                                  style: TextStyle(
+                                                      fontSize: 32,
+                                                      fontFamily: 'Inter',
+                                                      fontWeight:
+                                                          FontWeight.w500)))),
+                                      onTap: () => setState(() {
+                                            number = 7;
+                                            callback(
+                                                selectedgameButton, number);
+                                            ValidateInput();
+                                            number = null;
+                                          })),
+                                  SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.03),
+                                  GestureDetector(
+                                      child: Container(
+                                          height: 8.h,
+                                          width: 13.w,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xffCECECE),
+                                              borderRadius:
+                                                  BorderRadius.circular(12.0)),
+                                          child: Center(
+                                              child: Text('8',
+                                                  style: TextStyle(
+                                                      fontSize: 32,
+                                                      fontFamily: 'Inter',
+                                                      fontWeight:
+                                                          FontWeight.w500)))),
+                                      onTap: () => setState(() {
+                                            number = 8;
+                                            callback(
+                                                selectedgameButton, number);
+                                            ValidateInput();
+                                            number = null;
+                                          })),
+                                  SizedBox(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.03),
+                                  GestureDetector(
+                                      child: Container(
+                                          height: 8.h,
+                                          width: 13.w,
+                                          decoration: BoxDecoration(
+                                              color: Color(0xffCECECE),
+                                              borderRadius:
+                                                  BorderRadius.circular(12.0)),
+                                          child: Center(
+                                              child: Text('9',
+                                                  style: TextStyle(
+                                                      fontSize: 32,
+                                                      fontFamily: 'Inter',
+                                                      fontWeight:
+                                                          FontWeight.w500)))),
+                                      onTap: () => setState(() {
+                                            number = 9;
+                                            callback(
+                                                selectedgameButton, number);
+                                            ValidateInput();
+                                            number = null;
+                                          }))
+                                ],
+                              ),
+                            )
                           ],
                         ),
                       )
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      GestureDetector(
-                          child: Column(
-                            children: [
-                              Icon(
-                                Icons.lightbulb_outlined,
-                                size: 30.0,
-                                color: HomePageState.currentTheme == "light"
-                                    ? Styles.lightThemeprimaryColor
-                                    : Styles.darkThemeprimaryColor,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 4.0),
-                                child: SizedBox(
-                                  width: 30.0.w,
-                                  height: 5.0.h,
-                                  child: ElevatedButton(
-                                    child: Text('Hint ($hintCount/1)',
-                                        maxLines: 1,
-                                        style: TextStyle(
-                                            fontSize: 17,
-                                            fontFamily: 'Inter',
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500)),
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Styles.primaryColor),
-                                      shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(9.0),
-                                      )),
-                                    ),
-                                    onPressed: () {
-                                      showHint();
-                                    },
-                                  ),
-                                ),
-                              )
-                            ],
-                          ),
-                          onTap: () {
-                            showHint();
-                          }),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.1,
+                    : Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          "Game Over!",
+                          style: TextStyle(
+                              fontSize: 32,
+                              fontFamily: 'Inter',
+                              fontWeight: FontWeight.w500),
+                        ),
                       ),
-                      GestureDetector(
-                          child: Column(
-                            children: [
-                              Icon(
-                                FontAwesomeIcons.eraser,
-                                size: 30.0,
-                                color: HomePageState.currentTheme == "light"
-                                    ? Styles.lightThemeprimaryColor
-                                    : Styles.darkThemeprimaryColor,
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.only(top: 4.0),
-                                child: SizedBox(
-                                  width: 21.0.w,
-                                  height: 5.0.h,
-                                  child: ElevatedButton(
-                                    child: Text('Erase',
-                                        style: TextStyle(
-                                            fontSize: 17,
-                                            fontFamily: 'Inter',
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w500)),
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Styles.primaryColor),
-                                      shape: MaterialStateProperty.all<
-                                              RoundedRectangleBorder>(
-                                          RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(9.0),
-                                      )),
+                isShowSolutionPressed == false
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.lightbulb_outlined,
+                                      size: 30.0,
+                                      color:
+                                          HomePageState.currentTheme == "light"
+                                              ? Styles.lightThemeprimaryColor
+                                              : Styles.darkThemeprimaryColor,
                                     ),
-                                    onPressed: () {
-                                      callback(selectedgameButton, 0);
-                                      checkNumberOfFilledEntries();
-                                    },
-                                  ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 4.0),
+                                      child: SizedBox(
+                                        width: 30.0.w,
+                                        height: 5.0.h,
+                                        child: ElevatedButton(
+                                          child: Text('Hint ($hintCount/1)',
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                  fontSize: 17,
+                                                  fontFamily: 'Inter',
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w500)),
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Styles.primaryColor),
+                                            shape: MaterialStateProperty.all<
+                                                    RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(9.0),
+                                            )),
+                                          ),
+                                          onPressed: () {
+                                            showHint();
+                                          },
+                                        ),
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
-                          ),
-                          onTap: () {
-                            callback(selectedgameButton, 0);
-                          })
-                    ],
-                  ),
-                ),
+                                onTap: () {
+                                  showHint();
+                                }),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.1,
+                            ),
+                            GestureDetector(
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      FontAwesomeIcons.eraser,
+                                      size: 30.0,
+                                      color:
+                                          HomePageState.currentTheme == "light"
+                                              ? Styles.lightThemeprimaryColor
+                                              : Styles.darkThemeprimaryColor,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 4.0),
+                                      child: SizedBox(
+                                        width: 21.0.w,
+                                        height: 5.0.h,
+                                        child: ElevatedButton(
+                                          child: Text('Erase',
+                                              style: TextStyle(
+                                                  fontSize: 17,
+                                                  fontFamily: 'Inter',
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w500)),
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Styles.primaryColor),
+                                            shape: MaterialStateProperty.all<
+                                                    RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(9.0),
+                                            )),
+                                          ),
+                                          onPressed: () {
+                                            callback(selectedgameButton, 0);
+                                            checkNumberOfFilledEntries();
+                                          },
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                onTap: () {
+                                  callback(selectedgameButton, 0);
+                                })
+                          ],
+                        ),
+                      )
+                    : Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      Icons.restart_alt,
+                                      size: 30.0,
+                                      color:
+                                          HomePageState.currentTheme == "light"
+                                              ? Styles.lightThemeprimaryColor
+                                              : Styles.darkThemeprimaryColor,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 4.0),
+                                      child: SizedBox(
+                                        width: 30.0.w,
+                                        height: 5.0.h,
+                                        child: ElevatedButton(
+                                          child: Text('Restart',
+                                              maxLines: 1,
+                                              style: TextStyle(
+                                                  fontSize: 17,
+                                                  fontFamily: 'Inter',
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w500)),
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Styles.primaryColor),
+                                            shape: MaterialStateProperty.all<
+                                                    RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(9.0),
+                                            )),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pushReplacementNamed(
+                                                    '/home_page');
+                                          },
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                onTap: () {
+                                  Navigator.of(context)
+                                      .pushReplacementNamed('/home_page');
+                                }),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.1,
+                            ),
+                            GestureDetector(
+                                child: Column(
+                                  children: [
+                                    Icon(
+                                      FontAwesomeIcons.home,
+                                      size: 30.0,
+                                      color:
+                                          HomePageState.currentTheme == "light"
+                                              ? Styles.lightThemeprimaryColor
+                                              : Styles.darkThemeprimaryColor,
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.only(top: 4.0),
+                                      child: SizedBox(
+                                        width: 23.0.w,
+                                        height: 5.0.h,
+                                        child: ElevatedButton(
+                                          child: Text('Home',
+                                              style: TextStyle(
+                                                  fontSize: 17,
+                                                  fontFamily: 'Inter',
+                                                  color: Colors.white,
+                                                  fontWeight: FontWeight.w500)),
+                                          style: ButtonStyle(
+                                            backgroundColor:
+                                                MaterialStateProperty.all(
+                                                    Styles.primaryColor),
+                                            shape: MaterialStateProperty.all<
+                                                    RoundedRectangleBorder>(
+                                                RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(9.0),
+                                            )),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pushReplacementNamed(
+                                                    '/home_screen');
+                                          },
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                onTap: () {
+                                  Navigator.of(context)
+                                      .pushReplacementNamed('/home_screen');
+                                })
+                          ],
+                        ),
+                      )
               ],
             );
           }),
@@ -1351,7 +1549,7 @@ class HomePageState extends State<HomePage>
     Duration clockTimer = Duration(seconds: _counter);
     String newClockTimer =
         '${clockTimer.inMinutes.remainder(60).toString()}:${(clockTimer.inSeconds.remainder(60) % 60).toString().padLeft(2, '0')}';
-    if (_counter == 20) {
+    if (_counter == 720) {
       Provider.of<GamePreferences>(context).isTimeBound == true
           ? WidgetsBinding.instance.addPostFrameCallback((_) {
               Provider.of<GamePreferences>(context, listen: false)
@@ -1363,7 +1561,9 @@ class HomePageState extends State<HomePage>
           : null;
     }
     if (_counter > 660 &&
-        Provider.of<GamePreferences>(context).isTimeBound == true) {
+        Provider.of<GamePreferences>(context).isTimeBound == true &&
+        _counter != 720) {
+      HapticFeedback.heavyImpact();
       return FadeTransition(
           opacity: _animationController,
           child: Text(
@@ -1394,6 +1594,7 @@ class HomePageState extends State<HomePage>
           side: BorderSide(color: Styles.primaryColor, width: 3.0)),
       title: Text(
         'End Game',
+        textAlign: TextAlign.center,
         style: TextStyle(
           color: HomePageState.currentTheme == "light"
               ? Styles.lightThemeprimaryColor
@@ -1401,18 +1602,11 @@ class HomePageState extends State<HomePage>
         ),
       ),
       content: Container(
+        alignment: Alignment.center,
         height: MediaQuery.of(context).size.height * 0.08,
         child: Center(
           child: Column(
             children: [
-              Text(
-                'Are you sure you want to end the game ?',
-                style: TextStyle(
-                    color: HomePageState.currentTheme == "light"
-                        ? Styles.lightThemeprimaryColor
-                        : Styles.darkThemeprimaryColor,
-                    fontFamily: 'Inter'),
-              ),
               Padding(
                 padding: const EdgeInsets.only(top: 4.0),
                 child: Text(
@@ -1449,7 +1643,135 @@ class HomePageState extends State<HomePage>
               _timer.cancel();
               _counter = 0;
             });
-            Navigator.of(context).pushNamed('/home_screen');
+            Navigator.of(context).pushReplacementNamed('/home_screen');
+          },
+          child: Text('Yes'),
+        ),
+      ],
+    );
+  }
+
+  Widget _restartGameDialog() {
+    return AlertDialog(
+      backgroundColor: HomePageState.currentTheme == "light"
+          ? Styles.lightThemebackgroundColor
+          : Styles.darkThemebackgroundColor,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(color: Styles.primaryColor, width: 3.0)),
+      title: Text(
+        'Restart Game',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: HomePageState.currentTheme == "light"
+              ? Styles.lightThemeprimaryColor
+              : Styles.darkThemeprimaryColor,
+        ),
+      ),
+      content: Container(
+        alignment: Alignment.center,
+        height: MediaQuery.of(context).size.height * 0.08,
+        child: Center(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: Text(
+                  "Game progress would be lost. Do you want to restart the game ?",
+                  style: TextStyle(
+                      color: HomePageState.currentTheme == "light"
+                          ? Styles.lightThemeprimaryColor
+                          : Styles.darkThemeprimaryColor,
+                      fontFamily: 'Inter'),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(
+            HomePageState.currentTheme == "light"
+                ? Styles.lightThemeprimaryColor
+                : Styles.darkThemeprimaryColor,
+          )),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('No'),
+        ),
+        TextButton(
+          style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.red)),
+          onPressed: () {
+            Navigator.pop(context);
+            restartGame();
+          },
+          child: Text('Yes'),
+        ),
+      ],
+    );
+  }
+
+  Widget _showSolution() {
+    return AlertDialog(
+      backgroundColor: HomePageState.currentTheme == "light"
+          ? Styles.lightThemebackgroundColor
+          : Styles.darkThemebackgroundColor,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+          side: BorderSide(color: Styles.primaryColor, width: 3.0)),
+      title: Text(
+        'Show Solution',
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          color: HomePageState.currentTheme == "light"
+              ? Styles.lightThemeprimaryColor
+              : Styles.darkThemeprimaryColor,
+        ),
+      ),
+      content: Container(
+        alignment: Alignment.center,
+        height: MediaQuery.of(context).size.height * 0.08,
+        child: Center(
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 4.0),
+                child: Text(
+                  "Game progress would be lost. Do you want to end game and see the solution?",
+                  style: TextStyle(
+                      color: HomePageState.currentTheme == "light"
+                          ? Styles.lightThemeprimaryColor
+                          : Styles.darkThemeprimaryColor,
+                      fontFamily: 'Inter'),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+      actions: [
+        TextButton(
+          style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(
+            HomePageState.currentTheme == "light"
+                ? Styles.lightThemeprimaryColor
+                : Styles.darkThemeprimaryColor,
+          )),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('No'),
+        ),
+        TextButton(
+          style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.red)),
+          onPressed: () {
+            Navigator.pop(context);
+            showSolution();
           },
           child: Text('Yes'),
         ),

@@ -27,8 +27,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () async {
-        Navigator.of(context).pushNamed('/home_screen');
-        return false;
+        Navigator.of(context).pushReplacementNamed('/home_screen');
+        return true;
       },
       child: SafeArea(
           child: Scaffold(
@@ -38,7 +38,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               appBar: PreferredSize(
                 preferredSize: Size.fromHeight(50.0),
                 child: AppBar(
-                  // automaticallyImplyLeading: false,
+                  automaticallyImplyLeading: true,
                   centerTitle: true,
                   title: Text('Settings',
                       textAlign: TextAlign.center,
@@ -54,9 +54,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       : Color(0xff292929),
                   elevation: 0.0,
                   iconTheme: IconThemeData(
-                      color: HomePageState.currentTheme == "light"
-                          ? Colors.black
-                          : Colors.white),
+                    color: HomePageState.currentTheme == "light"
+                        ? Styles.lightThemeprimaryColor
+                        : Styles.darkThemeprimaryColor,
+                  ),
                 ),
               ),
               body: Column(
@@ -255,7 +256,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                             child: Container(
                                               width: 75,
                                               height: 38,
-                                              color: Colors.white,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft:
+                                                        Radius.circular(12),
+                                                    bottomLeft:
+                                                        Radius.circular(12)),
+                                              ),
                                               padding: const EdgeInsets.only(
                                                 top: 5,
                                                 bottom: 5,
@@ -292,7 +300,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                             Container(
                                               width: 75,
                                               height: 38,
-                                              color: Color(0xff080202),
+                                              decoration: BoxDecoration(
+                                                color: Colors.black,
+                                                borderRadius: BorderRadius.only(
+                                                    topRight:
+                                                        Radius.circular(12),
+                                                    bottomRight:
+                                                        Radius.circular(12)),
+                                              ),
                                               child: Center(
                                                 child: Text("Dark",
                                                     textAlign: TextAlign.center,
@@ -392,50 +407,50 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ? Styles.lightThemeprimaryColor.withOpacity(0.7)
                               : Styles.darkThemeprimaryColor.withOpacity(0.7),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: GestureDetector(
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Text("About",
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: HomePageState.currentTheme ==
-                                                  "light"
-                                              ? Styles.lightThemeprimaryColor
-                                              : Styles.darkThemeprimaryColor,
-                                          fontFamily: 'Gugi',
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.w500)),
-                                  Padding(
-                                    padding: const EdgeInsets.only(right: 8.0),
-                                    child: Icon(FontAwesomeIcons.infoCircle,
-                                        color: HomePageState.currentTheme ==
-                                                "light"
-                                            ? Styles.lightThemeprimaryColor
-                                            : Styles.darkThemeprimaryColor),
-                                  )
-                                ],
-                              ),
-                              onTap: () {
-                                showAnimatedDialog<void>(
-                                    animationType:
-                                        DialogTransitionType.fadeScale,
-                                    barrierDismissible: true,
-                                    duration: Duration(milliseconds: 350),
-                                    context: context,
-                                    builder: (_) => AlertAbout());
-                              }),
-                        ),
-                        Divider(
-                            height: 1,
-                            color: HomePageState.currentTheme == "light"
-                                ? Styles.lightThemeprimaryColor.withOpacity(0.7)
-                                : Styles.darkThemeprimaryColor
-                                    .withOpacity(0.7)),
+                        // Padding(
+                        //   padding: const EdgeInsets.all(12.0),
+                        //   child: GestureDetector(
+                        //       child: Row(
+                        //         mainAxisAlignment:
+                        //             MainAxisAlignment.spaceBetween,
+                        //         crossAxisAlignment: CrossAxisAlignment.center,
+                        //         children: [
+                        //           Text("About",
+                        //               textAlign: TextAlign.center,
+                        //               style: TextStyle(
+                        //                   color: HomePageState.currentTheme ==
+                        //                           "light"
+                        //                       ? Styles.lightThemeprimaryColor
+                        //                       : Styles.darkThemeprimaryColor,
+                        //                   fontFamily: 'Gugi',
+                        //                   fontSize: 24,
+                        //                   fontWeight: FontWeight.w500)),
+                        //           Padding(
+                        //             padding: const EdgeInsets.only(right: 8.0),
+                        //             child: Icon(FontAwesomeIcons.infoCircle,
+                        //                 color: HomePageState.currentTheme ==
+                        //                         "light"
+                        //                     ? Styles.lightThemeprimaryColor
+                        //                     : Styles.darkThemeprimaryColor),
+                        //           )
+                        //         ],
+                        //       ),
+                        //       onTap: () {
+                        //         showAnimatedDialog<void>(
+                        //             animationType:
+                        //                 DialogTransitionType.fadeScale,
+                        //             barrierDismissible: true,
+                        //             duration: Duration(milliseconds: 350),
+                        //             context: context,
+                        //             builder: (_) => AlertAbout());
+                        //       }),
+                        // ),
+                        // Divider(
+                        //     height: 1,
+                        //     color: HomePageState.currentTheme == "light"
+                        //         ? Styles.lightThemeprimaryColor.withOpacity(0.7)
+                        //         : Styles.darkThemeprimaryColor
+                        //             .withOpacity(0.7)),
                       ],
                     ),
                   ),
@@ -446,7 +461,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(bottom: 16.0),
-                          child: Text('Version:00.00.008',
+                          child: Text('Version:00.00.009',
                               style: TextStyle(
                                 color: HomePageState.currentTheme == "light"
                                     ? Styles.lightThemeprimaryColor

@@ -113,13 +113,15 @@ class _AlertGameOverState extends State<AlertGameOver> {
                     GestureDetector(
                         child: Icon(FontAwesomeIcons.home, size: 40),
                         onTap: () {
-                          Navigator.of(context).pushNamed('/home_screen');
+                          Navigator.of(context)
+                              .pushReplacementNamed('/home_screen');
                         }),
-                    SizedBox(width: 15),
+                    SizedBox(width: 35),
                     GestureDetector(
                       child: Icon(Icons.restart_alt, size: 40),
                       onTap: () {
-                        Navigator.of(context).pushNamed('/home_page');
+                        Navigator.of(context)
+                            .pushReplacementNamed('/home_page');
                       },
                     )
                   ]),
@@ -290,7 +292,7 @@ class AlertExit extends StatelessWidget {
           style: ButtonStyle(
               foregroundColor: MaterialStateProperty.all<Color>(Colors.red)),
           onPressed: () {
-            Navigator.of(context).pushNamed('/home_screen');
+            Navigator.of(context).pushReplacementNamed('/home_screen');
           },
           child: Text('Yes'),
         ),
@@ -548,7 +550,7 @@ class AlertAbout extends StatelessWidget {
                   fontSize: 24,
                   fontWeight: FontWeight.w500)),
           SizedBox(height: 5),
-          Text('Version: 00.00.008 ',
+          Text('Version: 00.00.009 ',
               style: TextStyle(
                   color: HomePageState.currentTheme == "light"
                       ? Styles.lightThemeprimaryColor

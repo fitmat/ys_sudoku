@@ -33,40 +33,62 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void dispose() {
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            backgroundColor: HomePageState.currentTheme == "light"
-                ? Color(0xfffff9f1)
-                : Color(0xff292929),
-            bottomNavigationBar: buildBottomNavigationBar(),
-            body: Column(children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 16.0),
-                child: Container(
-                  child: Align(
-                    alignment: Alignment.topCenter,
-                    child: Text('Sudoku',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                            color:
-                                Provider.of<GamePreferences>(context).selColor,
-                            fontFamily: 'Gugi',
-                            fontSize: 40,
-                            fontWeight: FontWeight.w500)),
+    return WillPopScope(
+      onWillPop: () async {
+        return false;
+      },
+      child: SafeArea(
+          child: Scaffold(
+              backgroundColor: HomePageState.currentTheme == "light"
+                  ? Color(0xfffff9f1)
+                  : Color(0xff292929),
+              bottomNavigationBar: buildBottomNavigationBar(),
+              body: Column(children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 16.0),
+                  child: Container(
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Text('Sudoku',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                              color: Provider.of<GamePreferences>(context)
+                                  .selColor,
+                              fontFamily: 'Gugi',
+                              fontSize: 40,
+                              fontWeight: FontWeight.w500)),
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                width: 390,
-                height: MediaQuery.of(context).size.height * 0.78,
-                child: Stack(children: <Widget>[
-                  Positioned(
-                      top: 275.7897033691406,
-                      left: 60.8812484741211,
-                      child: Transform.rotate(
-                          angle: -1.13,
+                Container(
+                  width: 390,
+                  height: MediaQuery.of(context).size.height * 0.8,
+                  child: Stack(children: <Widget>[
+                    Positioned(
+                        top: 278.7897033691406,
+                        left: 60.8812484741211,
+                        child: Transform.rotate(
+                            angle: -1.13,
+                            child: Container(
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                height: MediaQuery.of(context).size.width * 0.8,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/images/sudoku_blocks.png"),
+                                      fit: BoxFit.fitWidth),
+                                )))),
+                    Positioned(
+                        top: 80,
+                        left: 170.8812484741211,
+                        child: Transform.rotate(
+                          angle: -16,
                           child: Container(
                               width: MediaQuery.of(context).size.width * 0.8,
                               height: MediaQuery.of(context).size.width * 0.8,
@@ -75,43 +97,31 @@ class _HomeScreenState extends State<HomeScreen> {
                                     image: AssetImage(
                                         "assets/images/sudoku_blocks.png"),
                                     fit: BoxFit.fitWidth),
-                              )))),
-                  Positioned(
-                      top: 80,
-                      left: 170.8812484741211,
-                      child: Transform.rotate(
-                        angle: -16,
-                        child: Container(
-                            width: MediaQuery.of(context).size.width * 0.8,
-                            height: MediaQuery.of(context).size.width * 0.8,
-                            decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage(
-                                      "assets/images/sudoku_blocks.png"),
-                                  fit: BoxFit.fitWidth),
-                            )),
-                      )),
-                  Positioned(
-                      top: 54.6435241699219,
-                      left: -16,
-                      child: Transform.rotate(
-                          angle: 0.24,
-                          child: Container(
-                              width: MediaQuery.of(context).size.width * 0.8,
-                              height: MediaQuery.of(context).size.width * 0.8,
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                    image: AssetImage(
-                                        "assets/images/sudoku_blocks.png"),
-                                    fit: BoxFit.fitWidth),
-                              )))),
-                ]),
-              ),
-            ])));
+                              )),
+                        )),
+                    Positioned(
+                        top: 54.6435241699219,
+                        left: -16,
+                        child: Transform.rotate(
+                            angle: 0.24,
+                            child: Container(
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                height: MediaQuery.of(context).size.width * 0.8,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: AssetImage(
+                                          "assets/images/sudoku_blocks.png"),
+                                      fit: BoxFit.fitWidth),
+                                )))),
+                  ]),
+                ),
+              ]))),
+    );
   }
 
   Widget buildBottomNavigationBar() {
     return Container(
+      height: 65,
       child: BottomNavigationBar(
         selectedFontSize: 0,
         showSelectedLabels: false,
@@ -137,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Icon(
                           FontAwesomeIcons.cog,
                           color: Colors.white,
-                          size: 30.0,
+                          size: 35.0,
                         )),
                   ),
                 ],
@@ -158,7 +168,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       width: 30,
                       child: Icon(
                         FontAwesomeIcons.play,
-                        size: 30.0,
+                        size: 35.0,
                       ),
                     ),
                   ),
@@ -172,7 +182,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     context: context,
                     builder: (_) => AlertStartGame());
                 Future.delayed(Duration(seconds: 4), () {
-                  Navigator.of(context).pushNamed('/home_page');
+                  Navigator.of(context).pushReplacementNamed('/home_page');
                 });
               },
             ),
@@ -191,7 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: GestureDetector(
                           child: Icon(
                             Icons.help_rounded,
-                            size: 30.0,
+                            size: 35.0,
                           ),
                         ),
                       ),

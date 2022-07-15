@@ -210,8 +210,8 @@ class Styles {
   static final Map<String, MaterialColor> accentColors = {
     'Cyan': ionicCyan,
     'Blue': ionicBlue,
-    'Indigo': ionicIndigo,
-    'Violet': violet,
+    // 'Indigo': ionicIndigo,
+    // 'Violet': violet,
     'Purple': purple,
     'Pink': pink,
     'Red': oneplusRed,
