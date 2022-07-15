@@ -1432,7 +1432,7 @@ class HomePageState extends State<HomePage>
   }
 
   Widget _exitDialog() {
-    return AlertDialog(
+    return SimpleDialog(
       backgroundColor: HomePageState.currentTheme == "light"
           ? Styles.lightThemebackgroundColor
           : Styles.darkThemebackgroundColor,
@@ -1448,122 +1448,119 @@ class HomePageState extends State<HomePage>
               : Styles.darkThemeprimaryColor,
         ),
       ),
-      content: Container(
-        alignment: Alignment.center,
-        height: MediaQuery.of(context).size.height * 0.08,
-        child: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 4.0),
-                child: Text(
-                  "Game progress would be lost. Do you really want to exit the game ?",
-                  style: TextStyle(
-                      color: HomePageState.currentTheme == "light"
-                          ? Styles.lightThemeprimaryColor
-                          : Styles.darkThemeprimaryColor,
-                      fontFamily: 'Inter'),
-                ),
-              )
-            ],
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Text(
+              "Game progress would be lost. Do you really want to exit the game ?",
+              style: TextStyle(
+                  fontSize: 16,
+                  color: HomePageState.currentTheme == "light"
+                      ? Styles.lightThemeprimaryColor
+                      : Styles.darkThemeprimaryColor,
+                  fontFamily: 'Inter'),
+            ),
           ),
         ),
-      ),
-      actions: [
-        TextButton(
-          style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(
-            HomePageState.currentTheme == "light"
-                ? Styles.lightThemeprimaryColor
-                : Styles.darkThemeprimaryColor,
-          )),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('No'),
-        ),
-        TextButton(
-          style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.red)),
-          onPressed: () {
-            setState(() {
-              _timer.cancel();
-              _counter = 0;
-            });
-            Navigator.of(context).pushReplacementNamed('/home_screen');
-          },
-          child: Text('Yes'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton(
+              style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all<Color>(
+                HomePageState.currentTheme == "light"
+                    ? Styles.lightThemeprimaryColor
+                    : Styles.darkThemeprimaryColor,
+              )),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('No'),
+            ),
+            TextButton(
+              style: ButtonStyle(
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(Colors.red)),
+              onPressed: () {
+                setState(() {
+                  _timer.cancel();
+                  _counter = 0;
+                });
+                Navigator.of(context).pushReplacementNamed('/home_screen');
+              },
+              child: Text('Yes'),
+            ),
+          ],
         ),
       ],
     );
   }
 
   Widget _restartGameDialog() {
-    return AlertDialog(
-      backgroundColor: HomePageState.currentTheme == "light"
-          ? Styles.lightThemebackgroundColor
-          : Styles.darkThemebackgroundColor,
-      shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: BorderSide(color: Styles.primaryColor, width: 3.0)),
-      title: Text(
-        'Restart Game',
-        textAlign: TextAlign.center,
-        style: TextStyle(
-          color: HomePageState.currentTheme == "light"
-              ? Styles.lightThemeprimaryColor
-              : Styles.darkThemeprimaryColor,
-        ),
-      ),
-      content: Container(
-        alignment: Alignment.center,
-        height: MediaQuery.of(context).size.height * 0.08,
-        child: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 4.0),
-                child: Text(
-                  "Game progress would be lost. Do you want to restart the game ?",
-                  style: TextStyle(
-                      color: HomePageState.currentTheme == "light"
-                          ? Styles.lightThemeprimaryColor
-                          : Styles.darkThemeprimaryColor,
-                      fontFamily: 'Inter'),
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
-      actions: [
-        TextButton(
-          style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(
-            HomePageState.currentTheme == "light"
+    return SimpleDialog(
+        backgroundColor: HomePageState.currentTheme == "light"
+            ? Styles.lightThemebackgroundColor
+            : Styles.darkThemebackgroundColor,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+            side: BorderSide(color: Styles.primaryColor, width: 3.0)),
+        title: Text(
+          'Restart Game',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: HomePageState.currentTheme == "light"
                 ? Styles.lightThemeprimaryColor
                 : Styles.darkThemeprimaryColor,
-          )),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('No'),
+          ),
         ),
-        TextButton(
-          style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.red)),
-          onPressed: () {
-            Navigator.pop(context);
-            restartGame();
-          },
-          child: Text('Yes'),
-        ),
-      ],
-    );
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(
+              child: Text(
+                "Game progress would be lost. Do you want to restart the game ?",
+                style: TextStyle(
+                    fontSize: 16,
+                    color: HomePageState.currentTheme == "light"
+                        ? Styles.lightThemeprimaryColor
+                        : Styles.darkThemeprimaryColor,
+                    fontFamily: 'Inter'),
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                style: ButtonStyle(
+                    foregroundColor: MaterialStateProperty.all<Color>(
+                  HomePageState.currentTheme == "light"
+                      ? Styles.lightThemeprimaryColor
+                      : Styles.darkThemeprimaryColor,
+                )),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('No'),
+              ),
+              TextButton(
+                style: ButtonStyle(
+                    foregroundColor:
+                        MaterialStateProperty.all<Color>(Colors.red)),
+                onPressed: () {
+                  Navigator.pop(context);
+                  restartGame();
+                },
+                child: Text('Yes'),
+              ),
+            ],
+          ),
+        ]);
   }
 
   Widget _showSolution() {
-    return AlertDialog(
+    return SimpleDialog(
       backgroundColor: HomePageState.currentTheme == "light"
           ? Styles.lightThemebackgroundColor
           : Styles.darkThemebackgroundColor,
@@ -1579,48 +1576,47 @@ class HomePageState extends State<HomePage>
               : Styles.darkThemeprimaryColor,
         ),
       ),
-      content: Container(
-        alignment: Alignment.center,
-        height: MediaQuery.of(context).size.height * 0.08,
-        child: Center(
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 4.0),
-                child: Text(
-                  "Game progress would be lost. Do you want to end game and see the solution?",
-                  style: TextStyle(
-                      color: HomePageState.currentTheme == "light"
-                          ? Styles.lightThemeprimaryColor
-                          : Styles.darkThemeprimaryColor,
-                      fontFamily: 'Inter'),
-                ),
-              )
-            ],
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Center(
+            child: Text(
+              "Game progress would be lost. Do you want to end game and see the solution?",
+              style: TextStyle(
+                  fontSize: 16,
+                  color: HomePageState.currentTheme == "light"
+                      ? Styles.lightThemeprimaryColor
+                      : Styles.darkThemeprimaryColor,
+                  fontFamily: 'Inter'),
+            ),
           ),
         ),
-      ),
-      actions: [
-        TextButton(
-          style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(
-            HomePageState.currentTheme == "light"
-                ? Styles.lightThemeprimaryColor
-                : Styles.darkThemeprimaryColor,
-          )),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          child: Text('No'),
-        ),
-        TextButton(
-          style: ButtonStyle(
-              foregroundColor: MaterialStateProperty.all<Color>(Colors.red)),
-          onPressed: () {
-            Navigator.pop(context);
-            showSolution();
-          },
-          child: Text('Yes'),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton(
+              style: ButtonStyle(
+                  foregroundColor: MaterialStateProperty.all<Color>(
+                HomePageState.currentTheme == "light"
+                    ? Styles.lightThemeprimaryColor
+                    : Styles.darkThemeprimaryColor,
+              )),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('No'),
+            ),
+            TextButton(
+              style: ButtonStyle(
+                  foregroundColor:
+                      MaterialStateProperty.all<Color>(Colors.red)),
+              onPressed: () {
+                Navigator.pop(context);
+                showSolution();
+              },
+              child: Text('Yes'),
+            ),
+          ],
         ),
       ],
     );
