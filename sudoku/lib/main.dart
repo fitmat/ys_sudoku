@@ -1396,9 +1396,8 @@ class HomePageState extends State<HomePage>
     Duration clockTimer = Duration(seconds: _counter);
     String newClockTimer =
         '${clockTimer.inMinutes.remainder(60).toString()}:${(clockTimer.inSeconds.remainder(60) % 60).toString().padLeft(2, '0')}';
-    if (_counter == 720 ||
-        _counter > 720 &&
-            Provider.of<GamePreferences>(context).isTimeBound == true) {
+    if (_counter == 720 &&
+        Provider.of<GamePreferences>(context).isTimeBound == true) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Provider.of<GamePreferences>(context, listen: false)
             .setTimer(requiredTime);
@@ -1406,8 +1405,7 @@ class HomePageState extends State<HomePage>
         _counter = 0;
         _timer.cancel();
       });
-    }
-    if (_counter > 660 &&
+    } else if (_counter > 660 &&
         Provider.of<GamePreferences>(context).isTimeBound == true &&
         _counter <= 720) {
       HapticFeedback.heavyImpact();
