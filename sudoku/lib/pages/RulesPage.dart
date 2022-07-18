@@ -30,13 +30,13 @@ class _RulesPageState extends State<RulesPage> {
             title: Text('How to Play?',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                    color: Colors.black,
+                    color: Colors.white,
                     fontFamily: 'Gugi',
                     fontSize: 24,
                     fontWeight: FontWeight.w500)),
             backgroundColor: Styles.primaryColor,
             elevation: 0.0,
-            iconTheme: IconThemeData(color: Colors.black),
+            iconTheme: IconThemeData(color: Colors.white),
           ),
         ),
         body: VsScrollbar(
