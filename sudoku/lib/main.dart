@@ -363,7 +363,27 @@ class HomePageState extends State<HomePage>
           })
         : setState(() {
             hintList = SudokuUtilities.copySudoku(gameSolved);
-
+            if (rowNo == null && columnNo == null) {
+              final snackBar = SnackBar(
+                content: Text(
+                  'Please select a cell first',
+                  style: TextStyle(
+                    color: HomePageState.currentTheme == "light"
+                        ? Styles.lightThemebackgroundColor
+                        : Styles.darkThemebackgroundColor,
+                  ),
+                ),
+                behavior: SnackBarBehavior.floating,
+                margin: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).size.height - 80,
+                    right: 20,
+                    left: 20),
+                backgroundColor: HomePageState.currentTheme == "light"
+                    ? Styles.lightThemeprimaryColor
+                    : Styles.darkThemeprimaryColor,
+              );
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            }
             hint = hintList[rowNo][columnNo];
             setState(() {
               game[rowNo][columnNo] = hint;
@@ -437,6 +457,10 @@ class HomePageState extends State<HomePage>
                     : Styles.darkThemeprimaryColor,
               );
               ScaffoldMessenger.of(context).showSnackBar(snackBar);
+              Future.delayed(Duration(milliseconds: 1800), () {
+                callback(selectedgameButton, 0);
+                checkNumberOfFilledEntries();
+              });
             });
           })
         : setState(() {
@@ -1548,6 +1572,8 @@ class HomePageState extends State<HomePage>
                         MaterialStateProperty.all<Color>(Colors.red)),
                 onPressed: () {
                   Navigator.pop(context);
+                  mistakeCount = 0;
+                  _timer.cancel();
                   restartGame();
                 },
                 child: Text('Yes'),
