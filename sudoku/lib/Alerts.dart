@@ -463,7 +463,7 @@ class AlertAbout extends StatelessWidget {
                   fontSize: 24,
                   fontWeight: FontWeight.w500)),
           SizedBox(height: 5),
-          Text('Version: 00.00.014 ',
+          Text('Version: 00.00.015 ',
               style: TextStyle(
                   color: HomePageState.currentTheme == "light"
                       ? Styles.lightThemeprimaryColor

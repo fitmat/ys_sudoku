@@ -440,7 +440,7 @@ class HomePageState extends State<HomePage>
             setState(() {
               final snackBar = SnackBar(
                 content: Text(
-                  'OOPS! You have made mistake.',
+                  'OOPS! You have made a mistake.',
                   style: TextStyle(
                     color: HomePageState.currentTheme == "light"
                         ? Styles.lightThemebackgroundColor
