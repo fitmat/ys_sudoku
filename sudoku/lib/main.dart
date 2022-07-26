@@ -388,7 +388,7 @@ class HomePageState extends State<HomePage>
             setState(() {
               game[rowNo][columnNo] = hint;
               hintCount++;
-              filledEntries++;
+              checkNumberOfFilledEntries();
             });
           });
   }
