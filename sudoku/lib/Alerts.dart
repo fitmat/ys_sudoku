@@ -53,8 +53,10 @@ class _AlertGameOverState extends State<AlertGameOver> {
         ),
       ),
       content: Container(
-        height: MediaQuery.of(context).size.height * 0.06.h,
-        width: MediaQuery.of(context).size.width * 0.06.w,
+        height: 210,
+        width: 200,
+        // height: MediaQuery.of(context).size.height * 0.045.h,
+        // width: MediaQuery.of(context).size.width * 0.06.w,
         child: Column(
           children: [
             Row(
@@ -65,7 +67,7 @@ class _AlertGameOverState extends State<AlertGameOver> {
                     '$newClockTimer',
                     style: TextStyle(
                         fontFamily: "Inter",
-                        fontWeight: FontWeight.bold,
+                        fontWeight: FontWeight.normal,
                         fontSize: 20),
                   ),
                   Icon(FontAwesomeIcons.stopwatch)
@@ -76,9 +78,15 @@ class _AlertGameOverState extends State<AlertGameOver> {
                 Column(children: [
                   args[0] == false
                       ? Text('${HomePageState.emptyBoxes}',
-                          style: TextStyle(fontWeight: FontWeight.bold))
+                          style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontFamily: "Inter",
+                              fontSize: 20))
                       : Text('${args[2]}/${HomePageState.emptyBoxes}',
-                          style: TextStyle(fontWeight: FontWeight.bold)),
+                          style: TextStyle(
+                              fontWeight: FontWeight.normal,
+                              fontFamily: "Inter",
+                              fontSize: 20)),
                   Text('Completed', style: TextStyle(fontSize: 24)),
                 ]),
               ],
@@ -89,14 +97,17 @@ class _AlertGameOverState extends State<AlertGameOver> {
                     blastDirectionality: BlastDirectionality.explosive,
                   )
                 : SizedBox(width: 0),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.01.h,
-            ),
+            args[0] == false
+                ? SizedBox(
+                    height: 25,
+                  )
+                : SizedBox(height: 20),
             Text('${args[1]}',
                 style: TextStyle(
                     color: Colors.black,
                     fontSize: 32,
-                    fontWeight: FontWeight.bold)),
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Gugi')),
             SizedBox(height: 10),
             Container(
               height: MediaQuery.of(context).size.width * 0.2,
@@ -154,12 +165,7 @@ class AlertDifficultyState extends StatefulWidget {
 
 class AlertDifficulty extends State<AlertDifficultyState> {
   static String difficulty;
-  static final List<String> difficulties = [
-    'Beginner',
-    'Easy',
-    'Medium',
-    'Hard'
-  ];
+  static final List<String> difficulties = ['Easy', 'Medium', 'Hard', 'Expert'];
   String currentDifficultyLevel;
 
   AlertDifficulty(String currentDifficultyLevel) {
@@ -463,7 +469,7 @@ class AlertAbout extends StatelessWidget {
                   fontSize: 24,
                   fontWeight: FontWeight.w500)),
           SizedBox(height: 5),
-          Text('Version: 00.00.017 ',
+          Text('Version: 00.00.018 ',
               style: TextStyle(
                   color: HomePageState.currentTheme == "light"
                       ? Styles.lightThemeprimaryColor
@@ -591,9 +597,9 @@ class _AlertStartGameState extends State<AlertStartGame> {
                                 ),
                                 Positioned(
                                     top: 29.px,
-                                    left: 10.758502960205078.px,
+                                    left: 29.758502960205078.px,
                                     child: Text(
-                                      'Difficulty',
+                                      'Level',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: HomePageState.currentTheme ==
@@ -611,10 +617,16 @@ class _AlertStartGameState extends State<AlertStartGame> {
                                     )),
                                 Positioned(
                                     top: -0.000011207595889572985.px,
-                                    left: 10.758502960205078.px,
+                                    left: Provider.of<GamePreferences>(context)
+                                                .difficultyLevel
+                                                .length <
+                                            5
+                                        ? 22.758502960205078.px
+                                        : 10.758502960205078.px,
                                     child: Center(
                                       child: Text(
                                         '${Provider.of<GamePreferences>(context).difficultyLevel}',
+                                        textAlign: TextAlign.center,
                                         style: TextStyle(
                                             color: HomePageState.currentTheme ==
                                                     "light"
@@ -750,7 +762,11 @@ class _AlertStartGameState extends State<AlertStartGame> {
                               child: Stack(children: <Widget>[
                                 Positioned(
                                     top: 29.px,
-                                    left: 25.0986328125.px,
+                                    left: Provider.of<GamePreferences>(context)
+                                                .isTimeBound ==
+                                            true
+                                        ? 25.0986328125.px
+                                        : 32.0986328125.px,
                                     child: Text(
                                       'Time',
                                       textAlign: TextAlign.center,
@@ -770,7 +786,11 @@ class _AlertStartGameState extends State<AlertStartGame> {
                                     )),
                                 Positioned(
                                     top: 0.px,
-                                    left: 9.0986328125.px,
+                                    left: Provider.of<GamePreferences>(context)
+                                                .isTimeBound ==
+                                            true
+                                        ? 9.0986328125.px
+                                        : 3.0986328125.px,
                                     child: Text(
                                       Provider.of<GamePreferences>(context)
                                                   .isTimeBound ==

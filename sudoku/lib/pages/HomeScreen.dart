@@ -26,7 +26,7 @@ class _HomeScreenState extends State<HomeScreen> {
         HomePageState.setPrefs('currentAccentColor');
       }
       if (HomePageState.currentDifficultyLevel == null) {
-        HomePageState.currentDifficultyLevel = 'Beginner';
+        HomePageState.currentDifficultyLevel = 'Easy';
         HomePageState.setPrefs('currentDifficultyLevel');
       }
       HomePageState.changeAccentColor(HomePageState.currentAccentColor, true);

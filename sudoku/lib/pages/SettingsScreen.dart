@@ -78,7 +78,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                     MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
-                                  Text("Difficulty",
+                                  Text("Level",
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                           color: HomePageState.currentTheme ==
@@ -457,7 +457,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(bottom: 16.0),
-                          child: Text('Version:00.00.017',
+                          child: Text('Version:00.00.018',
                               style: TextStyle(
                                 color: HomePageState.currentTheme == "light"
                                     ? Styles.lightThemeprimaryColor

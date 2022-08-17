@@ -136,7 +136,7 @@ class HomePageState extends State<HomePage>
     } on UnimplementedError {}
     getPrefs().whenComplete(() {
       if (currentDifficultyLevel == null) {
-        currentDifficultyLevel = 'Beginner';
+        currentDifficultyLevel = 'Easy';
         setPrefs('currentDifficultyLevel');
       }
       if (currentTheme == null) {
@@ -281,29 +281,29 @@ class HomePageState extends State<HomePage>
   }
 
   static int emptyBoxes;
-  static List<List<List<int>>> getNewGame([String difficulty = 'Beginner']) {
+  static List<List<List<int>>> getNewGame([String difficulty = 'Easy']) {
     switch (difficulty) {
       case 'test':
         {
           emptyBoxes = 2;
         }
         break;
-      case 'Beginner':
+      case 'Easy':
         {
           emptyBoxes = 27;
         }
         break;
-      case 'Easy':
+      case 'Medium':
         {
           emptyBoxes = 36;
         }
         break;
-      case 'Medium':
+      case 'Hard':
         {
           emptyBoxes = 45;
         }
         break;
-      case 'Hard':
+      case 'Expert':
         {
           emptyBoxes = 54;
         }
@@ -313,7 +313,7 @@ class HomePageState extends State<HomePage>
     return [generator.newSudoku, generator.newSudokuSolved];
   }
 
-  void setGame(int mode, [String difficulty = 'Beginner']) {
+  void setGame(int mode, [String difficulty = 'Easy']) {
     if (mode == 1) {
       game = new List.generate(9, (i) => [0, 0, 0, 0, 0, 0, 0, 0, 0]);
       gameCopy = SudokuUtilities.copySudoku(game);
@@ -433,7 +433,7 @@ class HomePageState extends State<HomePage>
                 Provider.of<GamePreferences>(context, listen: false)
                     .setTimer(requiredTime);
                 Utils.goToGameOverAlert(
-                    context, true, "Limit Exhausted", filledEntries);
+                    context, true, "Limit's Up", filledEntries);
                 _counter = 0;
               });
             }
